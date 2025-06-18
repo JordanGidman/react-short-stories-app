@@ -1,5 +1,9 @@
 import styled from "styled-components";
 import Button from "./Button";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { auth } from "../firebase";
 
 const StyledNav = styled.nav`
   display: flex;
@@ -30,6 +34,7 @@ const StyledButton = styled.button`
   color: #fff;
   font-size: 1.8rem;
   transition: all 0.3s ease-in-out;
+
   span {
     background-color: #ffbe0b;
     border: none;
@@ -49,6 +54,11 @@ const StyledButton = styled.button`
 // const styledMainLinks = styled.div``;
 
 function Navbar() {
+  const { currentUser } = useContext(AuthContext);
+  console.log("Current User:", currentUser?.displayName);
+
+  const navigate = useNavigate();
+
   return (
     <StyledNav>
       <Ul>
@@ -66,7 +76,11 @@ function Navbar() {
         </li>
 
         <Li className="nav-link">
-          <Button>Sign In</Button>
+          {currentUser ? (
+            <Button onClick={() => auth.signOut()}>Log out</Button>
+          ) : (
+            <Button onClick={() => navigate("/signin")}>Sign In</Button>
+          )}
         </Li>
       </Ul>
     </StyledNav>

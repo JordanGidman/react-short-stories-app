@@ -1,41 +1,40 @@
 import styled from "styled-components";
 import Button from "./Button";
 
-function Featured() {
-  const StyledBanner = styled.div`
-    width: 100%;
-    height: 30vh;
-    background-color: #85e9e1;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem 4rem;
+const StyledBanner = styled.div`
+  width: 100%;
+  height: 30vh;
+  background-color: #85e9e1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 4rem;
 
-    h1 {
-      font-size: 5rem;
-      span {
-        font-family: "Playfair Display", serif;
-        font-weight: 900;
-      }
-
-      .highlight {
-        font-style: italic;
-        font-weight: 700;
-      }
+  h1 {
+    font-size: 5rem;
+    span {
+      font-family: "Playfair Display", serif;
+      font-weight: 900;
     }
 
-    p {
-      width: 60%;
-      text-align: center;
-      font-size: 1.8rem;
-      margin-top: 1rem;
-      color: #000;
-      margin-bottom: 2rem;
+    .highlight {
+      font-style: italic;
+      font-weight: 700;
     }
+  }
 
-    /* button {
+  p {
+    width: 60%;
+    text-align: center;
+    font-size: 1.8rem;
+    margin-top: 1rem;
+    color: #000;
+    margin-bottom: 2rem;
+  }
+
+  /* button {
       background-color: #ffbe0b;
       border: none;
       color: #000;
@@ -53,8 +52,9 @@ function Featured() {
         cursor: pointer;
       }
     } */
-  `;
+`;
 
+function Featured() {
   return (
     <div className="featured">
       <StyledBanner>

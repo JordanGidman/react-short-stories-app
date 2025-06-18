@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import Navbar from "./Navbar";
+import Navbar from "../components/Navbar";
 
 import heroImg from "../img/hero-img.jpg";
-import Button from "./Button";
+import Button from "../components/Button";
+import Featured from "../components/Featured";
 
 const StyledHero = styled.div`
   background-image: url(${(props) => props.img});
@@ -125,6 +126,7 @@ function Home() {
         </StyledHeroFooter>
       </StyledHero>
       <Navbar />
+      <Featured />
     </div>
   );
 }
