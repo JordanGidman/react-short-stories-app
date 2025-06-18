@@ -1,16 +1,19 @@
 import styled from "styled-components";
 import Home from "./components/Home";
+import GlobalStyles from "./GlobalStyles";
+import Featured from "./components/Featured";
 
-const Div = styled.div`
-  box-sizing: border-box;
-  font-size: 62.5%;
-`;
+const StyledApp = styled.div``;
 
 function App() {
   return (
-    <div>
-      <Home />
-    </div>
+    <>
+      <GlobalStyles />
+      <StyledApp>
+        <Home />
+        <Featured />
+      </StyledApp>
+    </>
   );
 }
 

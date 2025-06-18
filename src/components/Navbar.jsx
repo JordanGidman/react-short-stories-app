@@ -1,41 +1,75 @@
 import styled from "styled-components";
+import Button from "./Button";
 
-const Nav = styled.nav`
+const StyledNav = styled.nav`
   display: flex;
-  font-weight: 600;
-  padding: 4rem 2.4rem;
+  padding: 2rem 6rem;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  background-color: #1c1f2e;
+  filter: drop-shadow(0rem 0.8rem 0.8rem rgba(0, 0, 0, 0.3));
+  z-index: 10;
 `;
 
 const Ul = styled.ul`
   list-style: none;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 15rem;
   width: 100%;
 `;
 
 const Li = styled.li``;
 
-const Button = styled.button``;
+const StyledButton = styled.button`
+  background-color: transparent;
+  font-weight: 300;
+  border: none;
+  color: #fff;
+  font-size: 1.8rem;
+  transition: all 0.3s ease-in-out;
+  span {
+    background-color: #ffbe0b;
+    border: none;
+    color: #000;
+    font-size: 2rem;
+
+    transition: all 0.3s ease-in-out;
+    font-weight: 500;
+    border-radius: 2rem;
+    padding: 0.6rem 4rem;
+  }
+  &:hover {
+    scale: 1.1;
+    cursor: pointer;
+  }
+`;
+// const styledMainLinks = styled.div``;
 
 function Navbar() {
   return (
-    <Nav>
+    <StyledNav>
       <Ul>
         <Li className="nav-link">
-          <button>Home</button>
+          <Button>LOGO</Button>
         </Li>
         <Li className="nav-link">
-          <button>Browse</button>
+          <StyledButton>Featured</StyledButton>
+        </Li>
+        <Li className="nav-link">
+          <StyledButton>Browse</StyledButton>
         </Li>
         <li className="nav-link">
-          <button>Account</button>
+          <StyledButton>Account</StyledButton>
         </li>
+
         <Li className="nav-link">
-          <button>Sign In</button>
+          <Button>Sign In</Button>
         </Li>
       </Ul>
-    </Nav>
+    </StyledNav>
   );
 }
 
