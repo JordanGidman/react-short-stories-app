@@ -77,11 +77,17 @@ function Navbar() {
 
         <Li className="nav-link">
           {currentUser ? (
-            <Button onClick={() => auth.signOut()}>Log out</Button>
+            <StyledButton>{currentUser.displayName}</StyledButton>
           ) : (
             <Button onClick={() => navigate("/signin")}>Sign In</Button>
           )}
         </Li>
+
+        {currentUser && (
+          <Li className="nav-link">
+            <Button onClick={() => auth.signOut()}>Log out</Button>
+          </Li>
+        )}
       </Ul>
     </StyledNav>
   );

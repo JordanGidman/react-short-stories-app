@@ -1,91 +1,45 @@
-import { useState } from "react";
+// import { useState } from "react";
 import { auth } from "../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 function SignUp() {
-  const [email, setEmail] = useState("");
-  const [displayName, setDisplayName] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSignUp = async (email, password) => {
-    try {
-      setIsLoading(true);
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredential.user;
-      console.log("User signed up:", user);
+  async function handleSignUp(e) {
+    e.preventDefault();
+    const displayName = e.target[0].value; // Assuming the first input is for display name
+    const email = e.target[1].value;
+    const password = e.target[2].value;
 
-      // await updateProfile(userCredential.user, {
-      //   displayName,
-      // });
+    await createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log("User signed up:", user);
+        // Redirect or perform other actions
+      })
+      .catch((error) => {
+        console.error("Error signing up:", error);
+      });
 
-      // await setDoc(doc(db, "users", userCredential.user.uid), {
-      //   uid: userCredential.user.uid,
-      //   displayName,
-      //   email,
-      //   admin: false,
-      // });
-
-      // await signInWithEmailAndPassword(auth, email, password).then(
-      //   (userCredential) => {
-      //     const user = userCredential.user;
-      //     console.log("User signed in:", user);
-      //   }
-      // );
-      setIsLoading(false);
-      navigate("/");
-    } catch (error) {
-      console.error("Error signing up:", error);
-    }
-  };
+    await updateProfile(auth.currentUser, {
+      displayName: displayName, // You can set a default display name or get it from the form
+    });
+    navigate("/");
+  }
 
   return (
     <div>
-      <h1>SignUp</h1>
-      <form>
-        <input
-          type="text"
-          placeholder="Display Name"
-          value={displayName}
-          disabled={isLoading}
-          onChange={(e) => setDisplayName(e.target.value)}
-          name="displayName"
-          autoComplete="on"
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          disabled={isLoading}
-          onChange={(e) => setEmail(e.target.value)}
-          name="email"
-          autoComplete="on"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          disabled={isLoading}
-          onChange={(e) => setPassword(e.target.value)}
-          name="password"
-          autoComplete="on"
-        />
-        <button
-          onSubmit={() => handleSignUp(email, password, displayName, navigate)}
-        >
-          Sign Up
-        </button>
+      <h1>Sign Up</h1>
+      <form onSubmit={handleSignUp}>
+        <input type="text" placeholder="Display Name" />
+        <input type="email" placeholder="Email" />
+        <input type="password" placeholder="Password" />
+        <button>Sign Up</button>
       </form>
     </div>
   );
 }
 
 export default SignUp;
-
-// Fix bug where the button does not call the handleSignUp function correctly and for some reason puts the sign in details in the url
