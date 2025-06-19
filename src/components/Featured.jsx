@@ -1,6 +1,10 @@
 import styled from "styled-components";
 import Button from "./Button";
 
+const FeaturedButton = styled(Button)`
+  font-weight: 900;
+`;
+
 const StyledBanner = styled.div`
   width: 100%;
   height: 30vh;
@@ -28,7 +32,8 @@ const StyledBanner = styled.div`
   p {
     width: 60%;
     text-align: center;
-    font-size: 1.8rem;
+    font-size: 1.4rem;
+    max-width: 40%;
     margin-top: 1rem;
     color: #000;
     margin-bottom: 2rem;
@@ -67,7 +72,7 @@ function Featured() {
           for every mood and situation. Make your commute or workout riveting.
           Find something you never thought you needed.
         </p>
-        <Button>Browse Featured Stories</Button>
+        <FeaturedButton>Explore Featured</FeaturedButton>
       </StyledBanner>
     </div>
   );

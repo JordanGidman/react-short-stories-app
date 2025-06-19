@@ -32,7 +32,7 @@ const StyledButton = styled.button`
   font-weight: 300;
   border: none;
   color: #fff;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   transition: all 0.3s ease-in-out;
 
   span {

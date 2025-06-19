@@ -4,7 +4,7 @@ const StyledButton = styled.button`
   background-color: #ffbe0b;
   border: none;
   color: #000;
-  font-size: 2rem;
+  font-size: 1.6
   letter-spacing: 0.1rem;
   padding: 1rem 3rem;
   transition: all 0.3s ease-in-out;
@@ -20,8 +20,12 @@ const StyledButton = styled.button`
   }
 `;
 
-function Button({ onClick, children }) {
-  return <StyledButton onClick={onClick}>{children}</StyledButton>;
+function Button({ className, onClick, children }) {
+  return (
+    <StyledButton className={className} onClick={onClick}>
+      {children}
+    </StyledButton>
+  );
 }
 
 export default Button;

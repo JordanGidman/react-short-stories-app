@@ -40,12 +40,13 @@ const StyledHeroText = styled.div`
   width: 100%;
 
   h1 {
-    font-size: 4rem;
-    margin-bottom: 2rem;
+    font-size: 3.6rem;
+    margin-bottom: 6rem;
     background-color: #1c1f2e;
     padding: 1rem 2rem;
     font-family: "Playfair Display", serif;
     font-weight: 900;
+    box-shadow: 0rem 0.8rem 0.8rem rgba(0, 0, 0, 0.3);
     span {
       font-style: italic;
       font-family: "Playfair Display", serif;
@@ -66,6 +67,7 @@ const StyledHeroText = styled.div`
   .reading-time {
     font-size: 3rem;
     font-weight: 300;
+    margin-bottom: 6rem;
   }
 
   /* button {
