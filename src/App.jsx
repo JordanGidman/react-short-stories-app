@@ -6,6 +6,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PageNotFound from "./pages/PageNotFound";
 import SignUp from "./pages/SignUp";
 import { AuthContextProvider } from "./context/AuthContext";
+import About from "./pages/About";
+import Account from "./pages/Account";
 
 const StyledApp = styled.div``;
 
@@ -19,6 +21,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="signin" element={<SignIn />} />
             <Route path="signup" element={<SignUp />} />
+            <Route path="about" element={<About />} />
+            <Route path="account" element={<Account />} />
 
             <Route path="*" element={<PageNotFound />} />
           </Routes>

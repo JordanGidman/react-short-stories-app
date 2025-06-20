@@ -55,7 +55,7 @@ const StyledButton = styled.button`
 
 function Navbar() {
   const { currentUser } = useContext(AuthContext);
-  console.log("Current User:", currentUser?.displayName);
+  // console.log("Current User:", currentUser?.displayName);
 
   const navigate = useNavigate();
 
@@ -63,13 +63,13 @@ function Navbar() {
     <StyledNav>
       <Ul>
         <Li className="nav-link">
-          <Button>LOGO</Button>
+          <Button onClick={() => navigate("/")}>LOGO</Button>
         </Li>
         <Li className="nav-link">
-          <StyledButton>Featured</StyledButton>
+          <StyledButton>Daily Read</StyledButton>
         </Li>
         <Li className="nav-link">
-          <StyledButton>Browse</StyledButton>
+          <StyledButton>Library</StyledButton>
         </Li>
         <li className="nav-link">
           <StyledButton>Account</StyledButton>

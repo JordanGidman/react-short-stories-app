@@ -117,8 +117,8 @@ function Home() {
           <h1>
             What <span>to read</span> today
           </h1>
+          {/* replace later with titles from db */}
           <p className="author">Jordan Gidman</p>
-          {/* replace later with selected titles and names to change each day */}
           <p className="title">A Tale of Tarkov Extract Campers</p>
           <p className="reading-time">5 min read</p>
           <Button>read now</Button>
