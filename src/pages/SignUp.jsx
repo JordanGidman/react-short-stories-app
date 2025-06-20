@@ -7,6 +7,7 @@ import Spinner from "../components/Spinner";
 import styled from "styled-components";
 import Button from "../components/Button";
 import Navbar from "../components/Navbar";
+import InputBox from "../components/InputBox";
 
 //Styled components
 const StyledContainer = styled.div`
@@ -36,19 +37,19 @@ const StyledForm = styled.form`
   gap: 3rem;
   width: 50%;
 `;
-const StyledInput = styled.input`
-  width: 50%;
-  padding: 1rem 2rem;
-  text-transform: capitalize;
-  font-size: 1.6rem;
-  border: none;
-  border-bottom: 1px solid rgb(0, 0, 0, 0.2);
-  color: #1c1f2e;
-  &::placeholder {
-    color: rgb(0, 0, 0, 0.5);
-    font-style: italic;
-  }
-`;
+// const StyledInput = styled.input`
+//   width: 50%;
+//   padding: 1rem 2rem;
+//   text-transform: capitalize;
+//   font-size: 1.6rem;
+//   border: none;
+//   border-bottom: 1px solid rgb(0, 0, 0, 0.2);
+//   color: #1c1f2e;
+//   &::placeholder {
+//     color: rgb(0, 0, 0, 0.5);
+//     font-style: italic;
+//   }
+// `;
 
 const SigninButton = styled(Button)`
   margin-top: 6rem;
@@ -98,9 +99,9 @@ function SignUp() {
       </StyledH1>
       {!isLoading ? (
         <StyledForm onSubmit={handleSignUp}>
-          <StyledInput type="text" placeholder="* Display Name" />
-          <StyledInput type="email" placeholder="* Email" />
-          <StyledInput type="password" placeholder="* Password" />
+          <InputBox type="text" placeholder="* Display Name" />
+          <InputBox type="email" placeholder="* Email" />
+          <InputBox type="password" placeholder="* Password" />
           <SigninButton disabled={isLoading}>
             {isLoading ? "Signing Up..." : "Sign Up"}
           </SigninButton>

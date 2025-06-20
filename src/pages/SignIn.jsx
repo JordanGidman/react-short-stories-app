@@ -5,6 +5,7 @@ import { auth } from "../firebase";
 import styled from "styled-components";
 import Button from "../components/Button";
 import Navbar from "../components/Navbar";
+import InputBox from "../components/InputBox";
 
 const SigninButton = styled(Button)`
   margin-top: 6rem;
@@ -46,17 +47,21 @@ const StyledForm = styled.form`
   gap: 3rem;
   width: 60%;
 `;
-const StyledInput = styled.input`
-  padding: 1rem 2rem;
-  text-transform: capitalize;
-  font-size: 1.6rem;
-  border: none;
-  border-bottom: 1px solid rgb(0, 0, 0, 0.2);
+// const StyledInput = styled.input`
+//   padding: 1rem 2rem;
+//   text-transform: capitalize;
+//   font-size: 1.6rem;
+//   border: none;
+//   border-bottom: 1px solid rgb(0, 0, 0, 0.2);
 
-  &::placeholder {
-    color: rgb(0, 0, 0, 0.5);
-    font-style: italic;
-  }
+//   &::placeholder {
+//     color: rgb(0, 0, 0, 0.5);
+//     font-style: italic;
+//   }
+// `;
+
+const StyledInputBox = styled(InputBox)`
+  width: 100%;
 `;
 const StyledH1 = styled.h1`
   font-size: 4.6rem;
@@ -136,8 +141,8 @@ function SignIn() {
         </StyledH1>
         <StyledSubheading>Sign In ↓</StyledSubheading>
         <StyledForm onSubmit={handleSubmit}>
-          <StyledInput type="email" placeholder="* Email"></StyledInput>
-          <StyledInput type="password" placeholder="* Password"></StyledInput>
+          <StyledInputBox type="email" placeholder="* Email" />
+          <StyledInputBox type="password" placeholder="* Password" />
           <SigninButton disabled={isLoading}>Sign in</SigninButton>
           {error && <span>Something went wrong..</span>}
         </StyledForm>

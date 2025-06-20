@@ -66,7 +66,9 @@ function Navbar() {
           <Button onClick={() => navigate("/")}>LOGO</Button>
         </Li>
         <Li className="nav-link">
-          <StyledButton>Daily Read</StyledButton>
+          <StyledButton onClick={() => navigate("/write")}>
+            Write Story
+          </StyledButton>
         </Li>
         <Li className="nav-link">
           <StyledButton>Library</StyledButton>

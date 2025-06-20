@@ -8,6 +8,7 @@ import SignUp from "./pages/SignUp";
 import { AuthContextProvider } from "./context/AuthContext";
 import About from "./pages/About";
 import Account from "./pages/Account";
+import WriteBook from "./pages/WriteBook";
 
 const StyledApp = styled.div``;
 
@@ -23,6 +24,7 @@ function App() {
             <Route path="signup" element={<SignUp />} />
             <Route path="about" element={<About />} />
             <Route path="account" element={<Account />} />
+            <Route path="write" element={<WriteBook />} />
 
             <Route path="*" element={<PageNotFound />} />
           </Routes>
