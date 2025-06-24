@@ -4,6 +4,16 @@ import Button from "../components/Button";
 import InputBox from "../components/InputBox";
 import "react-quill-new/dist/quill.snow.css";
 import ReactQuill from "react-quill-new";
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../firebase";
+import { useContext, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const StyledWriteBook = styled.div`
   display: flex;
@@ -129,22 +139,45 @@ const StyledButton = styled(Button)`
 `;
 
 function WriteBook() {
-  //1)title
-  //2)Genre
-  //3)Synopsis
-  //4)Book
-  //5)Read Time
-
+  //Need to refactor the inputs to be controlled components.
   //Need a check for user authentication before allowing access to this page - same for any comp that requires a signed in user
   //Need a check for isLoading state to show a loading spinner while the page is loading
 
-  function handleSubmit(e) {
+  const { currentUser } = useContext(AuthContext);
+  const [storyText, setStoryText] = useState("");
+
+  async function handleSubmit(e) {
     console.log(e);
+    e.preventDefault();
 
-    //Capture input data
+    //Capture input data not using controlled components because of issues saving to firebase will refactor later
+    const title = e.target[0].value;
+    const genre = e.target[1].value;
+    const synopsis = e.target[2].value;
+    const readTime = e.target[3].value;
+    // const storyText = e.target[4].value;
+    console.log(currentUser.uid);
 
-    //Save input data to firebase to db/userid/stories - create a new doc here.
+    //Save input data to firebase
+    try {
+      //Create a new story document and trim the p tag we get back from the library
+      const docRef = await addDoc(collection(db, "stories"), {
+        title,
+        genre,
+        synopsis,
+        readTime,
+        storyText: storyText.split("<p>").join("").split("</p>").join(""),
+      });
 
+      console.log(docRef);
+      //add the story id to the stories array of the user that created it
+      await updateDoc(doc(db, "users", currentUser.uid), {
+        stories: arrayUnion(docRef.id),
+      });
+    } catch (err) {
+      //replace with proper error handling later
+      console.log(err.message);
+    }
     //Maybe navigate to the book page for this story
   }
 
@@ -171,7 +204,6 @@ function WriteBook() {
             <StyledOption value="romance">Romance</StyledOption>
             <StyledOption value="horror">Horror</StyledOption>
             <StyledOption value="thriller">Thriller</StyledOption>
-            <StyledOption value="non-fiction">Non-Fiction</StyledOption>
             <StyledOption value="historical">Historical</StyledOption>
             <StyledOption value="adventure">Adventure</StyledOption>
             <StyledOption value="Action">Action</StyledOption>
@@ -189,6 +221,7 @@ function WriteBook() {
             theme="snow"
             placeholder="Write your story here..."
             className="text-editor"
+            onChange={setStoryText}
           />
           <StyledButton>Post</StyledButton>
           {/* Maybe a button for saving as draft */}

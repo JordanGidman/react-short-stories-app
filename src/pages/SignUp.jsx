@@ -1,5 +1,5 @@
 // import { useState } from "react";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +8,7 @@ import styled from "styled-components";
 import Button from "../components/Button";
 import Navbar from "../components/Navbar";
 import InputBox from "../components/InputBox";
+import { doc, setDoc } from "firebase/firestore";
 
 //Styled components
 const StyledContainer = styled.div`
@@ -69,29 +70,44 @@ function SignUp() {
     setIsLoading(true);
 
     const displayName = e.target[0].value; // Assuming the first input is for display name
-    const email = e.target[1].value;
-    const password = e.target[2].value;
+    const fullName = e.target[1].value; // Assuming the first input is for display name
+
+    const email = e.target[2].value;
+    const password = e.target[3].value;
 
     //Might need to create a user in the DB also for saving their stories.
+    try {
+      //Create user with email and password
+      await createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log("User signed up:", user);
 
-    //Create user with email and password
-    await createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log("User signed up:", user);
-        // Redirect or perform other actions
-      })
-      .catch((error) => {
-        console.error("Error signing up:", error);
+          // Redirect or perform other actions
+        })
+        .catch((error) => {
+          console.error("Error signing up:", error);
+        });
+      //Update user profile with display name
+      await updateProfile(auth.currentUser, {
+        displayName: displayName,
+        fullName: fullName,
       });
-    //Update user profile with display name
-    await updateProfile(auth.currentUser, {
-      displayName: displayName,
-    });
 
-    setIsLoading(false);
-    navigate("/");
+      //Create a user in the db
+      await setDoc(doc(db, "users", auth.currentUser.uid), {
+        uid: auth.currentUser.uid,
+        displayName: displayName,
+        fullName,
+        stories: [],
+      });
+      navigate("/");
+      setIsLoading(false);
+    } catch (err) {
+      //replace with proper error handling later
+      console.log(err.message);
+    }
   }
 
   return (
@@ -103,6 +119,7 @@ function SignUp() {
       {!isLoading ? (
         <StyledForm onSubmit={handleSignUp}>
           <InputBox type="text" placeholder="* Display Name" />
+          <InputBox type="text" placeholder="* Full Name" />
           <InputBox type="email" placeholder="* Email" />
           <InputBox type="password" placeholder="* Password" />
           <SigninButton disabled={isLoading}>
