@@ -72,6 +72,8 @@ function SignUp() {
     const email = e.target[1].value;
     const password = e.target[2].value;
 
+    //Might need to create a user in the DB also for saving their stories.
+
     //Create user with email and password
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -87,6 +89,7 @@ function SignUp() {
     await updateProfile(auth.currentUser, {
       displayName: displayName,
     });
+
     setIsLoading(false);
     navigate("/");
   }

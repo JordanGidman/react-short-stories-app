@@ -13,6 +13,8 @@ import WriteBook from "./pages/WriteBook";
 const StyledApp = styled.div``;
 
 function App() {
+  //Need a check for a current user before allowing them to navigate to any page that requires one e.g write/account
+
   return (
     <AuthContextProvider>
       <StyledApp>

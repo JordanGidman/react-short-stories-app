@@ -13,6 +13,7 @@ const StyledNav = styled.nav`
   width: 100vw;
   background-color: #1c1f2e;
   filter: drop-shadow(0rem 0.8rem 0.8rem rgba(0, 0, 0, 0.3));
+  height: 8rem;
   z-index: 10;
 `;
 
@@ -65,6 +66,7 @@ function Navbar() {
         <Li className="nav-link">
           <Button onClick={() => navigate("/")}>LOGO</Button>
         </Li>
+
         <Li className="nav-link">
           <StyledButton onClick={() => navigate("/write")}>
             Write Story
