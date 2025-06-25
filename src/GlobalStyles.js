@@ -15,7 +15,7 @@ html {
 }
 
 body {
-  background-color: #fff;
+  background-color: #f7f7f7;
   color: #1c1f2e;
   font-family: "Montserrat", sans-serif;
   font-size: 1.6rem;

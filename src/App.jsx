@@ -9,11 +9,14 @@ import { AuthContextProvider } from "./context/AuthContext";
 import About from "./pages/About";
 import Account from "./pages/Account";
 import WriteBook from "./pages/WriteBook";
+import Library from "./pages/Library";
 
 const StyledApp = styled.div``;
 
 function App() {
   //Need a check for a current user before allowing them to navigate to any page that requires one e.g write/account
+
+  //i wanted to allow images to be used both for the book "cover" and within the post itself however firebase has paywalled its image uploading unfortunately. I will look into alternate db options for the next project.
 
   return (
     <AuthContextProvider>
@@ -27,6 +30,7 @@ function App() {
             <Route path="about" element={<About />} />
             <Route path="account" element={<Account />} />
             <Route path="write" element={<WriteBook />} />
+            <Route path="library" element={<Library />} />
 
             <Route path="*" element={<PageNotFound />} />
           </Routes>

@@ -73,7 +73,9 @@ function Navbar() {
           </StyledButton>
         </Li>
         <Li className="nav-link">
-          <StyledButton>Library</StyledButton>
+          <StyledButton onClick={() => navigate("/library")}>
+            Library
+          </StyledButton>
         </Li>
         <li className="nav-link">
           <StyledButton>Account</StyledButton>
