@@ -10,6 +10,7 @@ import About from "./pages/About";
 import Account from "./pages/Account";
 import WriteBook from "./pages/WriteBook";
 import Library from "./pages/Library";
+import StoryList from "./pages/StoryList";
 
 const StyledApp = styled.div``;
 
@@ -31,6 +32,7 @@ function App() {
             <Route path="account" element={<Account />} />
             <Route path="write" element={<WriteBook />} />
             <Route path="library" element={<Library />} />
+            <Route path="library/:genre" element={<StoryList />} />
 
             <Route path="*" element={<PageNotFound />} />
           </Routes>

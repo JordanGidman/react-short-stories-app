@@ -9,6 +9,7 @@ import historical from "../img/historical.webp";
 import mystery from "../img/mystery.webp";
 import drama from "../img/drama.webp";
 import religious from "../img/religious.webp";
+import { Outlet } from "react-router-dom";
 
 // Styled components
 const StyledLibrary = styled.div`
@@ -204,6 +205,8 @@ function Library() {
           })}
         </StyledGenreList>
       </StyledContainer>
+
+      {/* <Outlet /> */}
     </StyledLibrary>
   );
 }

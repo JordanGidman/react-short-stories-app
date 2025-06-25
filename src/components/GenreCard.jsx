@@ -1,7 +1,10 @@
 import styled from "styled-components";
+import Button from "./Button";
+import { Link } from "react-router-dom";
 
 const StyledCard = styled.li`
   display: flex;
+  /* flex-direction: column; */
   height: 35rem;
   font-size: 6.4rem;
   padding: 3rem;
@@ -11,6 +14,7 @@ const StyledCard = styled.li`
   justify-content: flex-${(props) => props.$justify};
   align-items: flex-${(props) => props.$align};
   grid-column: span ${(props) => props.$span};
+  color: #1c1f2e;
   font-family: "Playfair Display", serif;
   font-weight: 800;
   /* background-image: url(${(props) => props.$genre.src}); */
@@ -49,6 +53,35 @@ const StyledCard = styled.li`
   }
 `;
 
+const StyledLink = styled(Link)`
+  height: 100%;
+  width: 100%;
+`;
+
+const StyledButton = styled(Button)`
+  width: fit-content;
+  font-size: 1.4rem;
+  font-weight: 600;
+
+  background-color: ${(props) =>
+    props.$backgroundColor === "#ffee34" ? "#fff" : "#ffee34"};
+
+  &:hover {
+    background-color: ${(props) =>
+      props.$backgroundColor === "#85e9e1" ? "#fff" : "#85e9e1"};
+  }
+`;
+
+const StyledWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-${(props) => props.$justify};
+  justify-content: flex-${(props) => props.$align};
+  text-decoration: none;
+  height: 100%;
+  width: 100%;
+`;
+
 function GenreCard({
   genre,
   span,
@@ -57,7 +90,11 @@ function GenreCard({
   backgroundColor,
   backgroundImage,
 }) {
-  console.log(backgroundImage);
+  // function handleClick(e) {
+  //   e.preventDefault();
+
+  //   console.log("Click");
+  // }
 
   return (
     <StyledCard
@@ -67,8 +104,16 @@ function GenreCard({
       $justify={justify}
       $backgroundColor={backgroundColor}
       $backgroundImage={backgroundImage}
+      // onClick={(e) => handleClick(e)}
     >
-      {genre}
+      <StyledLink to={`${genre.toLowerCase()}`}>
+        <StyledWrapper $align={align} $justify={justify}>
+          {genre}
+          <StyledButton $backgroundColor={backgroundColor}>
+            See All
+          </StyledButton>
+        </StyledWrapper>
+      </StyledLink>
     </StyledCard>
   );
 }

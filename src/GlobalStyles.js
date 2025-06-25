@@ -22,6 +22,11 @@ body {
   line-height: 1.5;
   overflow-x: hidden;
 }
+
+a {
+  text-decoration: none;
+  color: #1c1f2e;
+}
 `;
 
 export default GlobalStyles;
