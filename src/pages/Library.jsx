@@ -164,10 +164,10 @@ function Library() {
           <StyledWrapper>
             <StyledH1>Browse by Genre</StyledH1>
             <StyledSubheading>
-              A curated, user-made library of short stories, bringing you titles
-              from around the world, featuring the short stories of all genres.
-              No matter what you are feeling theres something for you. So choose
-              your genre and get stuck in to your literary adventure.
+              A vast, user-made library of short stories, bringing you titles
+              from around the world, featuring short stories of all genres. No
+              matter what you are feeling theres something for everyone. So
+              choose your genre and get stuck in to your literary adventure.
             </StyledSubheading>
           </StyledWrapper>
         </StyledHeader>
