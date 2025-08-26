@@ -1,17 +1,131 @@
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { faker } from "@faker-js/faker";
+import StoryCard from "../components/StoryCard";
+import Navbar from "../components/Navbar";
+import styled from "styled-components";
+import book from "../img/book.png";
+
+const StyledStoryList = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-top: 8.2rem;
+  align-items: center;
+  /* justify-content: center; */
+  width: 100vw;
+  gap: 2rem;
+  padding: 0% 5%;
+  padding-top: 8rem;
+  background-color: #f9f9f9;
+
+  min-height: 100vh;
+`;
+
+const StyledContainer = styled.div`
+  margin-bottom: 3rem;
+`;
+const StyledH1 = styled.h1`
+  font-size: 6.4rem;
+  text-align: left;
+  padding: 2rem 0rem;
+  font-family: "Playfair Display", serif;
+  text-transform: capitalize;
+`;
+const StyledSubheading = styled.p`
+  font-size: 1.6rem;
+  padding-bottom: 4rem;
+  max-width: 70rem;
+`;
+
+const StyledHeader = styled.header`
+  padding: 0rem 4rem;
+  display: grid;
+  grid-template-columns: 40% 60%;
+  height: 50vh;
+  width: 95vw;
+  background-image: url(${book});
+  background-color: #fff;
+  background-size: 30% auto;
+  background-repeat: no-repeat;
+  background-position: left 2rem center;
+
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
+  margin-bottom: 3rem;
+`;
+
+const StyledWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 1.2rem 4rem;
+`;
+
+const StyledList = styled.ul`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4rem;
+`;
 
 function StoryList() {
-  const genre = useParams();
-
   //Here we run into a problem, the db has only the test stories i have added. Meaning theres nothing to pull, i have 2 options here i can either fill the db manually or programatically with random stories
   //Or i can use an api, however the only free one i have found returns a random short story that has no genre, so i would have to assign them randomly just to have some sample data.
 
+  //Somehow i didnt know about this tool until now but i will be using faker to fake the data for this
+  const genre = useParams();
+
+  const [stories, setStories] = useState([]);
+
+  useEffect(() => {
+    function createRandomStories() {
+      const randomStories = Array.from({ length: 20 }, () => ({
+        // id: faker.datatype.uuid(),
+        title: faker.word.words({ length: { min: 2, max: 5 } }),
+        Author: faker.person.fullName(),
+        storyText: faker.lorem.paragraphs(),
+        synopsis: faker.lorem.sentences(2),
+        genre: genre.genre,
+      }));
+
+      setStories(() => [...randomStories]);
+    }
+    createRandomStories();
+  }, [genre]);
+
+  console.log("stories:", stories);
+
   return (
-    <div>
-      {genre.genre}
-      <Link to="/library">Back to genres</Link>
-    </div>
+    <StyledStoryList>
+      <Navbar />
+      <StyledContainer>
+        <StyledHeader>
+          <StyledWrapper />
+          <StyledWrapper>
+            <StyledH1>{genre.genre}</StyledH1>
+            <StyledSubheading>
+              Here you can browse all the stories in the {genre.genre} genre
+              that our users have created. Feel free to read, like, and share
+              your favorite stories! Aswell as create your own stories to share
+              with the community. Happy reading!
+            </StyledSubheading>
+          </StyledWrapper>
+        </StyledHeader>
+        <StyledList>
+          {stories.map((story, index) => (
+            <StoryCard key={index} story={story} />
+          ))}
+        </StyledList>
+      </StyledContainer>
+    </StyledStoryList>
   );
 }
 
 export default StoryList;
+
+//  <Link to="/library">Back to genres</Link>
+// {stories.map((story, index) => (
+// <StoryCard key={index} story={story} />
+// ))}
