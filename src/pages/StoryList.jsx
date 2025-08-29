@@ -75,23 +75,47 @@ function StoryList() {
   //Or i can use an api, however the only free one i have found returns a random short story that has no genre, so i would have to assign them randomly just to have some sample data.
 
   //Somehow i didnt know about this tool until now but i will be using faker to fake the data for this
+  //I will also need to pull in the results from the DB as i want it all to function normally even if it is just populated by dummy data
   const genre = useParams();
 
   const [stories, setStories] = useState([]);
 
-  useEffect(() => {
-    function createRandomStories() {
-      const randomStories = Array.from({ length: 20 }, () => ({
-        // id: faker.datatype.uuid(),
-        title: faker.word.words({ length: { min: 2, max: 5 } }),
-        Author: faker.person.fullName(),
-        storyText: faker.lorem.paragraphs(),
-        synopsis: faker.lorem.sentences(2),
-        genre: genre.genre,
-      }));
+  function validateImage(url) {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve(url);
+      img.onerror = () =>
+        resolve(
+          faker.image.urlPicsumPhotos({
+            category: "abstract",
+            blur: 0,
+          })
+        );
+      img.src = url;
+    });
+  }
 
-      setStories(() => [...randomStories]);
+  useEffect(() => {
+    async function createRandomStories() {
+      const randomStories = await Promise.all(
+        Array.from({ length: 20 }, async () => {
+          const fakerUrl = faker.image.urlLoremFlickr({ category: "book" });
+          const validUrl = await validateImage(fakerUrl);
+
+          return {
+            title: faker.word.words({ length: { min: 2, max: 5 } }),
+            author: faker.person.fullName(),
+            storyText: faker.lorem.paragraphs(),
+            synopsis: faker.lorem.sentences(2),
+            genre: genre.genre,
+            img: validUrl, // always valid
+          };
+        })
+      );
+
+      setStories(randomStories);
     }
+
     createRandomStories();
   }, [genre]);
 

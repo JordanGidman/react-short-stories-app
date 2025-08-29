@@ -108,6 +108,7 @@ function Library() {
   //I could do this randomly with Math.random but i have a specific layout in mind and this is just easier - Not the cleanest but it works for now
   //I could also do this with a json file and import it but again this works for now
   //The spans array determines how many columns each genre card spans
+  //Its incredibly unreadable i know but no one else will work on this but me and it works.
 
   const spans = [1, 1, 1, 1, 1, 3, 3, 1, 1, 1, 1, 1, 3, 1, 1, 3, 2, 2, 4];
   const aligns = [
