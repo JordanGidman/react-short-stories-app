@@ -1,5 +1,8 @@
 import { faker } from "@faker-js/faker";
 import styled from "styled-components";
+import placeholder from "../img/placeholder.jpg";
+import { useEffect, useState } from "react";
+import Button from "./Button";
 
 const StyledStoryCard = styled.div`
   display: grid;
@@ -26,14 +29,15 @@ const StyledTextBox = styled.div`
   background-color: #fff;
 `;
 const StyledImageBox = styled.div`
-  background-image: url(${(props) => props.img});
+  background-image: url(${(props) => props.img || props.placeholder});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  transition: background-image 0.3s ease-in-out, filter 0.3s ease-in-out;
 `;
 
 const StyledTitle = styled.h2`
-  font-size: 4rem;
+  font-size: 3.2rem;
   font-family: "Playfair Display", serif;
   text-transform: capitalize;
 `;
@@ -55,10 +59,37 @@ const StyledAuthor = styled.p`
   color: #1c1f2e;
 `;
 
+const StyledButton = styled(Button)`
+  width: fit-content;
+  font-size: 1.4rem;
+  font-weight: 600;
+
+  background-color: ${(props) =>
+    props.$backgroundColor === "#ffee34" ? "#fff" : "#ffee34"};
+
+  &:hover {
+    background-color: ${(props) =>
+      props.$backgroundColor === "#85e9e1" ? "#fff" : "#85e9e1"};
+  }
+`;
+
 function StoryCard({ story }) {
+  const [loadedImg, setLoadedImg] = useState(null);
+
+  useEffect(() => {
+    if (!story.img) return;
+
+    const img = new Image();
+    img.onload = () => setLoadedImg(story.img);
+    img.src = story.img;
+  }, [story.img]);
+
   return (
     <StyledStoryCard>
-      <StyledImageBox img={story.img}></StyledImageBox>
+      <StyledImageBox
+        img={loadedImg}
+        placeholder={placeholder}
+      ></StyledImageBox>
       <StyledTextBox>
         <div>
           <StyledAuthor>{story.author}</StyledAuthor>
@@ -67,6 +98,7 @@ function StoryCard({ story }) {
         {/* <p>{story.storyText}</p> */}
         <StyledSynopsis>{story.synopsis}</StyledSynopsis>
         <StyledGenre>{story.genre}</StyledGenre>
+        <StyledButton>Read</StyledButton>
       </StyledTextBox>
     </StyledStoryCard>
   );

@@ -77,8 +77,8 @@ function StoryList() {
   //Somehow i didnt know about this tool until now but i will be using faker to fake the data for this
   //I will also need to pull in the results from the DB as i want it all to function normally even if it is just populated by dummy data
   const genre = useParams();
-
   const [stories, setStories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   function validateImage(url) {
     return new Promise((resolve) => {
@@ -87,7 +87,7 @@ function StoryList() {
       img.onerror = () =>
         resolve(
           faker.image.urlPicsumPhotos({
-            category: "abstract",
+            category: "animals",
             blur: 0,
           })
         );
@@ -114,6 +114,7 @@ function StoryList() {
       );
 
       setStories(randomStories);
+      setLoading(false);
     }
 
     createRandomStories();
