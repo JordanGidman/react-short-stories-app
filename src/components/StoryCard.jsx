@@ -3,6 +3,7 @@ import styled from "styled-components";
 import placeholder from "../img/placeholder.jpg";
 import { useEffect, useState } from "react";
 import Button from "./Button";
+import { Link } from "react-router-dom";
 
 const StyledStoryCard = styled.div`
   display: grid;
@@ -73,8 +74,12 @@ const StyledButton = styled(Button)`
   }
 `;
 
+const StyledLink = styled(Link)``;
+
 function StoryCard({ story }) {
   const [loadedImg, setLoadedImg] = useState(null);
+
+  console.log(placeholder);
 
   useEffect(() => {
     if (!story.img) return;
@@ -98,7 +103,9 @@ function StoryCard({ story }) {
         {/* <p>{story.storyText}</p> */}
         <StyledSynopsis>{story.synopsis}</StyledSynopsis>
         <StyledGenre>{story.genre}</StyledGenre>
-        <StyledButton>Read</StyledButton>
+        <StyledLink to={`/story/${story.id}`}>
+          <StyledButton>Read</StyledButton>
+        </StyledLink>
       </StyledTextBox>
     </StyledStoryCard>
   );

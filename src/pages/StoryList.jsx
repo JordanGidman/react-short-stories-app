@@ -103,6 +103,7 @@ function StoryList() {
           const validUrl = await validateImage(fakerUrl);
 
           return {
+            id: faker.string.uuid(),
             title: faker.word.words({ length: { min: 2, max: 5 } }),
             author: faker.person.fullName(),
             storyText: faker.lorem.paragraphs(),
