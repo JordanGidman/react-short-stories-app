@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { faker } from "@faker-js/faker";
 import StoryCard from "../components/StoryCard";
 import Navbar from "../components/Navbar";
 import styled from "styled-components";
