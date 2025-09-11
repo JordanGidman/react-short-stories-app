@@ -116,6 +116,10 @@ const StyledOption = styled.option`
   color: #1c1f2e;
 `;
 
+const StyledInputBox = styled(InputBox)`
+  width: 100%;
+`;
+
 const StyledTextarea = styled.textarea`
   width: 100%;
   min-height: 7.8rem;
@@ -154,7 +158,10 @@ function WriteBook() {
     const title = e.target[0].value;
     const genre = e.target[1].value;
     const synopsis = e.target[2].value;
-    const readTime = e.target[3].value;
+    const img =
+      e.target[3].value === ""
+        ? "https://picsum.photos/seed/hireme/600/400"
+        : e.target[3].value;
     // const storyText = e.target[4].value;
     console.log(currentUser.uid);
 
@@ -165,8 +172,9 @@ function WriteBook() {
         title,
         genre,
         synopsis,
-        readTime,
+        img,
         storyText: storyText.split("<p>").join("").split("</p>").join(""),
+        createdAt: new Date(),
       });
 
       console.log(docRef);
@@ -198,25 +206,35 @@ function WriteBook() {
             >
               Select Genre *
             </StyledOption>
-            <StyledOption value="fantasy">Fantasy</StyledOption>
-            <StyledOption value="science-fiction">Science Fiction</StyledOption>
-            <StyledOption value="mystery">Mystery</StyledOption>
-            <StyledOption value="romance">Romance</StyledOption>
-            <StyledOption value="horror">Horror</StyledOption>
-            <StyledOption value="thriller">Thriller</StyledOption>
-            <StyledOption value="historical">Historical</StyledOption>
-            <StyledOption value="adventure">Adventure</StyledOption>
+            <StyledOption value="Fantasy">Fantasy</StyledOption>
+            <StyledOption value="Science-fiction">Science Fiction</StyledOption>
+            <StyledOption value="Gaming">Gaming</StyledOption>
+            <StyledOption value="Mystery">Mystery</StyledOption>
+            <StyledOption value="Romance">Romance</StyledOption>
+            <StyledOption value="Horror">Horror</StyledOption>
+            <StyledOption value="Thriller">Thriller</StyledOption>
+            <StyledOption value="Historical">Historical</StyledOption>
+            <StyledOption value="Adventure">Adventure</StyledOption>
             <StyledOption value="Action">Action</StyledOption>
-            <StyledOption value="comedy">Comedy</StyledOption>
-            <StyledOption value="drama">Drama</StyledOption>
-            <StyledOption value="other">Other</StyledOption>
+            <StyledOption value="Crime">Crime</StyledOption>
+            <StyledOption value="Comedy">Comedy</StyledOption>
+            <StyledOption value="Religious">Religious</StyledOption>
+            <StyledOption value="Political">Political</StyledOption>
+            <StyledOption value="Existential">Existential</StyledOption>
+            <StyledOption value="War">War</StyledOption>
+            <StyledOption value="Educational">Educational</StyledOption>
+            <StyledOption value="Drama">Drama</StyledOption>
+            <StyledOption value="Other">Other</StyledOption>
           </StyledSelect>
 
           <StyledTextarea
             type="textarea"
             placeholder="A short synopsis of your story *"
           />
-          <InputBox type="text" placeholder="Estimated read time (minutes) *" />
+          <StyledInputBox
+            type="text"
+            placeholder="Image URL (Firebase no longer allows free image uploads leave blank for a placeholder or put any image url. )"
+          />
           <ReactQuill
             theme="snow"
             placeholder="Write your story here..."

@@ -5,6 +5,8 @@ import StoryCard from "../components/StoryCard";
 import Navbar from "../components/Navbar";
 import styled from "styled-components";
 import book from "../img/book.png";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../firebase";
 
 const StyledStoryList = styled.div`
   display: flex;
@@ -80,48 +82,78 @@ function StoryList() {
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  function validateImage(url) {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.onload = () => resolve(url);
-      img.onerror = () =>
-        resolve(
-          faker.image.urlPicsumPhotos({
-            category: "animals",
-            blur: 0,
-          })
-        );
-      img.src = url;
-    });
-  }
+  console.log(stories);
 
   useEffect(() => {
-    async function createRandomStories() {
-      const randomStories = await Promise.all(
-        Array.from({ length: 20 }, async () => {
-          const fakerUrl = faker.image.urlLoremFlickr({ category: "book" });
-          const validUrl = await validateImage(fakerUrl);
+    async function fetchStories() {
+      const storiesRef = collection(db, "stories");
 
-          return {
-            id: faker.string.uuid(),
-            title: faker.word.words({ length: { min: 2, max: 5 } }),
-            author: faker.person.fullName(),
-            storyText: faker.lorem.paragraphs(),
-            synopsis: faker.lorem.sentences(2),
-            genre: genre.genre,
-            img: validUrl, // always valid
-          };
-        })
-      );
+      // Capitalize genre to match stored format
+      const genreName = genre.genre
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
 
-      setStories(randomStories);
+      const q = query(storiesRef, where("genre", "==", genreName));
+
+      const querySnapshot = await getDocs(q);
+
+      const fetchedStories = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setStories(fetchedStories);
       setLoading(false);
     }
 
-    createRandomStories();
+    fetchStories();
   }, [genre]);
 
-  console.log("stories:", stories);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  // function validateImage(url) {
+  //   return new Promise((resolve) => {
+  //     const img = new Image();
+  //     img.onload = () => resolve(url);
+  //     img.onerror = () =>
+  //       resolve(
+  //         faker.image.urlPicsumPhotos({
+  //           category: "animals",
+  //           blur: 0,
+  //         })
+  //       );
+  //     img.src = url;
+  //   });
+  // }
+
+  // useEffect(() => {
+  //   async function createRandomStories() {
+  //     const randomStories = await Promise.all(
+  //       Array.from({ length: 20 }, async () => {
+  //         const fakerUrl = faker.image.urlLoremFlickr({ category: "book" });
+  //         const validUrl = await validateImage(fakerUrl);
+
+  //         return {
+  //           id: faker.string.uuid(),
+  //           title: faker.word.words({ length: { min: 2, max: 5 } }),
+  //           author: faker.person.fullName(),
+  //           storyText: faker.lorem.paragraphs(),
+  //           synopsis: faker.lorem.sentences(2),
+  //           genre: genre.genre,
+  //           img: validUrl, // always valid
+  //         };
+  //       })
+  //     );
+
+  //     setStories(randomStories);
+  //     setLoading(false);
+  //   }
+
+  //   createRandomStories();
+  // }, [genre]);
 
   return (
     <StyledStoryList>
