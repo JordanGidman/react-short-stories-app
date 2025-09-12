@@ -171,8 +171,8 @@ function StoryList() {
           </StyledWrapper>
         </StyledHeader>
         <StyledList>
-          {stories.map((story, index) => (
-            <StoryCard key={index} story={story} />
+          {stories.map((story) => (
+            <StoryCard key={story.id} story={story} />
           ))}
         </StyledList>
       </StyledContainer>

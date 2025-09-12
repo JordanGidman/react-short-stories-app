@@ -146,6 +146,10 @@ function WriteBook() {
   //Need to refactor the inputs to be controlled components.
   //Need a check for user authentication before allowing access to this page - same for any comp that requires a signed in user
   //Need a check for isLoading state to show a loading spinner while the page is loading
+  //Need to add error handling for the form submission
+  //Need to add form validation to make sure all required fields are filled out
+  //Need to add a way to save a draft of the story
+  //Need to navigate user to the page of the story they just created.
 
   const { currentUser } = useContext(AuthContext);
   const [storyText, setStoryText] = useState("");
@@ -163,7 +167,6 @@ function WriteBook() {
         ? "https://picsum.photos/seed/hireme/600/400"
         : e.target[3].value;
     // const storyText = e.target[4].value;
-    console.log(currentUser.uid);
 
     //Save input data to firebase
     try {
@@ -173,8 +176,12 @@ function WriteBook() {
         genre,
         synopsis,
         img,
-        storyText: storyText.split("<p>").join("").split("</p>").join(""),
+        storyText,
+        creatorID: currentUser.uid,
+        //Maybe add a isPublished field later for drafts
         createdAt: new Date(),
+        author: currentUser.displayName,
+        isSeedData: false,
       });
 
       console.log(docRef);
@@ -186,7 +193,7 @@ function WriteBook() {
       //replace with proper error handling later
       console.log(err.message);
     }
-    //Maybe navigate to the book page for this story
+    //Navigate to the book page for this story
   }
 
   return (

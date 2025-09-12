@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Button from "./Button";
 import { Link } from "react-router-dom";
 
-const StyledStoryCard = styled.div`
+const StyledStoryCard = styled(Link)`
   display: grid;
   grid-template-columns: 1fr 1fr;
   padding: 2rem;
@@ -90,7 +90,7 @@ function StoryCard({ story }) {
   }, [story.img]);
 
   return (
-    <StyledStoryCard>
+    <StyledStoryCard to={`/library/${story.genre}/book/${story.id}`}>
       <StyledImageBox
         img={loadedImg}
         placeholder={placeholder}
