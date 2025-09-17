@@ -12,7 +12,7 @@ const StyledBook = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 4rem;
+  padding: 8rem;
 `;
 
 const StyledHeader = styled.header`
@@ -22,7 +22,8 @@ const StyledHeader = styled.header`
   justify-content: space-between;
   padding: 0rem 4rem;
   margin: 6rem 0rem;
-  width: 100vw;
+  width: 100%;
+  height: 40vh;
   gap: 1.2rem;
 `;
 const StyledTextWrapper = styled.div`
@@ -30,6 +31,7 @@ const StyledTextWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   height: 100%;
+  width: 100%;
   gap: 2rem;
 `;
 const StyledH1 = styled.h1`
@@ -51,16 +53,24 @@ const StyledSynopsis = styled.p`
   line-height: 1.6;
   color: #555;
 `;
-const StyledImgWrapper = styled.div``;
-const StyledImg = styled.img`
+const StyledImgWrapper = styled.div`
+  background-image: url(${(props) => props.$backgroundImage});
+  background-size: cover;
+  background-position: center;
   border-radius: 1.6rem;
-  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
 `;
+// const StyledImg = styled.img`
+//   border-radius: 1.6rem;
+//   width: 100%;
+// `;
 const StyledBody = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
 
+  padding: 4rem;
   font-size: 2rem;
 `;
 
@@ -106,8 +116,8 @@ function Book() {
           </StyledSubheading>
           <StyledSynopsis>{story.synopsis}</StyledSynopsis>
         </StyledTextWrapper>
-        <StyledImgWrapper>
-          <StyledImg src={story.img} alt={story.title} />
+        <StyledImgWrapper $backgroundImage={story.img}>
+          {/* <StyledImg src={story.img} alt={story.title} /> */}
         </StyledImgWrapper>
       </StyledHeader>
       {!story.isSeedData ? (
@@ -121,8 +131,9 @@ function Book() {
           <p>
             This is a seed data story. Full styling is <strong>not</strong>{" "}
             available. For the best example please look at any of the stories
-            titled "Test Story" there is one in every genre. As these are what
-            user created storied with personalised styling will look like.
+            titled "Test Story" in the fantasy genre. As these are what user
+            created storied with personalised styling will look like, or create
+            your own short story to share with others!
           </p>
           <p>{story.storyText}</p>
           <p>{story.storyText + " " + story.storyText}</p>

@@ -7,7 +7,8 @@ import { Link } from "react-router-dom";
 
 const StyledStoryCard = styled(Link)`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 40% 60%;
+  border-radius: 1.6rem;
   padding: 2rem;
   gap: 2rem;
   background-color: #fff;

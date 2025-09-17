@@ -89,22 +89,30 @@ function Navbar() {
   return (
     <StyledNav>
       <Ul>
-        <Li className="nav-link">
+        <Li>
           <Button onClick={() => navigate("/")}>LOGO</Button>
         </Li>
 
-        <Li className="nav-link">
+        <Li>
           <StyledButton onClick={() => navigate("/write")}>
             Write Story
           </StyledButton>
         </Li>
-        <Li className="nav-link">
+        <Li>
           <StyledButton onClick={() => navigate("/library")}>
             Library
           </StyledButton>
         </Li>
 
-        <Li className="nav-link">
+        {currentUser && (
+          <Li>
+            <StyledButton onClick={() => navigate("/mystories")}>
+              My Stories
+            </StyledButton>
+          </Li>
+        )}
+
+        <Li>
           {currentUser ? (
             <StyledButton>
               <StyledLink to="/account">{currentUser.displayName}</StyledLink>
@@ -115,7 +123,7 @@ function Navbar() {
         </Li>
 
         {currentUser && (
-          <Li className="nav-link">
+          <Li>
             <Button onClick={() => auth.signOut()}>Log out</Button>
           </Li>
         )}

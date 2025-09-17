@@ -6,7 +6,7 @@ import Button from "../components/Button";
 import Featured from "../components/Featured";
 
 const StyledHero = styled.div`
-  background-image: url(${(props) => props.img});
+  background-image: url(${(props) => props.$img});
   width: 100vw;
   height: 100vh;
   background-size: cover;
@@ -112,7 +112,7 @@ const StyledHeroFooter = styled.div`
 function Home() {
   return (
     <div>
-      <StyledHero img={heroImg}>
+      <StyledHero $img={heroImg}>
         <StyledHeroText>
           <h1>
             What <span>to read</span> today

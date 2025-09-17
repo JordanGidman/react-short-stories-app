@@ -54,16 +54,15 @@ const StyledGenreList = styled.ul`
   row-gap: 4rem;
   column-gap: 2rem;
 `;
-
 const StyledHeader = styled.header`
   padding: 0rem 4rem;
   display: grid;
   grid-template-columns: 40% 60%;
-  height: 60vh;
+  height: 50vh;
   width: 95vw;
   background-image: url(${religious});
   background-color: #fff;
-  background-size: 40% auto;
+  background-size: 30% auto;
   background-repeat: no-repeat;
   background-position: left 2rem center;
 
@@ -72,7 +71,6 @@ const StyledHeader = styled.header`
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
   margin-bottom: 3rem;
 `;
-
 const StyledWrapper = styled.div`
   display: flex;
   width: 100%;
@@ -108,7 +106,7 @@ function Library() {
   //I could do this randomly with Math.random but i have a specific layout in mind and this is just easier - Not the cleanest but it works for now
   //I could also do this with a json file and import it but again this works for now
   //The spans array determines how many columns each genre card spans
-  //Its incredibly unreadable i know but no one else will work on this but me and it works.
+  //Its incredibly unreadable i know but no one else will work on this but me which is the only reason im leaving it as is.
 
   const spans = [1, 1, 1, 1, 1, 3, 3, 1, 1, 1, 1, 1, 3, 1, 1, 3, 2, 2, 4];
   const aligns = [
