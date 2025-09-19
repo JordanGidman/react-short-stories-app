@@ -171,9 +171,11 @@ function StoryList() {
           </StyledWrapper>
         </StyledHeader>
         <StyledList>
-          {stories.map((story) => (
-            <StoryCard key={story.id} story={story} />
-          ))}
+          {stories
+            .filter((story) => story.hidden !== false)
+            .map((story) => (
+              <StoryCard key={story.id} story={story} />
+            ))}
         </StyledList>
       </StyledContainer>
     </StyledStoryList>

@@ -182,6 +182,7 @@ function WriteBook() {
         createdAt: new Date(),
         author: currentUser.displayName,
         isSeedData: false,
+        hidden: false,
       });
 
       console.log(docRef);

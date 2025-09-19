@@ -30,7 +30,7 @@ function App() {
   //6 - Edit a story (title, genre, synopsis, cover image, story text) - Not done
   //7 - Delete a story (Need to make sure logged in user can only delete their own stories) - Not done
   //8 - Responsive design - Not done
-  //9 - Error handling and loading states - Partially done
+  //9 - Error handling and loading states (Need to use loading spinner) - Partially done
   //10 - Form validation - Partially done
   //11 - Search functionality - Not done
   //12 - User comments on stories - Not done

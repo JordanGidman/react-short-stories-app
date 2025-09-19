@@ -1,4 +1,11 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { db } from "../firebase";
@@ -196,9 +203,29 @@ function MyStories() {
     //will need to check on the write story page if it is posting a new story or editing an existing one
   }
 
-  function handleTogglePrivacy(storyId) {
+  async function handleTogglePrivacy(storyId) {
     // Logic to handle toggling the story's privacy
     //Also need to adjust the story list to check for stories with hidden true/false and only show those that are false
+    //Need to have a conditional for what icon to show for the button, either a locked or unlocked padlock.
+    try {
+      //Get the relevant story from firebase
+      const story = stories.find((story) => story.id === storyId);
+      const storyRef = doc(db, "stories", storyId);
+      console.log(storyRef);
+
+      //Change it in the stories state as well to force a re-render
+      setStories((prevStories) =>
+        prevStories.map((s) =>
+          s.id === storyId ? { ...s, hidden: !s.hidden } : s
+        )
+      );
+
+      await updateDoc(storyRef, {
+        hidden: !story.hidden,
+      });
+    } catch (err) {
+      console.log(err.message);
+    }
   }
 
   function handleDelete(storyId) {
@@ -248,12 +275,21 @@ function MyStories() {
                 ></ion-icon>
                 <Tooltip>Edit Story</Tooltip>
               </StyledButton>
-              <StyledButton>
-                <ion-icon
-                  name="lock-closed-outline"
-                  className="icon icon-lock"
-                ></ion-icon>
-                <Tooltip>Make Story Private/Public</Tooltip>
+              <StyledButton onClick={() => handleTogglePrivacy(story.id)}>
+                {!story.hidden ? (
+                  <ion-icon
+                    name="lock-closed-outline"
+                    className="icon icon-lock"
+                  ></ion-icon>
+                ) : (
+                  <ion-icon
+                    name="lock-open-outline"
+                    className="icon icon-lock"
+                  ></ion-icon>
+                )}
+                <Tooltip>
+                  {story.hidden ? "Make Story Public" : "Make Story Private"}
+                </Tooltip>
               </StyledButton>
               <StyledButton>
                 <ion-icon
