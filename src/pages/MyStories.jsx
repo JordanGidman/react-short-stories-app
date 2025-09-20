@@ -74,7 +74,7 @@ const StyledStoryList = styled.ul`
   flex-direction: column;
   list-style: none;
   align-items: center;
-  justify-content: flex-start
+  justify-content: flex-start;
   gap: 2rem;
   background-color: #fff;
   width: 95vw;
@@ -228,10 +228,18 @@ function MyStories() {
 
       const querySnapshot = await getDocs(q);
 
-      const fetchedStories = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      querySnapshot.forEach((doc) => {
+        console.log(doc.id, " => ", doc.data());
+      });
+
+      const fetchedStories = querySnapshot.docs
+        .sort((a, b) => {
+          return b.data().createdAt - a.data().createdAt;
+        })
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
 
       setStories(fetchedStories);
       setLoading(false);
