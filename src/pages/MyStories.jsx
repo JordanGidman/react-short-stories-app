@@ -1,5 +1,6 @@
 import {
   collection,
+  deleteDoc,
   doc,
   getDocs,
   query,
@@ -12,6 +13,7 @@ import { db } from "../firebase";
 import styled from "styled-components";
 import mystories from "../img/mystories.jpg";
 import Navbar from "../components/Navbar";
+import Button from "../components/Button";
 
 //Just realizing i likely want this to just be a component on the account page rather than its own page. But thats tomorrows problem. Likely this will be moved to the accounts page later on.
 
@@ -72,20 +74,26 @@ const StyledStoryList = styled.ul`
   flex-direction: column;
   list-style: none;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start
+  gap: 2rem;
   background-color: #fff;
   width: 95vw;
-  height: 100%;
+  min-height: 100vh;
+
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
 `;
 
 const StyledListItem = styled.li`
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   align-items: center;
   justify-content: space-between;
+  text-align: center;
+  border-bottom: 1px solid #eee;
   width: 100%;
   padding: 2rem 4rem;
-  height: 10rem;
+
+  /* background-color: red; */
 `;
 
 const StyledItemText = styled.p``;
@@ -168,17 +176,52 @@ const StyledImg = styled.div`
   background-position: center;
 `;
 
+const StyledModalContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  text-align: center;
+  padding: 3rem;
+  gap: 4rem;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  background-color: #1c1f2e;
+  color: #fff;
+  width: 50vw;
+  height: 30vh;
+  font-size: 2rem;
+  box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
+  border-radius: 1.2rem;
+  z-index: 1000;
+`;
+
+const StyledModal = styled.div`
+  display: ${(props) => (props.$modalOpen ? "flex" : "none")};
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  backdrop-filter: blur(4px);
+`;
+
+const StyledModalButton = styled(Button)``;
+
 function MyStories() {
   const [stories, setStories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  //Did not know this was even an option. I have been using a context for this so i will continue to do so for consistency but will use this in future projects.
-  // const currentUser = auth.currentUser;
+  const [loading, setLoading] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [currentStory, setCurrentStory] = useState(null);
   const { currentUser } = useContext(AuthContext);
+  //Did not know this was even an option. I have been using a context for this so i will continue to do so for consistency but will use the below in future projects.
+  // const currentUser = auth.currentUser;
 
   console.log(stories);
 
   useEffect(() => {
     async function fetchStories() {
+      setLoading(true);
       const storiesRef = collection(db, "stories");
 
       const q = query(storiesRef, where("creatorID", "==", currentUser.uid));
@@ -207,6 +250,7 @@ function MyStories() {
     // Logic to handle toggling the story's privacy
     //Also need to adjust the story list to check for stories with hidden true/false and only show those that are false
     //Need to have a conditional for what icon to show for the button, either a locked or unlocked padlock.
+    setLoading(true);
     try {
       //Get the relevant story from firebase
       const story = stories.find((story) => story.id === storyId);
@@ -225,12 +269,26 @@ function MyStories() {
       });
     } catch (err) {
       console.log(err.message);
+    } finally {
+      setLoading(false);
     }
   }
 
-  function handleDelete(storyId) {
+  async function handleDelete(storyId) {
     // Logic to handle deleting the story
     //I want a pop up modal to confirm the delete action as we will permanently delete the story
+    setLoading(true);
+    try {
+      await deleteDoc(doc(db, "stories", storyId));
+      //Also want to remove the story from the stories state to force a re-render
+      setStories((prevStories) =>
+        prevStories.filter((story) => story.id !== storyId)
+      );
+    } catch (err) {
+      console.log(err.message);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -246,62 +304,95 @@ function MyStories() {
           </StyledSubheading>
         </StyledWrapper>
       </StyledHeader>
+
       <StyledStoryList>
-        {stories.map((story) => (
-          <StyledListItem key={story.id}>
-            <StyledImg $backgroundImage={story.img} alt={story.title} />
-            <StyledItemText>{story.title}</StyledItemText>
-            <StyledItemText>{story.genre}</StyledItemText>
-            <StyledItemText>
-              Created:{" "}
-              {new Date(story.createdAt?.seconds * 1000).toLocaleDateString(
-                "en-US"
-              )}
-            </StyledItemText>
-            {story.editedAt && (
+        {loading ? (
+          <div>Loading...</div>
+        ) : (
+          stories.map((story) => (
+            <StyledListItem key={story.id}>
+              <StyledImg $backgroundImage={story.img} alt={story.title} />
+              <StyledItemText>{story.title}</StyledItemText>
+              <StyledItemText>{story.genre}</StyledItemText>
               <StyledItemText>
-                Edited:{" "}
-                {new Date(story.editedAt?.seconds * 1000).toLocaleDateString(
+                Created:{" "}
+                {new Date(story.createdAt?.seconds * 1000).toLocaleDateString(
                   "en-US"
                 )}
               </StyledItemText>
-            )}
+              {story.editedAt && (
+                <StyledItemText>
+                  Edited:{" "}
+                  {new Date(story.editedAt?.seconds * 1000).toLocaleDateString(
+                    "en-US"
+                  )}
+                </StyledItemText>
+              )}
 
-            <StyledButtons>
-              <StyledButton>
-                <ion-icon
-                  name="create-outline"
-                  className="icon icon-edit"
-                ></ion-icon>
-                <Tooltip>Edit Story</Tooltip>
-              </StyledButton>
-              <StyledButton onClick={() => handleTogglePrivacy(story.id)}>
-                {!story.hidden ? (
+              <StyledButtons>
+                <StyledButton>
                   <ion-icon
-                    name="lock-closed-outline"
-                    className="icon icon-lock"
+                    name="create-outline"
+                    className="icon icon-edit"
                   ></ion-icon>
-                ) : (
+                  <Tooltip>Edit Story</Tooltip>
+                </StyledButton>
+                <StyledButton onClick={() => handleTogglePrivacy(story.id)}>
+                  {!story.hidden ? (
+                    <ion-icon
+                      name="lock-closed-outline"
+                      className="icon icon-lock"
+                    ></ion-icon>
+                  ) : (
+                    <ion-icon
+                      name="lock-open-outline"
+                      className="icon icon-lock"
+                    ></ion-icon>
+                  )}
+                  <Tooltip>
+                    {story.hidden ? "Make Story Public" : "Make Story Private"}
+                  </Tooltip>
+                </StyledButton>
+                <StyledButton
+                  onClick={() => {
+                    setModalOpen(true);
+                    setCurrentStory(story);
+                  }}
+                >
                   <ion-icon
-                    name="lock-open-outline"
-                    className="icon icon-lock"
+                    name="trash-outline"
+                    className="icon icon-delete"
                   ></ion-icon>
-                )}
-                <Tooltip>
-                  {story.hidden ? "Make Story Public" : "Make Story Private"}
-                </Tooltip>
-              </StyledButton>
-              <StyledButton>
-                <ion-icon
-                  name="trash-outline"
-                  className="icon icon-delete"
-                ></ion-icon>
-                <Tooltip className="tooltip-delete">Delete Story</Tooltip>
-              </StyledButton>
-            </StyledButtons>
-          </StyledListItem>
-        ))}
+                  <Tooltip className="tooltip-delete">Delete Story</Tooltip>
+                </StyledButton>
+              </StyledButtons>
+            </StyledListItem>
+          ))
+        )}
       </StyledStoryList>
+
+      <StyledModal $modalOpen={modalOpen}>
+        <StyledModalContent>
+          <p>
+            Are you sure you want to delete this story? Deleting is permanent
+            and cannot be undone.
+          </p>
+          <StyledButtons>
+            <StyledModalButton onClick={() => setModalOpen(false)}>
+              Cancel
+            </StyledModalButton>
+            <StyledModalButton
+              disabled={loading}
+              onClick={() => {
+                handleDelete(currentStory.id);
+                setModalOpen(false);
+              }}
+            >
+              Confirm Delete
+            </StyledModalButton>
+          </StyledButtons>
+        </StyledModalContent>
+      </StyledModal>
     </StyledMyStories>
   );
 }

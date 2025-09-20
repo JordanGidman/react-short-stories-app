@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Button from "./Button";
 import { Link } from "react-router-dom";
 
-const StyledStoryCard = styled(Link)`
+const StyledStoryCard = styled.div`
   display: grid;
   grid-template-columns: 40% 60%;
   border-radius: 1.6rem;
@@ -80,8 +80,6 @@ const StyledLink = styled(Link)``;
 function StoryCard({ story }) {
   const [loadedImg, setLoadedImg] = useState(null);
 
-  console.log(placeholder);
-
   useEffect(() => {
     if (!story.img) return;
 
@@ -104,7 +102,7 @@ function StoryCard({ story }) {
         {/* <p>{story.storyText}</p> */}
         <StyledSynopsis>{story.synopsis}</StyledSynopsis>
         <StyledGenre>{story.genre}</StyledGenre>
-        <StyledLink to={`/story/${story.id}`}>
+        <StyledLink to={`/library/${story.genre}/book/${story.id}`}>
           <StyledButton>Read</StyledButton>
         </StyledLink>
       </StyledTextBox>

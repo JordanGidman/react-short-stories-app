@@ -20,11 +20,13 @@ const StyledHeader = styled.header`
   grid-template-columns: 60% 40%;
   align-items: center;
   justify-content: space-between;
-  padding: 0rem 4rem;
+  padding: 4rem 4em;
   margin: 6rem 0rem;
   width: 100%;
   height: 40vh;
   gap: 1.2rem;
+  background-color: #fff;
+  box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
 `;
 const StyledTextWrapper = styled.div`
   display: flex;
@@ -57,7 +59,7 @@ const StyledImgWrapper = styled.div`
   background-image: url(${(props) => props.$backgroundImage});
   background-size: cover;
   background-position: center;
-  border-radius: 1.6rem;
+  /* border-radius: 1.6rem; */
   height: 100%;
   background-repeat: no-repeat;
 `;
@@ -69,9 +71,12 @@ const StyledBody = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
-
+  background-color: #fff;
   padding: 4rem;
   font-size: 2rem;
+  box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
+  min-width: 100%;
+  min-height: 30vh;
 `;
 
 function Book() {

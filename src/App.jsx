@@ -38,9 +38,11 @@ function App() {
   //14 - Story ratings/reviews - Not done
   //15 - Pagination or infinite scroll for story lists - Not done
   //16 - Required Logins for certain actions/pages - Not done
-  //17 - My stories page to view/edit/delete user's own stories - Partially done
-  //18 - Ability to share publicly or hide and keep private - Not done
-  //19 - Deployment - Not done
+  //17 - My stories page to edit/delete user's own stories - Delete done
+  //18 - Ability to share publicly or hide and keep private - Done
+  //19 - Refactor Book/WriteBook to be Story for consistency - Not Done
+  //20 - Add toast notifications for user feedback writing/deleting- Not done
+  //21 - Deployment - Not done
 
   return (
     <AuthContextProvider>

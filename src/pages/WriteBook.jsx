@@ -14,6 +14,7 @@ import {
 import { db } from "../firebase";
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const StyledWriteBook = styled.div`
   display: flex;
@@ -153,6 +154,9 @@ function WriteBook() {
 
   const { currentUser } = useContext(AuthContext);
   const [storyText, setStoryText] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   async function handleSubmit(e) {
     console.log(e);
@@ -161,6 +165,9 @@ function WriteBook() {
     //Capture input data not using controlled components because of issues saving to firebase will refactor later
     const title = e.target[0].value;
     const genre = e.target[1].value;
+
+    console.log("Genre selected:", genre);
+
     const synopsis = e.target[2].value;
     const img =
       e.target[3].value === ""
@@ -171,6 +178,7 @@ function WriteBook() {
     //Save input data to firebase
     try {
       //Create a new story document and trim the p tag we get back from the library
+      setLoading(true);
       const docRef = await addDoc(collection(db, "stories"), {
         title,
         genre,
@@ -190,6 +198,8 @@ function WriteBook() {
       await updateDoc(doc(db, "users", currentUser.uid), {
         stories: arrayUnion(docRef.id),
       });
+      setLoading(false);
+      navigate(`/library/${genre.split("-").join(" ")}/book/${docRef.id}`);
     } catch (err) {
       //replace with proper error handling later
       console.log(err.message);
@@ -203,9 +213,17 @@ function WriteBook() {
       <StyledWrapper>
         <StyledForm onSubmit={(e) => handleSubmit(e)}>
           <StyledH1>Write your story</StyledH1>
-          <TitleInput type="text" placeholder="Title of your story *" />
+          <TitleInput
+            type="text"
+            placeholder="Title of your story *"
+            disabled={loading}
+          />
 
-          <StyledSelect name="genre" defaultValue={"placeholder"}>
+          <StyledSelect
+            name="genre"
+            defaultValue={"placeholder"}
+            disabled={loading}
+          >
             <StyledOption
               name="placeholder"
               value="placeholder"
@@ -215,7 +233,7 @@ function WriteBook() {
               Select Genre *
             </StyledOption>
             <StyledOption value="Fantasy">Fantasy</StyledOption>
-            <StyledOption value="Science-fiction">Science Fiction</StyledOption>
+            <StyledOption value="Science Fiction">Science Fiction</StyledOption>
             <StyledOption value="Gaming">Gaming</StyledOption>
             <StyledOption value="Mystery">Mystery</StyledOption>
             <StyledOption value="Romance">Romance</StyledOption>
@@ -238,18 +256,23 @@ function WriteBook() {
           <StyledTextarea
             type="textarea"
             placeholder="A short synopsis of your story *"
+            disabled={loading}
           />
           <StyledInputBox
             type="text"
             placeholder="Image URL (Firebase no longer allows free image uploads leave blank for a placeholder or put any image url. )"
+            disabled={loading}
           />
           <ReactQuill
             theme="snow"
             placeholder="Write your story here..."
             className="text-editor"
             onChange={setStoryText}
+            readOnly={loading}
           />
-          <StyledButton>Post</StyledButton>
+          <StyledButton disabled={loading}>
+            {loading ? "Posting..." : "Post"}
+          </StyledButton>
           {/* Maybe a button for saving as draft */}
         </StyledForm>
       </StyledWrapper>

@@ -93,6 +93,8 @@ function StoryList() {
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(" ");
 
+      console.log("Genre:", genreName);
+
       const q = query(storiesRef, where("genre", "==", genreName));
 
       const querySnapshot = await getDocs(q);
@@ -172,7 +174,7 @@ function StoryList() {
         </StyledHeader>
         <StyledList>
           {stories
-            .filter((story) => story.hidden !== false)
+            .filter((story) => story.hidden !== true)
             .map((story) => (
               <StoryCard key={story.id} story={story} />
             ))}
