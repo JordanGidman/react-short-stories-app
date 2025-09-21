@@ -23,7 +23,7 @@ const StyledHeader = styled.header`
   padding: 4rem 4em;
   margin: 6rem 0rem;
   width: 100%;
-  height: 40vh;
+  min-height: 40vh;
   gap: 1.2rem;
   background-color: #fff;
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);

@@ -13,6 +13,7 @@ import Library from "./pages/Library";
 import StoryList from "./pages/StoryList";
 import Book from "./pages/Book";
 import MyStories from "./pages/MyStories";
+import EditStory from "./pages/EditStory";
 
 const StyledApp = styled.div``;
 
@@ -27,19 +28,19 @@ function App() {
   //3 - Create a story (title, genre, synopsis, cover image, story text) - Done
   //4 - View a list of stories (filter by genre) - Done
   //5 - View a single story (title, author, genre, synopsis, cover image, story text) - Done
-  //6 - Edit a story (title, genre, synopsis, cover image, story text) - Not done
-  //7 - Delete a story (Need to make sure logged in user can only delete their own stories) - Not done
-  //8 - Responsive design - Not done
-  //9 - Error handling and loading states (Need to use loading spinner) - Partially done
+  //6 - Edit a story (title, genre, synopsis, cover image, story text) - Done
+  //7 - Delete a story (Need to make sure logged in user can only delete their own stories) - Done
+  //8 - My stories page to edit/delete user's own stories - Done
+  //9 - Ability to share publicly or hide and keep private - Done
   //10 - Form validation - Partially done
-  //11 - Search functionality - Not done
-  //12 - User comments on stories - Not done
-  //13 - Like/favorite stories - Not done
-  //14 - Story ratings/reviews - Not done
-  //15 - Pagination or infinite scroll for story lists - Not done
-  //16 - Required Logins for certain actions/pages - Not done
-  //17 - My stories page to edit/delete user's own stories - Delete done
-  //18 - Ability to share publicly or hide and keep private - Done
+  //11 - Error handling and loading states (Need to use loading spinner) - Partially done
+  //12 - Responsive design - Not done
+  //13 - Search functionality - Not done
+  //14 - User comments on stories - Not done
+  //15 - Like/favorite stories - Not done
+  //16 - Story ratings/reviews - Not done
+  //17 - Pagination or infinite scroll for story lists - Not done
+  //18 - Required Logins for certain actions/pages - Not done
   //19 - Refactor Book/WriteBook to be Story for consistency - Not Done
   //20 - Add toast notifications for user feedback writing/deleting- Not done
   //21 - Deployment - Not done
@@ -56,6 +57,7 @@ function App() {
             <Route path="about" element={<About />} />
             <Route path="account" element={<Account />} />
             <Route path="write" element={<WriteBook />} />
+            <Route path="edit/:id" element={<EditStory />} />
             <Route path="library" element={<Library />} />
             <Route path="mystories" element={<MyStories />} />
             <Route path="library/:genre" element={<StoryList />} />

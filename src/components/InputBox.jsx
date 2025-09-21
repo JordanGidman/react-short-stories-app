@@ -18,10 +18,17 @@ const StyledInput = styled.input`
   }
 `;
 
-function InputBox({ className, placeholder, type = "text", onChange }) {
+function InputBox({
+  className,
+  placeholder,
+  type = "text",
+  onChange,
+  defaultValue,
+}) {
   return (
     <StyledInput
       className={className}
+      defaultValue={defaultValue}
       placeholder={placeholder}
       type={type}
       onChange={onChange}

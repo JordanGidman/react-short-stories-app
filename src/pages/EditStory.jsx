@@ -16,7 +16,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const StyledWriteBook = styled.div`
+const StyledEditStory = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -143,7 +143,7 @@ const StyledButton = styled(Button)`
   align-self: center;
 `;
 
-function WriteBook() {
+function EditStory() {
   //Need to refactor the inputs to be controlled components.
   //Need a check for user authentication before allowing access to this page - same for any comp that requires a signed in user
   //Need a check for isLoading state to show a loading spinner while the page is loading
@@ -153,13 +153,11 @@ function WriteBook() {
   //Need to navigate user to the page of the story they just created.
 
   const { currentUser } = useContext(AuthContext);
-  const [storyText, setStoryText] = useState("");
   const [loading, setLoading] = useState(false);
-  // const { state } = useLocation();
-  // const story = state ? state.story : null;
+  const { state } = useLocation();
+  const story = state ? state.story : null;
+  const [storyText, setStoryText] = useState(story.storyText || "");
   const navigate = useNavigate();
-
-  // console.log(story);
 
   async function handleSubmit(e) {
     console.log(e);
@@ -182,27 +180,18 @@ function WriteBook() {
     try {
       //Create a new story document and trim the p tag we get back from the library
       setLoading(true);
-      const docRef = await addDoc(collection(db, "stories"), {
+
+      await updateDoc(doc(db, "stories", story.id), {
         title,
         genre,
         synopsis,
         img,
         storyText,
-        creatorID: currentUser.uid,
-        //Maybe add a isPublished field later for drafts
-        createdAt: new Date(),
-        author: currentUser.displayName,
-        isSeedData: false,
-        hidden: false,
+        editedAt: new Date(),
       });
 
-      console.log(docRef);
-      //add the story id to the stories array of the user that created it
-      await updateDoc(doc(db, "users", currentUser.uid), {
-        stories: arrayUnion(docRef.id),
-      });
       setLoading(false);
-      navigate(`/library/${genre.split("-").join(" ")}/book/${docRef.id}`);
+      navigate(`/library/${genre.split("-").join(" ")}/book/${story.id}`);
     } catch (err) {
       //replace with proper error handling later
       console.log(err.message);
@@ -211,18 +200,23 @@ function WriteBook() {
   }
 
   return (
-    <StyledWriteBook>
+    <StyledEditStory>
       <Navbar />
       <StyledWrapper>
         <StyledForm onSubmit={(e) => handleSubmit(e)}>
-          <StyledH1>Write your story</StyledH1>
+          <StyledH1>Edit your story</StyledH1>
           <TitleInput
             type="text"
+            defaultValue={story ? story.title : ""}
             placeholder="Title of your story *"
             disabled={loading}
           />
 
-          <StyledSelect name="genre" disabled={loading}>
+          <StyledSelect
+            name="genre"
+            defaultValue={story ? story.genre : "placeholder"}
+            disabled={loading}
+          >
             <StyledOption
               name="placeholder"
               value="placeholder"
@@ -254,11 +248,13 @@ function WriteBook() {
 
           <StyledTextarea
             type="textarea"
+            defaultValue={story ? story.synopsis : ""}
             placeholder="A short synopsis of your story *"
             disabled={loading}
           />
           <StyledInputBox
             type="text"
+            defaultValue={story ? story.img : ""}
             placeholder="Image URL (Firebase no longer allows free image uploads leave blank for a placeholder or put any image url. )"
             disabled={loading}
           />
@@ -268,6 +264,7 @@ function WriteBook() {
             className="text-editor"
             onChange={setStoryText}
             readOnly={loading}
+            defaultValue={story ? story.storyText : ""}
           />
           <StyledButton disabled={loading}>
             {loading ? "Posting..." : "Post"}
@@ -275,8 +272,8 @@ function WriteBook() {
           {/* Maybe a button for saving as draft */}
         </StyledForm>
       </StyledWrapper>
-    </StyledWriteBook>
+    </StyledEditStory>
   );
 }
 
-export default WriteBook;
+export default EditStory;

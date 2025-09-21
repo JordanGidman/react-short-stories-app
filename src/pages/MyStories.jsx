@@ -14,6 +14,8 @@ import styled from "styled-components";
 import mystories from "../img/mystories.jpg";
 import Navbar from "../components/Navbar";
 import Button from "../components/Button";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 //Just realizing i likely want this to just be a component on the account page rather than its own page. But thats tomorrows problem. Likely this will be moved to the accounts page later on.
 
@@ -85,24 +87,32 @@ const StyledStoryList = styled.ul`
 
 const StyledListItem = styled.li`
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   align-items: center;
   justify-content: space-between;
   text-align: center;
   border-bottom: 1px solid #eee;
   width: 100%;
   padding: 2rem 4rem;
-
-  /* background-color: red; */
 `;
 
 const StyledItemText = styled.p``;
+
+const StyledTitle = styled(Link)`
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    text-decoration: underline;
+    color: #ffbe0b;
+  }
+`;
 
 const StyledButtons = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 2rem;
+  grid-column: 6 / -1;
 `;
 
 const StyledButton = styled.button`
@@ -214,6 +224,7 @@ function MyStories() {
   const [modalOpen, setModalOpen] = useState(false);
   const [currentStory, setCurrentStory] = useState(null);
   const { currentUser } = useContext(AuthContext);
+  const navigate = useNavigate();
   //Did not know this was even an option. I have been using a context for this so i will continue to do so for consistency but will use the below in future projects.
   // const currentUser = auth.currentUser;
 
@@ -248,16 +259,15 @@ function MyStories() {
     fetchStories();
   }, [currentUser]);
 
-  function handleEdit(storyId) {
+  function handleEdit(story) {
     // Logic to handle editing the story
-    //Open the write story page with the fields filled with the story data
-    //will need to check on the write story page if it is posting a new story or editing an existing one
+    //Open the edit story page with the fields filled with the story data
+    //will need to check on the edit story page if it is posting a new story or editing an existing one
+    navigate(`/edit/${story.id}`, { state: { story } });
   }
 
   async function handleTogglePrivacy(storyId) {
     // Logic to handle toggling the story's privacy
-    //Also need to adjust the story list to check for stories with hidden true/false and only show those that are false
-    //Need to have a conditional for what icon to show for the button, either a locked or unlocked padlock.
     setLoading(true);
     try {
       //Get the relevant story from firebase
@@ -284,7 +294,6 @@ function MyStories() {
 
   async function handleDelete(storyId) {
     // Logic to handle deleting the story
-    //I want a pop up modal to confirm the delete action as we will permanently delete the story
     setLoading(true);
     try {
       await deleteDoc(doc(db, "stories", storyId));
@@ -320,7 +329,13 @@ function MyStories() {
           stories.map((story) => (
             <StyledListItem key={story.id}>
               <StyledImg $backgroundImage={story.img} alt={story.title} />
-              <StyledItemText>{story.title}</StyledItemText>
+              <StyledTitle
+                to={`/library/${story.genre.split("-").join(" ")}/book/${
+                  story.id
+                }`}
+              >
+                {story.title}
+              </StyledTitle>
               <StyledItemText>{story.genre}</StyledItemText>
               <StyledItemText>
                 Created:{" "}
@@ -342,6 +357,7 @@ function MyStories() {
                   <ion-icon
                     name="create-outline"
                     className="icon icon-edit"
+                    onClick={() => handleEdit(story)}
                   ></ion-icon>
                   <Tooltip>Edit Story</Tooltip>
                 </StyledButton>
