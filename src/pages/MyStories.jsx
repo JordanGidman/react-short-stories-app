@@ -157,7 +157,7 @@ const Tooltip = styled.span`
 
   z-index: 1;
 
-  /* arrow */
+  /* arrow, ill be honest i took this from the internet, thank you random person */
   &::after {
     content: "";
     position: absolute;

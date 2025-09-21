@@ -43,7 +43,9 @@ function App() {
   //18 - Required Logins for certain actions/pages - Not done
   //19 - Refactor Book/WriteBook to be Story for consistency - Not Done
   //20 - Add toast notifications for user feedback writing/deleting- Not done
-  //21 - Deployment - Not done
+  //21 - Animations and transitions - Not done
+  //22 - Night reader mode - Not done
+  //23 - Deployment - Not done
 
   return (
     <AuthContextProvider>

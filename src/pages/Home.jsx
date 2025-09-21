@@ -4,6 +4,10 @@ import Navbar from "../components/Navbar";
 import heroImg from "../img/hero-img.jpg";
 import Button from "../components/Button";
 import Featured from "../components/Featured";
+import { useEffect, useState } from "react";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 const StyledHero = styled.div`
   background-image: url(${(props) => props.$img});
@@ -47,6 +51,7 @@ const StyledHeroText = styled.div`
     font-family: "Playfair Display", serif;
     font-weight: 900;
     box-shadow: 0rem 0.8rem 0.8rem rgba(0, 0, 0, 0.3);
+    text-transform: capitalize;
     span {
       font-style: italic;
       font-family: "Playfair Display", serif;
@@ -62,9 +67,10 @@ const StyledHeroText = styled.div`
   .title {
     font-size: 7rem;
     font-weight: 400;
+    text-transform: capitalize;
   }
 
-  .reading-time {
+  .genre {
     font-size: 3rem;
     font-weight: 300;
     margin-bottom: 6rem;
@@ -110,18 +116,69 @@ const StyledHeroFooter = styled.div`
   }
 `;
 function Home() {
+  const [story, setStory] = useState();
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  console.log("story", story);
+
+  useEffect(() => {
+    try {
+      async function fetchStories() {
+        const storiesRef = collection(db, "stories");
+
+        const q = query(storiesRef, where("isSeedData", "==", true));
+
+        const querySnapshot = await getDocs(q);
+
+        const fetchedStories = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        console.log("fetchedStories", fetchedStories);
+
+        setStory(
+          fetchedStories[Math.floor(Math.random() * fetchedStories.length)]
+        );
+        setLoading(false);
+      }
+
+      fetchStories();
+    } catch (error) {
+      console.error("Error fetching story:", error);
+      setLoading(false);
+    }
+  }, []);
+
+  function resizePicsum(url, width, height) {
+    const parts = url.split("/");
+    parts[parts.length - 2] = width; // replace 600
+    parts[parts.length - 1] = height; // replace 400
+    return parts.join("/");
+  }
+
   return (
     <div>
-      <StyledHero $img={heroImg}>
+      <StyledHero
+        $img={loading ? heroImg : resizePicsum(story?.img, 1920, 1080)}
+      >
+        {/* "https://picsum.photos/seed/a3a60a47-6e80-46bd-a709-f6c759b36964/600/400" */}
         <StyledHeroText>
           <h1>
             What <span>to read</span> today
           </h1>
           {/* replace later with titles from db */}
-          <p className="author">Jordan Gidman</p>
-          <p className="title">A Tale of Tarkov Extract Campers</p>
-          <p className="reading-time">5 min read</p>
-          <Button>read now</Button>
+          <p className="author">{loading ? "Loading..." : story?.author}</p>
+          <p className="title">{loading ? "Loading..." : story?.title}</p>
+          <p className="genre">{loading ? "Loading..." : story?.genre}</p>
+          <Button
+            onClick={() =>
+              navigate(`/library/${story?.genre}/book/${story?.id}`)
+            }
+          >
+            read now
+          </Button>
         </StyledHeroText>
         <StyledHeroFooter>
           <p>read user written short stories</p>
