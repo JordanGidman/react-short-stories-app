@@ -154,6 +154,10 @@ function WriteBook() {
 
   const { currentUser } = useContext(AuthContext);
   const [storyText, setStoryText] = useState("");
+  const [title, setTitle] = useState("");
+  const [genre, setGenre] = useState("");
+  const [synopsis, setSynopsis] = useState("");
+  const [img, setImg] = useState("");
   const [loading, setLoading] = useState(false);
   // const { state } = useLocation();
   // const story = state ? state.story : null;
@@ -166,17 +170,18 @@ function WriteBook() {
     e.preventDefault();
 
     //Capture input data not using controlled components because of issues saving to firebase will refactor later
-    const title = e.target[0].value;
-    const genre = e.target[1].value;
+    // const title = e.target[0].value;
+    // const genre = e.target[1].value;
 
-    console.log("Genre selected:", genre);
+    // console.log("Genre selected:", genre);
 
-    const synopsis = e.target[2].value;
-    const img =
-      e.target[3].value === ""
-        ? "https://picsum.photos/seed/hireme/600/400"
-        : e.target[3].value;
-    // const storyText = e.target[4].value;
+    // const synopsis = e.target[2].value;
+    // const img =
+    //   e.target[3].value === ""
+    //     ? "https://picsum.photos/seed/hireme/600/400"
+    //     : e.target[3].value;
+
+    console.log(genre);
 
     //Save input data to firebase
     try {
@@ -220,9 +225,16 @@ function WriteBook() {
             type="text"
             placeholder="Title of your story *"
             disabled={loading}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
 
-          <StyledSelect name="genre" disabled={loading}>
+          <StyledSelect
+            name="genre"
+            disabled={loading}
+            value={genre}
+            onChange={(e) => setGenre(e.target.value)}
+          >
             <StyledOption
               name="placeholder"
               value="placeholder"
@@ -256,17 +268,22 @@ function WriteBook() {
             type="textarea"
             placeholder="A short synopsis of your story *"
             disabled={loading}
+            value={synopsis}
+            onChange={(e) => setSynopsis(e.target.value)}
           />
           <StyledInputBox
             type="text"
             placeholder="Image URL (Firebase no longer allows free image uploads leave blank for a placeholder or put any image url. )"
             disabled={loading}
+            value={img}
+            onChange={(e) => setImg(e.target.value)}
           />
           <ReactQuill
             theme="snow"
             placeholder="Write your story here..."
             className="text-editor"
-            onChange={setStoryText}
+            value={storyText}
+            onChange={(value) => setStoryText(value)}
             readOnly={loading}
           />
           <StyledButton disabled={loading}>

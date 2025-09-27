@@ -27,10 +27,10 @@ async function updateStories() {
 
   for (const doc of snapshot.docs) {
     await db.collection("stories").doc(doc.id).update({
-      isSeedData: true,
+      comments: [],
     });
 
-    console.log(`✅ Updated story ${doc.id} with isSeedData: true`);
+    console.log(`✅ Updated story ${doc.id} with comments: []`);
   }
 
   console.log("🎉 All stories updated successfully!");

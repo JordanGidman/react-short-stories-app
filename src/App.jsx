@@ -39,8 +39,8 @@ function App() {
   //14 - User comments on stories - Not done
   //15 - Like/favorite stories - Not done
   //16 - Story ratings/reviews - Not done
-  //17 - Pagination or infinite scroll for story lists - Not done
-  //18 - Required Logins for certain actions/pages - Not done
+  //17 - Required Logins for certain actions/pages - Not done
+  //18 - Pagination or infinite scroll for story lists - Not done
   //19 - Refactor Book/WriteBook to be Story for consistency - Not Done
   //20 - Add toast notifications for user feedback writing/deleting- Not done
   //21 - Animations and transitions - Not done

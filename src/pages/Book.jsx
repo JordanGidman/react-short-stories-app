@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { faker } from "@faker-js/faker";
 import Navbar from "../components/Navbar";
 import DOMPurify from "dompurify";
+import Comments from "../components/Comments";
 
 const StyledBook = styled.div`
   display: flex;
@@ -147,6 +148,7 @@ function Book() {
           <p>{story.storyText + " " + story.storyText}</p>
         </StyledBody>
       )}
+      <Comments storyId={story.id} />
     </StyledBook>
   );
 }
