@@ -48,8 +48,9 @@ function App() {
   //9 - Add toast notifications for user feedback writing/deleting- Not done
   //10 - Animations and transitions - Not done
   //11 - Night reader mode(Maybe) - Not done
-  //12 - Finish home page.
-  //13 - Clean console logs and comments
+  //12 - Finish home page - Partially done
+  //13 - Fvourite/Read later component - Not done
+  //13 - Clean console logs and comments - Not done
   //14 - Deployment - Not done
 
   return (

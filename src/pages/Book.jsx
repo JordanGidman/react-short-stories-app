@@ -96,11 +96,12 @@ const StyledLikes = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 2rem;
+    gap: 1rem;
+    font-size: 2rem;
 
     ion-icon {
-      color: red;
-      font-size: 2.4rem;
+      color: #c92a2a;
+      font-size: 3rem;
     }
   }
 `;

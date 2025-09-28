@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 import { useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 
 const StyledHero = styled.div`
   background-image: url(${(props) => props.$img});
@@ -62,12 +63,13 @@ const StyledHeroText = styled.div`
   .author {
     font-size: 3.5rem;
     font-weight: 400;
+    text-transform: uppercase;
   }
 
   .title {
     font-size: 7rem;
     font-weight: 400;
-    text-transform: capitalize;
+    text-transform: uppercase;
   }
 
   .genre {
@@ -102,21 +104,113 @@ const StyledHeroFooter = styled.div`
   bottom: 0;
   width: 100%;
   height: 10rem;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(170, 170, 170, 0.8);
   color: #000;
   display: flex;
   align-items: center;
   justify-content: center;
+
   /* z-index: 2; */
   p {
     text-transform: uppercase;
-    font-weight: bold;
+    font-weight: 500;
     opacity: 0.6;
     font-size: 4rem;
+    letter-spacing: 1rem;
   }
 `;
+
+const StyledFresh = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100vw;
+  height: calc(100vh - 7.8rem);
+`;
+
+const StyledTextBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  padding: 4rem;
+
+  h1 {
+    background-color: #1c1f2e;
+    padding: 1rem 2rem;
+    font-family: "Playfair Display", serif;
+    font-weight: 900;
+    box-shadow: 0rem 0.8rem 0.8rem rgba(0, 0, 0, 0.3);
+    text-transform: capitalize;
+    color: #fff;
+
+    span {
+      font-style: italic;
+    }
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .author {
+    text-transform: uppercase;
+    font-size: 2.4rem;
+    letter-spacing: 0.8rem;
+    font-weight: 500;
+  }
+
+  .title {
+    font-size: 4.8rem;
+    text-transform: uppercase;
+    font-family: "Playfair Display", serif;
+    font-weight: 600;
+  }
+
+  .underline {
+    background-color: #000;
+    height: 0.1rem;
+    width: 50%;
+  }
+
+  .genre {
+    font-size: 1.8rem;
+  }
+`;
+const StyledImg = styled.div`
+  background-image: url(${(props) => props.$backgroundImage});
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+`;
+
+const StyledAltButton = styled.button`
+  border: none;
+  background-color: transparent;
+  font-size: 1.4rem;
+  margin-bottom: 4rem;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: #4d4d4d;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
 function Home() {
   const [story, setStory] = useState();
+  const [freshStory, setFreshStory] = useState();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -139,6 +233,11 @@ function Home() {
         console.log("fetchedStories", fetchedStories);
 
         setStory(
+          fetchedStories[Math.floor(Math.random() * fetchedStories.length)]
+        );
+
+        //This should of course be finding the story with the most recent createdAt which would be as easy as checking for the smallest number for the timestamp. The issue here is that it will always just be my test story, as that is the most recent which isnt a good representation of a live site.
+        setFreshStory(
           fetchedStories[Math.floor(Math.random() * fetchedStories.length)]
         );
         setLoading(false);
@@ -184,8 +283,33 @@ function Home() {
           <p>read user written short stories</p>
         </StyledHeroFooter>
       </StyledHero>
-      <Navbar />
       <Featured />
+      <StyledFresh>
+        <StyledTextBox>
+          <h1>
+            <span>Fresh</span> Arrival
+          </h1>
+          <div>
+            <p className="author">{freshStory?.author}</p>
+            <p className="title">{freshStory?.title}</p>
+            <div className="underline"></div>
+            <p className="genre">{freshStory?.genre}</p>
+          </div>
+          <Button>Read</Button>
+          <StyledAltButton
+            onClick={() => navigate(`/library/${freshStory?.genre}`)}
+          >
+            More stories like this <ion-icon name="arrow-forward"></ion-icon>
+          </StyledAltButton>
+        </StyledTextBox>
+        <StyledImg
+          $backgroundImage={
+            loading ? heroImg : resizePicsum(freshStory?.img, 1280, 720)
+          }
+        ></StyledImg>
+      </StyledFresh>
+      <Footer />
+      <Navbar />
     </div>
   );
 }

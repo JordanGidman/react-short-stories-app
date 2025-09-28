@@ -155,7 +155,7 @@ function WriteBook() {
   const { currentUser } = useContext(AuthContext);
   const [storyText, setStoryText] = useState("");
   const [title, setTitle] = useState("");
-  const [genre, setGenre] = useState("");
+  const [genre, setGenre] = useState("placeholder");
   const [synopsis, setSynopsis] = useState("");
   const [img, setImg] = useState("");
   const [loading, setLoading] = useState(false);
@@ -181,8 +181,6 @@ function WriteBook() {
     //     ? "https://picsum.photos/seed/hireme/600/400"
     //     : e.target[3].value;
 
-    console.log(genre);
-
     //Save input data to firebase
     try {
       //Create a new story document and trim the p tag we get back from the library
@@ -201,13 +199,12 @@ function WriteBook() {
         hidden: false,
       });
 
-      console.log(docRef);
       //add the story id to the stories array of the user that created it
       await updateDoc(doc(db, "users", currentUser.uid), {
         stories: arrayUnion(docRef.id),
       });
       setLoading(false);
-      navigate(`/library/${genre.split("-").join(" ")}/book/${docRef.id}`);
+      navigate(`/library/${genre}/book/${docRef.id}`);
     } catch (err) {
       //replace with proper error handling later
       console.log(err.message);
