@@ -1,12 +1,20 @@
-import { useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  arrayRemove,
+  arrayUnion,
+  doc,
+  getDoc,
+  onSnapshot,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import styled from "styled-components";
 import { faker } from "@faker-js/faker";
 import Navbar from "../components/Navbar";
 import DOMPurify from "dompurify";
 import Comments from "../components/Comments";
+import { AuthContext } from "../context/AuthContext";
 
 const StyledBook = styled.div`
   display: flex;
@@ -80,33 +88,121 @@ const StyledBody = styled.div`
   min-height: 30vh;
 `;
 
+const StyledLikes = styled.div`
+  align-self: flex-end;
+  margin-top: 2rem;
+
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+
+    ion-icon {
+      color: red;
+      font-size: 2.4rem;
+    }
+  }
+`;
+
+const StyledButton = styled.button`
+  position: relative;
+  border: none;
+  background-color: transparent;
+  transition: all 0.3s ease-in-out;
+  .icon-delete {
+    &:hover {
+      color: #ff0000;
+    }
+  }
+
+  &:hover {
+    cursor: pointer;
+    color: #ffbe0b;
+  }
+`;
+
+// Tooltip text
+const Tooltip = styled.span`
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+
+  position: absolute;
+  bottom: 125%; /* show above button */
+  left: 50%;
+  transform: translateX(-50%);
+
+  background-color: #1c1f2e;
+  color: #fff;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.4rem;
+  font-size: 1.2rem;
+  white-space: nowrap;
+
+  z-index: 1;
+
+  /* arrow, ill be honest i took this from the internet, thank you random person */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 100%; /* point downwards */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+  }
+
+  ${StyledButton}:hover & {
+    visibility: visible;
+    opacity: 1;
+    .icon {
+      font-size: 2.4rem;
+    }
+  }
+`;
+
 function Book() {
   const { id } = useParams();
   const [story, setStory] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { currentUser } = useContext(AuthContext);
 
   console.log(story);
 
   useEffect(() => {
-    const fetchStory = async () => {
-      try {
-        const docRef = doc(db, "stories", id);
-        const docSnap = await getDoc(docRef);
+    const docRef = doc(db, "stories", id);
 
-        if (docSnap.exists()) {
-          setStory({ id: docSnap.id, ...docSnap.data() });
-        } else {
-          console.log("No such document!");
-        }
-      } catch (error) {
-        console.error("Error fetching story:", error);
-      } finally {
-        setLoading(false);
+    const unsub = onSnapshot(docRef, (docSnap) => {
+      if (docSnap.exists()) {
+        setStory({ id: docSnap.id, ...docSnap.data() });
+      } else {
+        console.log("No such document!");
       }
-    };
+      setLoading(false);
+    });
 
-    fetchStory();
+    return () => unsub(); // cleanup on unmount
   }, [id]);
+
+  async function handleLike(userId, isLiked) {
+    console.log(userId);
+
+    try {
+      if (!isLiked) {
+        await updateDoc(doc(db, "stories", story.id), {
+          likes: arrayUnion(userId),
+        });
+      } else {
+        await updateDoc(doc(db, "stories", story.id), {
+          likes: arrayRemove(userId),
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   if (loading) return <p>Loading...</p>;
   if (!story) return <p>story not found.</p>;
@@ -148,6 +244,30 @@ function Book() {
           <p>{story.storyText + " " + story.storyText}</p>
         </StyledBody>
       )}
+      <StyledLikes>
+        <span>
+          <StyledButton
+            onClick={() =>
+              handleLike(
+                currentUser.uid,
+                story.likes?.find((like) => like === currentUser.uid)
+              )
+            }
+          >
+            {story.likes?.find((like) => like === currentUser.uid) ? (
+              <ion-icon name="heart"></ion-icon>
+            ) : (
+              <ion-icon name="heart-outline"></ion-icon>
+            )}
+            <Tooltip>
+              {story.likes?.find((like) => like === currentUser.uid)
+                ? "Remove Like"
+                : "Like Story"}
+            </Tooltip>
+          </StyledButton>
+          {story.likes?.length || 0} likes
+        </span>
+      </StyledLikes>
       <Comments storyId={story.id} />
     </StyledBook>
   );

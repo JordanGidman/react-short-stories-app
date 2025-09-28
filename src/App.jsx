@@ -23,6 +23,8 @@ function App() {
   //i wanted to allow images to be used both for the book "cover" and within the post itself however firebase has paywalled its image uploading unfortunately. I will look into alternate db options for the next project.
 
   //For now im going to use this as a list of features i want to add -
+
+  //COMPLETED
   //1 - User authentication (signup/signin/signout) - Done
   //2 - User profile page (view/edit profile info, view user's stories) - Done
   //3 - Create a story (title, genre, synopsis, cover image, story text) - Done
@@ -32,20 +34,23 @@ function App() {
   //7 - Delete a story (Need to make sure logged in user can only delete their own stories) - Done
   //8 - My stories page to edit/delete user's own stories - Done
   //9 - Ability to share publicly or hide and keep private - Done
-  //10 - Form validation - Partially done
-  //11 - Error handling and loading states (Need to use loading spinner) - Partially done
-  //12 - Responsive design - Not done
-  //13 - Search functionality - Not done
-  //14 - User comments on stories - Not done
-  //15 - Like/favorite stories - Not done
-  //16 - Story ratings/reviews - Not done
-  //17 - Required Logins for certain actions/pages - Not done
-  //18 - Pagination or infinite scroll for story lists - Not done
-  //19 - Refactor Book/WriteBook to be Story for consistency - Not Done
-  //20 - Add toast notifications for user feedback writing/deleting- Not done
-  //21 - Animations and transitions - Not done
-  //22 - Night reader mode - Not done
-  //23 - Deployment - Not done
+  //10 - Like/favorite stories - Not done
+
+  //WIP
+  //1 - Form validation - Partially done
+  //2 - Error handling and loading states (Need to use loading spinner) - Partially done
+  //3 - Responsive design - Not done
+  //4 - Search functionality - Not done
+  //5 - User comments on stories - Not done
+  //6 - Required Logins for certain actions/pages - Not done
+  //7 - Pagination or infinite scroll for story lists - Not done
+  //8 - Refactor Book/WriteBook to be Story for consistency - Not Done
+  //9 - Add toast notifications for user feedback writing/deleting- Not done
+  //10 - Animations and transitions - Not done
+  //11 - Night reader mode(Maybe) - Not done
+  //12 - Finish home page.
+  //13 - Clean console logs and comments
+  //14 - Deployment - Not done
 
   return (
     <AuthContextProvider>

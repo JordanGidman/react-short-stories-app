@@ -66,8 +66,6 @@ function Comments({ storyId }) {
   const [loading, setLoading] = useState(true);
   const { currentUser } = useContext(AuthContext);
 
-  console.log(currentUser);
-
   useEffect(() => {
     const docRef = doc(db, "stories", storyId);
     const unsubscribe = onSnapshot(docRef, (docSnap) => {
@@ -81,8 +79,6 @@ function Comments({ storyId }) {
 
     return () => unsubscribe(); // clean up listener on unmount
   }, [storyId]);
-
-  console.log(story);
 
   async function handleCommentSubmit(e) {
     e.preventDefault();
