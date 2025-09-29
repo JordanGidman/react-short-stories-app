@@ -10,6 +10,7 @@ import mystery from "../img/mystery.webp";
 import drama from "../img/drama.webp";
 import religious from "../img/religious.webp";
 import { Outlet } from "react-router-dom";
+import Footer from "../components/Footer";
 
 // Styled components
 const StyledLibrary = styled.div`
@@ -207,7 +208,7 @@ function Library() {
           })}
         </StyledGenreList>
       </StyledContainer>
-
+      <Footer />
       {/* <Outlet /> */}
     </StyledLibrary>
   );

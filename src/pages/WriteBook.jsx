@@ -15,6 +15,7 @@ import { db } from "../firebase";
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 
 const StyledWriteBook = styled.div`
   display: flex;
@@ -43,7 +44,7 @@ const StyledForm = styled.form`
   justify-content: center;
   gap: 1.5rem;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   padding-top: 10rem;
   padding-bottom: 3rem;
 
@@ -65,12 +66,15 @@ const StyledForm = styled.form`
 
     .ql-container {
       border: none !important;
+      height: auto !important;
       .ql-editor {
         font-size: 1.6rem;
         font-family: "Montserrat", sans-serif;
         box-shadow: 0rem 0.8rem 0.6rem -1rem rgba(0, 0, 0, 0.8);
         font-style: italic;
         /* border-bottom: 1px solid rgb(0, 0, 0, 0.2); */
+        height: auto;
+        overflow-y: visible;
 
         &::before {
           text-transform: capitalize;
@@ -289,6 +293,7 @@ function WriteBook() {
           {/* Maybe a button for saving as draft */}
         </StyledForm>
       </StyledWrapper>
+      <Footer />
     </StyledWriteBook>
   );
 }

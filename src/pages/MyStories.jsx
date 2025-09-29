@@ -16,6 +16,7 @@ import Navbar from "../components/Navbar";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import Footer from "../components/Footer";
 
 //Just realizing i likely want this to just be a component on the account page rather than its own page. But thats tomorrows problem. Likely this will be moved to the accounts page later on.
 
@@ -417,6 +418,7 @@ function MyStories() {
           </StyledButtons>
         </StyledModalContent>
       </StyledModal>
+      <Footer />
     </StyledMyStories>
   );
 }

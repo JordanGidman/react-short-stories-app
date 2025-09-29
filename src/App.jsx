@@ -14,6 +14,7 @@ import StoryList from "./pages/StoryList";
 import Book from "./pages/Book";
 import MyStories from "./pages/MyStories";
 import EditStory from "./pages/EditStory";
+import ScrollToTop from "./helpers/ScrollToTop";
 
 const StyledApp = styled.div``;
 
@@ -51,13 +52,15 @@ function App() {
   //12 - Finish home page - Partially done
   //13 - Fvourite/Read later component - Not done
   //13 - Clean console logs and comments - Not done
-  //14 - Deployment - Not done
+  //14 - About page - Not done
+  //15 - Deployment - Not done
 
   return (
     <AuthContextProvider>
       <StyledApp>
         <GlobalStyles />
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="signin" element={<SignIn />} />
