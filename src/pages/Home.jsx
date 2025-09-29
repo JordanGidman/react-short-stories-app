@@ -9,6 +9,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
+import StoryCard from "../components/StoryCard";
 
 const StyledHero = styled.div`
   background-image: url(${(props) => props.$img});
@@ -50,14 +51,14 @@ const StyledHeroText = styled.div`
     background-color: #1c1f2e;
     padding: 1rem 2rem;
     font-family: "Playfair Display", serif;
-    font-weight: 900;
+    font-weight: 600;
     box-shadow: 0rem 0.8rem 0.8rem rgba(0, 0, 0, 0.3);
-    text-transform: capitalize;
+
     span {
       font-style: italic;
       font-family: "Playfair Display", serif;
       padding: 0rem 1rem;
-      font-weight: 600;
+      font-weight: 500;
     }
   }
   .author {
@@ -208,13 +209,76 @@ const StyledAltButton = styled.button`
   }
 `;
 
+const StyledPicks = styled.div`
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  width: 100vw;
+  height: calc(100vh - 7.8rem);
+  background-color: #f7f7f7;
+  h1 {
+    background-color: #1c1f2e;
+    padding: 1rem 2rem;
+    font-family: "Playfair Display", serif;
+    font-weight: 900;
+    box-shadow: 0rem 0.8rem 0.8rem rgba(0, 0, 0, 0.3);
+    text-transform: capitalize;
+    color: #fff;
+    width: auto;
+
+    span {
+      font-style: italic;
+    }
+  }
+`;
+
+const StyledPicksSubheading = styled.div`
+  font-size: 4.8rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-family: "Playfair Display", serif;
+`;
+
+const StyledPicksText = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  background-color: #f7f7f7;
+  padding: 4rem;
+  text-transform: uppercase;
+
+  p {
+    font-size: 2rem;
+    font-weight: 500;
+    letter-spacing: 0.4rem;
+  }
+
+  .underline {
+    background-color: #000;
+    height: 0.1rem;
+    width: 30%;
+  }
+`;
+
+const StyledCardsBox = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 100vw;
+  gap: 2rem;
+  padding: 4rem;
+`;
+
 function Home() {
   const [story, setStory] = useState();
   const [freshStory, setFreshStory] = useState();
+  const [staffPicks, setStaffPicks] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  console.log("story", story);
+  console.log(staffPicks);
 
   useEffect(() => {
     try {
@@ -235,6 +299,12 @@ function Home() {
         setStory(
           fetchedStories[Math.floor(Math.random() * fetchedStories.length)]
         );
+
+        //This should of course not be random but there arent any staff and there arent any real stories either. But if there were i would just have a button for staff members on each story they can click to recommend which would save the storyId to an array on the db called recommendations. Then i simply pull one for each staff member here.
+        setStaffPicks(() => {
+          const shuffled = [...fetchedStories].sort(() => 0.5 - Math.random());
+          return shuffled.slice(0, 3);
+        });
 
         //This should of course be finding the story with the most recent createdAt which would be as easy as checking for the smallest number for the timestamp. The issue here is that it will always just be my test story, as that is the most recent which isnt a good representation of a live site.
         setFreshStory(
@@ -265,7 +335,7 @@ function Home() {
         {/* "https://picsum.photos/seed/a3a60a47-6e80-46bd-a709-f6c759b36964/600/400" */}
         <StyledHeroText>
           <h1>
-            What <span>to read</span> today
+            What<span>to Read</span>Today
           </h1>
           {/* replace later with titles from db */}
           <p className="author">{loading ? "Loading..." : story?.author}</p>
@@ -295,7 +365,13 @@ function Home() {
             <div className="underline"></div>
             <p className="genre">{freshStory?.genre}</p>
           </div>
-          <Button>Read</Button>
+          <Button
+            onClick={() =>
+              navigate(`/library/${freshStory?.genre}/Book/${freshStory.id}`)
+            }
+          >
+            Read
+          </Button>
           <StyledAltButton
             onClick={() => navigate(`/library/${freshStory?.genre}`)}
           >
@@ -308,6 +384,25 @@ function Home() {
           }
         ></StyledImg>
       </StyledFresh>
+      <StyledPicks>
+        <StyledPicksText>
+          <h1>
+            <span>Staff</span> Picks
+          </h1>
+          <div>
+            <p>Check out what our staff are recommending</p>
+            <StyledPicksSubheading>
+              What should you read this week
+            </StyledPicksSubheading>
+          </div>
+          <div className="underline"></div>
+        </StyledPicksText>
+        <StyledCardsBox>
+          {staffPicks?.map((story) => {
+            return <StoryCard story={story} />;
+          })}
+        </StyledCardsBox>
+      </StyledPicks>
       <Footer />
       <Navbar />
     </div>
