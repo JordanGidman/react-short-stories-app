@@ -35,22 +35,24 @@ function App() {
   //7 - Delete a story (Need to make sure logged in user can only delete their own stories) - Done
   //8 - My stories page to edit/delete user's own stories - Done
   //9 - Ability to share publicly or hide and keep private - Done
-  //10 - Like/favorite stories - Not done
+  //10 - Like/favorite stories - Done
+  //11 - Footer - Done
+  //12 - User comments on stories - Done
+  //13 - Favorite stories - Done
 
   //WIP
   //1 - Form validation - Partially done
   //2 - Error handling and loading states (Need to use loading spinner) - Partially done
   //3 - Responsive design - Not done
   //4 - Search functionality - Not done
-  //5 - User comments on stories - Not done
-  //6 - Required Logins for certain actions/pages - Not done
-  //7 - Pagination or infinite scroll for story lists - Not done
-  //8 - Refactor Book/WriteBook to be Story for consistency - Not Done
-  //9 - Add toast notifications for user feedback writing/deleting- Not done
-  //10 - Animations and transitions - Not done
-  //11 - Night reader mode(Maybe) - Not done
-  //12 - Finish home page - Partially done
-  //13 - Fvourite/Read later component - Not done
+  //5 - Required Logins for certain actions/pages (write, like, favorite, mystories) - Not done
+  //6 - Pagination or infinite scroll for story lists - Not done
+  //7 - Refactor Book/WriteBook to be Story for consistency - Not Done
+  //8 - Add toast notifications for user feedback writing/deleting/commenting/liking- Not done
+  //9 - Animations and transitions - Not done
+  //10 - Night reader mode(Maybe) - Not done
+  //11 - Finish home page - Partially done
+  //12 - Display favorite stories somewhere - Not done
   //13 - Clean console logs and comments - Not done
   //14 - About page - Not done
   //15 - Deployment - Not done

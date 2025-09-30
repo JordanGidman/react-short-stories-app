@@ -64,7 +64,8 @@ const StyledNavLink = styled(Link)`
 
   &:hover {
     cursor: pointer;
-    color: #fff;
+
+    color: #85e9e1;
   }
 `;
 
@@ -76,7 +77,7 @@ const StyledPersonalLink = styled.a`
 
   &:hover {
     cursor: pointer;
-    color: #fff;
+    color: #85e9e1;
   }
 `;
 

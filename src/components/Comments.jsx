@@ -23,7 +23,7 @@ const StyledComments = styled.div`
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
   min-width: 100%;
   min-height: 30vh;
-  margin-top: 4rem;
+  /* margin-top: 4rem; */
 `;
 
 const StyledQuill = styled(ReactQuill)`
