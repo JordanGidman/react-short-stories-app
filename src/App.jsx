@@ -15,6 +15,7 @@ import Book from "./pages/Book";
 import MyStories from "./pages/MyStories";
 import EditStory from "./pages/EditStory";
 import ScrollToTop from "./helpers/ScrollToTop";
+import Favorites from "./components/Favorites";
 
 const StyledApp = styled.div``;
 
@@ -39,6 +40,7 @@ function App() {
   //11 - Footer - Done
   //12 - User comments on stories - Done
   //13 - Favorite stories - Done
+  //14 - Display favorite stories - Done
 
   //WIP
   //1 - Form validation - Partially done
@@ -46,16 +48,19 @@ function App() {
   //3 - Responsive design - Not done
   //4 - Search functionality - Not done
   //5 - Required Logins for certain actions/pages (write, like, favorite, mystories) - Not done
-  //6 - Pagination or infinite scroll for story lists - Not done
-  //7 - Refactor Book/WriteBook to be Story for consistency - Not Done
+  //6 - Pagination or infinite scroll for story lists(maybe) - Not done
+  //7 - Refactor Book/WriteBook to be Story/WriteStory for consistency - Not Done
   //8 - Add toast notifications for user feedback writing/deleting/commenting/liking- Not done
   //9 - Animations and transitions - Not done
   //10 - Night reader mode(Maybe) - Not done
   //11 - Finish home page - Partially done
-  //12 - Display favorite stories somewhere - Not done
-  //13 - Clean console logs and comments - Not done
-  //14 - About page - Not done
-  //15 - Deployment - Not done
+  //12 - Clean console logs and comments - Not done
+  //13 - About page - Not done
+  //14 - Refactor homepage stories pulling so we only pull the amount we need and not the entire collection - Not done
+  //15 - Refactor MyStories to be a part of the account page - Not done
+  //16 - Maybe look into replacing none loaded images with a loading spinner instead of a temp image. This may be tricky as im using the images as a backgroundImage url. - Not done
+  //16 - Implement delete account functionality - Not done
+  //17 - Deployment - Not done
 
   return (
     <AuthContextProvider>
@@ -68,7 +73,9 @@ function App() {
             <Route path="signin" element={<SignIn />} />
             <Route path="signup" element={<SignUp />} />
             <Route path="about" element={<About />} />
-            <Route path="account" element={<Account />} />
+            <Route path="account/:id" element={<Account />}>
+              <Route path="account/:id/favorites" element={<Favorites />} />
+            </Route>
             <Route path="write" element={<WriteBook />} />
             <Route path="edit/:id" element={<EditStory />} />
             <Route path="library" element={<Library />} />

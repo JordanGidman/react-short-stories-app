@@ -267,11 +267,11 @@ function Book() {
       ) : (
         <StyledBody>
           <p>
-            This is a seed data story. Full styling is <strong>not</strong>{" "}
-            available. For the best example please look at any of the stories
-            titled "Test Story" in the fantasy genre. As these are what user
-            created storied with personalised styling will look like, or create
-            your own short story to share with others!
+            This is a seed data story created using fakerJS. Full styling is{" "}
+            <strong>not</strong> available. For the best example please look at
+            any of the stories titled "Test Story" in the fantasy genre. As
+            these are what user created storied with personalised styling will
+            look like, or create your own short story to share with others!
           </p>
           <p>{story.storyText}</p>
           <p>{story.storyText + " " + story.storyText}</p>

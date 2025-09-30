@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Button from "./Button";
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { auth } from "../firebase";
@@ -53,7 +53,7 @@ const StyledButton = styled.button`
   }
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(NavLink)`
   background-color: transparent;
   font-weight: 300;
   border: none;
@@ -115,7 +115,9 @@ function Navbar() {
         <Li>
           {currentUser ? (
             <StyledButton>
-              <StyledLink to="/account">{currentUser.displayName}</StyledLink>
+              <StyledLink to={`/account/${currentUser.uid}`}>
+                {currentUser.displayName}
+              </StyledLink>
             </StyledButton>
           ) : (
             <Button onClick={() => navigate("/signin")}>Sign In</Button>

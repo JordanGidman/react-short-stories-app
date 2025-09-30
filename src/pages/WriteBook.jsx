@@ -73,7 +73,7 @@ const StyledForm = styled.form`
         box-shadow: 0rem 0.8rem 0.6rem -1rem rgba(0, 0, 0, 0.8);
         font-style: italic;
         /* border-bottom: 1px solid rgb(0, 0, 0, 0.2); */
-        height: auto;
+        min-height: 35vh;
         overflow-y: visible;
 
         &::before {

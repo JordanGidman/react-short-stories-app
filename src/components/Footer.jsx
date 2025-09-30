@@ -91,7 +91,7 @@ const StyledLogo = styled.div`
 
   .icon {
     font-size: 13rem;
-    color: lightblue;
+    color: #85e9e1;
   }
 `;
 

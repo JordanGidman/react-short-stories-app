@@ -398,8 +398,8 @@ function Home() {
           <div className="underline"></div>
         </StyledPicksText>
         <StyledCardsBox>
-          {staffPicks?.map((i, story) => {
-            return <StoryCard key={i} story={story} />;
+          {staffPicks?.map((story) => {
+            return <StoryCard key={story.id} story={story} />;
           })}
         </StyledCardsBox>
       </StyledPicks>

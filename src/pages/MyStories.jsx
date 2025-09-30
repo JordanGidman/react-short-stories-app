@@ -81,7 +81,7 @@ const StyledStoryList = styled.ul`
   gap: 2rem;
   background-color: #fff;
   width: 95vw;
-  min-height: 100vh;
+  min-height: 20vh;
 
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
 `;
