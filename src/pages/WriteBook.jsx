@@ -161,7 +161,7 @@ function WriteBook() {
   const [title, setTitle] = useState("");
   const [genre, setGenre] = useState("placeholder");
   const [synopsis, setSynopsis] = useState("");
-  const [img, setImg] = useState("");
+  const [img, setImg] = useState("https://picsum.photos/seed/hireme/600/400");
   const [loading, setLoading] = useState(false);
   // const { state } = useLocation();
   // const story = state ? state.story : null;
@@ -277,7 +277,13 @@ function WriteBook() {
             placeholder="Image URL (Firebase no longer allows free image uploads leave blank for a placeholder or put any image url. )"
             disabled={loading}
             value={img}
-            onChange={(e) => setImg(e.target.value)}
+            onChange={(e) =>
+              setImg(
+                e.target.value
+                  ? e.target.value
+                  : "https://picsum.photos/seed/hireme/600/400"
+              )
+            }
           />
           <ReactQuill
             theme="snow"

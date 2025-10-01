@@ -196,7 +196,14 @@ function Account() {
                 Favorites
               </StyledNavLink>
             </StyledNavItem>
-            <StyledNavItem>My Stories</StyledNavItem>
+            <StyledNavItem>
+              <StyledNavLink
+                className="nav-link"
+                to={`account/${id}/mystories`}
+              >
+                My Stories
+              </StyledNavLink>
+            </StyledNavItem>
             <StyledNavItem>Edit Account</StyledNavItem>
           </StyledNavList>
           <StyledButton onClick={() => setModalOpen(true)}>

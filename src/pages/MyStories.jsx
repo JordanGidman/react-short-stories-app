@@ -11,66 +11,69 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { db } from "../firebase";
 import styled from "styled-components";
-import mystories from "../img/mystories.jpg";
-import Navbar from "../components/Navbar";
+// import mystories from "../img/mystories.jpg";
+// import Navbar from "../components/Navbar";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import Footer from "../components/Footer";
+// import Footer from "../components/Footer";
 
 //Just realizing i likely want this to just be a component on the account page rather than its own page. But thats tomorrows problem. Likely this will be moved to the accounts page later on.
 
 const StyledMyStories = styled.div`
-  display: flex;
+  /* display: flex;
   flex-direction: column;
-  align-items: center;
-  /* justify-content: center; */
-  width: 100vw;
+  align-items: center; */
+
+  /* width: 100vw;
   gap: 2rem;
   padding: 0% 5%;
   padding-top: 8rem;
-  background-color: #f9f9f9;
+  background-color: #f9f9f9; */
 
-  min-height: 100vh;
+  height: 100%;
 `;
 
-const StyledHeader = styled.header`
-  padding: 0rem 4rem;
-  display: grid;
-  grid-template-columns: 40% 60%;
-  height: 50vh;
-  width: 95vw;
-  background-image: url(${mystories});
-  background-color: #fff;
-  background-size: 30% auto;
-  background-repeat: no-repeat;
-  background-position: left 2rem center;
+// const StyledHeader = styled.header`
+//   padding: 0rem 4rem;
+//   display: grid;
+//   grid-template-columns: 40% 60%;
+//   height: 50vh;
+//   width: 95vw;
+//   background-image: url(${mystories});
+//   background-color: #fff;
+//   background-size: 30% auto;
+//   background-repeat: no-repeat;
+//   background-position: left 2rem center;
 
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
-  margin-bottom: 3rem;
-`;
+//   align-items: center;
+//   justify-content: space-between;
+//   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
+//   margin-bottom: 3rem;
+// `;
 
 const StyledH1 = styled.h1`
-  font-size: 6.4rem;
-  text-align: left;
-  padding: 2rem 0rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  color: rgb(28, 31, 46, 0.8);
+  padding-bottom: 2rem;
+  text-transform: uppercase;
   font-family: "Playfair Display", serif;
+  font-weight: 600;
+  font-style: italic;
 `;
-const StyledSubheading = styled.p`
-  font-size: 1.8rem;
-  padding-bottom: 4rem;
-`;
+// const StyledSubheading = styled.p`
+//   font-size: 1.8rem;
+//   padding-bottom: 4rem;
+// `;
 
-const StyledWrapper = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  padding: 1.2rem 4rem;
-`;
+// const StyledWrapper = styled.div`
+//   display: flex;
+//   width: 100%;
+//   flex-direction: column;
+//   align-items: flex-start;
+//   justify-content: flex-start;
+//   padding: 1.2rem 4rem;
+// `;
 
 const StyledStoryList = styled.ul`
   display: flex;
@@ -79,11 +82,12 @@ const StyledStoryList = styled.ul`
   align-items: center;
   justify-content: flex-start;
   gap: 2rem;
-  background-color: #fff;
-  width: 95vw;
-  min-height: 20vh;
+  /* background-color: #fff; */
+  width: 100%;
+  min-height: 100vh;
 
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
+  overflow-y: scroll;
 `;
 
 const StyledListItem = styled.li`
@@ -94,7 +98,7 @@ const StyledListItem = styled.li`
   text-align: center;
   border-bottom: 1px solid #eee;
   width: 100%;
-  padding: 2rem 4rem;
+  padding: 2rem 0rem;
 `;
 
 const StyledItemText = styled.p``;
@@ -126,15 +130,21 @@ const StyledButton = styled.button`
     font-size: 2.4rem;
   }
 
-  .icon-delete {
+  .icon-edit,
+  .icon-lock {
+    transition: all 0.3s ease-in-out;
     &:hover {
-      color: #ff0000;
+      cursor: pointer;
+      color: #ffbe0b;
     }
   }
 
-  &:hover {
-    cursor: pointer;
-    color: #ffbe0b;
+  .icon-delete {
+    transition: all 0.3s ease-in-out;
+    &:hover {
+      color: #ff0000;
+      cursor: pointer;
+    }
   }
 `;
 
@@ -214,10 +224,21 @@ const StyledModal = styled.div`
   height: 100vh;
   width: 100vw;
   position: fixed;
+  top: 0;
+  left: 0;
+
   backdrop-filter: blur(4px);
 `;
 
-const StyledModalButton = styled(Button)``;
+const StyledModalButton = styled(Button)`
+  transition: all 0.3s ease-in-out;
+  font-weight: 600;
+
+  &:hover {
+    background-color: red;
+    color: #fff;
+  }
+`;
 
 function MyStories() {
   const [stories, setStories] = useState([]);
@@ -311,8 +332,8 @@ function MyStories() {
 
   return (
     <StyledMyStories>
-      <Navbar />
-      <StyledHeader>
+      {/* <Navbar /> */}
+      {/* <StyledHeader>
         <StyledWrapper />
         <StyledWrapper>
           <StyledH1>My Stories</StyledH1>
@@ -321,8 +342,8 @@ function MyStories() {
             here.
           </StyledSubheading>
         </StyledWrapper>
-      </StyledHeader>
-
+      </StyledHeader> */}
+      <StyledH1>My Stories</StyledH1>
       <StyledStoryList>
         {loading ? (
           <div>Loading...</div>
@@ -365,12 +386,12 @@ function MyStories() {
                 <StyledButton onClick={() => handleTogglePrivacy(story.id)}>
                   {!story.hidden ? (
                     <ion-icon
-                      name="lock-closed-outline"
+                      name="lock-open-outline"
                       className="icon icon-lock"
                     ></ion-icon>
                   ) : (
                     <ion-icon
-                      name="lock-open-outline"
+                      name="lock-closed-outline"
                       className="icon icon-lock"
                     ></ion-icon>
                   )}
@@ -418,7 +439,7 @@ function MyStories() {
           </StyledButtons>
         </StyledModalContent>
       </StyledModal>
-      <Footer />
+      {/* <Footer /> */}
     </StyledMyStories>
   );
 }

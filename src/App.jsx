@@ -41,6 +41,7 @@ function App() {
   //12 - User comments on stories - Done
   //13 - Favorite stories - Done
   //14 - Display favorite stories - Done
+  //15 - Refactor MyStories to be a part of the account page - Done
 
   //WIP
   //1 - Form validation - Partially done
@@ -57,8 +58,7 @@ function App() {
   //12 - Clean console logs and comments - Not done
   //13 - About page - Not done
   //14 - Refactor homepage stories pulling so we only pull the amount we need and not the entire collection - Not done
-  //15 - Refactor MyStories to be a part of the account page - Not done
-  //16 - Maybe look into replacing none loaded images with a loading spinner instead of a temp image. This may be tricky as im using the images as a backgroundImage url. - Not done
+  //15 - Maybe look into replacing none loaded images with a loading spinner instead of a temp image. This may be tricky as im using the images as a backgroundImage url. - Not done
   //16 - Implement delete account functionality - Not done
   //17 - Deployment - Not done
 
@@ -75,11 +75,11 @@ function App() {
             <Route path="about" element={<About />} />
             <Route path="account/:id" element={<Account />}>
               <Route path="account/:id/favorites" element={<Favorites />} />
+              <Route path="account/:id/mystories" element={<MyStories />} />
             </Route>
             <Route path="write" element={<WriteBook />} />
             <Route path="edit/:id" element={<EditStory />} />
             <Route path="library" element={<Library />} />
-            <Route path="mystories" element={<MyStories />} />
             <Route path="library/:genre" element={<StoryList />} />
             <Route path="library/:genre/book/:id" element={<Book />} />
             <Route path="*" element={<PageNotFound />} />

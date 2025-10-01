@@ -104,13 +104,13 @@ function Navbar() {
           </StyledButton>
         </Li>
 
-        {currentUser && (
+        {/* {currentUser && (
           <Li>
             <StyledButton onClick={() => navigate("/mystories")}>
               My Stories
             </StyledButton>
           </Li>
-        )}
+        )} */}
 
         <Li>
           {currentUser ? (
