@@ -16,6 +16,7 @@ import MyStories from "./pages/MyStories";
 import EditStory from "./pages/EditStory";
 import ScrollToTop from "./helpers/ScrollToTop";
 import Favorites from "./components/Favorites";
+import EditAccount from "./components/EditAccount";
 
 const StyledApp = styled.div``;
 
@@ -76,6 +77,7 @@ function App() {
             <Route path="account/:id" element={<Account />}>
               <Route path="account/:id/favorites" element={<Favorites />} />
               <Route path="account/:id/mystories" element={<MyStories />} />
+              <Route path="account/:id/edit" element={<EditAccount />} />
             </Route>
             <Route path="write" element={<WriteBook />} />
             <Route path="edit/:id" element={<EditStory />} />

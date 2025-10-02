@@ -84,10 +84,13 @@ const StyledStoryList = styled.ul`
   gap: 2rem;
   /* background-color: #fff; */
   width: 100%;
-  min-height: 100vh;
-
+  height: calc(100% - 8rem);
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
   overflow-y: scroll;
+  overflow-x: hidden;
+  /* &::-webkit-scrollbar {
+    display: none;
+  } */
 `;
 
 const StyledListItem = styled.li`

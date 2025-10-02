@@ -28,8 +28,11 @@ const StyledWrapper = styled.div`
   padding: 2rem 4rem;
   display: flex;
   flex-direction: column;
-  overflow-y: hidden;
+  /* overflow-y: scroll; */
+  height: 100%;
   width: 100%;
+  min-height: 0;
+  overflow-y: visible;
 `;
 
 const StyledNav = styled.nav`
@@ -40,7 +43,7 @@ const StyledNav = styled.nav`
   /* justify-content: space-between; */
   /* padding: 4rem 0rem; */
   /* gap: 2rem; */
-  height: auto;
+  height: 100%;
   padding: 2rem;
 `;
 
@@ -204,7 +207,11 @@ function Account() {
                 My Stories
               </StyledNavLink>
             </StyledNavItem>
-            <StyledNavItem>Edit Account</StyledNavItem>
+            <StyledNavItem>
+              <StyledNavLink className="nav-link" to={`account/${id}/edit`}>
+                Edit Account
+              </StyledNavLink>
+            </StyledNavItem>
           </StyledNavList>
           <StyledButton onClick={() => setModalOpen(true)}>
             Delete account

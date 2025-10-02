@@ -17,6 +17,7 @@ import Button from "./Button";
 
 const StyledFavorites = styled.div`
   height: 100%;
+  min-height: 0;
 `;
 
 const StyledH1 = styled.h1`
@@ -38,10 +39,14 @@ const StyledStoryList = styled.ul`
   gap: 2rem;
   /* background-color: #fff; */
   width: 100%;
-  min-height: 100vh;
+  height: 92%;
 
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
   overflow-y: scroll;
+
+  /* &::-webkit-scrollbar {
+    display: none;
+  } */
 `;
 
 const StyledListItem = styled.li`
