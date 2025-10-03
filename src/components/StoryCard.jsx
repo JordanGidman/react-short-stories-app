@@ -4,6 +4,8 @@ import placeholder from "../img/placeholder.jpg";
 import { useEffect, useState } from "react";
 import Button from "./Button";
 import { Link } from "react-router-dom";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../firebase";
 
 const StyledStoryCard = styled.div`
   display: grid;
@@ -79,6 +81,23 @@ const StyledLink = styled(Link)``;
 
 function StoryCard({ story }) {
   const [loadedImg, setLoadedImg] = useState(null);
+  const [author, setAuthor] = useState("");
+
+  useEffect(() => {
+    if (!story.creatorID) return;
+
+    const userRef = doc(db, "users", story.creatorID);
+
+    const unsub = onSnapshot(userRef, (docSnap) => {
+      if (docSnap.exists()) {
+        setAuthor(docSnap.data().displayName);
+      } else {
+        console.log("No such user exists");
+      }
+    });
+
+    return () => unsub();
+  }, [story]);
 
   useEffect(() => {
     if (!story.img) return;
@@ -96,7 +115,7 @@ function StoryCard({ story }) {
       ></StyledImageBox>
       <StyledTextBox>
         <div>
-          <StyledAuthor>{story.author}</StyledAuthor>
+          <StyledAuthor>{author || story.author}</StyledAuthor>
           <StyledTitle>{story.title}</StyledTitle>
         </div>
         {/* <p>{story.storyText}</p> */}

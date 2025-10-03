@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import Home from "./pages/Home";
+import { useContext } from "react";
 import GlobalStyles from "./GlobalStyles";
 import SignIn from "./pages/SignIn";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PageNotFound from "./pages/PageNotFound";
 import SignUp from "./pages/SignUp";
-import { AuthContextProvider } from "./context/AuthContext";
+import { AuthContext, AuthContextProvider } from "./context/AuthContext";
 import About from "./pages/About";
 import Account from "./pages/Account";
 import WriteBook from "./pages/WriteBook";
@@ -17,6 +18,7 @@ import EditStory from "./pages/EditStory";
 import ScrollToTop from "./helpers/ScrollToTop";
 import Favorites from "./components/Favorites";
 import EditAccount from "./components/EditAccount";
+import ProtectedRoute from "./helpers/ProtectedRoutes";
 
 const StyledApp = styled.div``;
 
@@ -74,13 +76,59 @@ function App() {
             <Route path="signin" element={<SignIn />} />
             <Route path="signup" element={<SignUp />} />
             <Route path="about" element={<About />} />
-            <Route path="account/:id" element={<Account />}>
-              <Route path="account/:id/favorites" element={<Favorites />} />
-              <Route path="account/:id/mystories" element={<MyStories />} />
-              <Route path="account/:id/edit" element={<EditAccount />} />
+
+            <Route
+              path="account/:id"
+              element={
+                <ProtectedRoute>
+                  <Account />
+                </ProtectedRoute>
+              }
+            >
+              <Route
+                path="account/:id/favorites"
+                element={
+                  <ProtectedRoute>
+                    <Favorites />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="account/:id/mystories"
+                element={
+                  <ProtectedRoute>
+                    <MyStories />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="account/:id/edit"
+                element={
+                  <ProtectedRoute>
+                    <EditAccount />
+                  </ProtectedRoute>
+                }
+              />
             </Route>
-            <Route path="write" element={<WriteBook />} />
-            <Route path="edit/:id" element={<EditStory />} />
+
+            <Route
+              path="write"
+              element={
+                <ProtectedRoute>
+                  <WriteBook />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="edit/:id"
+              element={
+                <ProtectedRoute>
+                  <EditStory />
+                </ProtectedRoute>
+              }
+            />
+
             <Route path="library" element={<Library />} />
             <Route path="library/:genre" element={<StoryList />} />
             <Route path="library/:genre/book/:id" element={<Book />} />

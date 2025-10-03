@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { AuthContext } from "../context/AuthContext";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import Button from "./Button";
 
@@ -99,12 +99,24 @@ function EditAccount() {
   const [password, setPassword] = useState("New Password");
 
   console.log(currentUser);
+  console.log(fullName);
+  console.log(displayName);
 
   useEffect(() => {
     if (!currentUser?.uid) return;
 
-    setDisplayName(currentUser.displayName);
-    setFullName(currentUser.fullName || "John Doe");
+    const userRef = doc(db, "users", currentUser.uid);
+
+    const unsub = onSnapshot(userRef, (docSnap) => {
+      if (docSnap.exists()) {
+        setDisplayName(docSnap.data().displayName);
+        setFullName(docSnap.data().fullName);
+      } else {
+        console.log("No such user exists");
+      }
+    });
+
+    return () => unsub();
   }, [currentUser]);
 
   async function handleDetailsChange(e) {
@@ -129,7 +141,7 @@ function EditAccount() {
     }
 
     if (email !== "New Email") {
-      //Alert the user that this is a portfolio project and firebase auth requires real email verification to change email.
+      //Alert the user that this is a portfolio project and firebase auth requires real email verification to change email. I may add this in future as firebase auth seems to require a valid email to run
       alert(
         "Apologies but firebase auth requires real email verfication to change email and as this is a portfolio piece i do not expect users to use a real email."
       );

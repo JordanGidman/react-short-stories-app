@@ -169,6 +169,7 @@ function Book() {
   const [loading, setLoading] = useState(true);
   const { currentUser } = useContext(AuthContext);
   const [user, setUser] = useState(null);
+  const [author, setAuthor] = useState("");
 
   console.log(story);
   console.log(user);
@@ -203,6 +204,21 @@ function Book() {
 
     return () => unsub();
   }, [currentUser]);
+  useEffect(() => {
+    if (!story?.creatorID) return;
+
+    const userRef = doc(db, "users", story.creatorID);
+
+    const unsub = onSnapshot(userRef, (docSnap) => {
+      if (docSnap.exists()) {
+        setAuthor({ id: docSnap.id, ...docSnap.data() });
+      } else {
+        console.log("No such user exists");
+      }
+    });
+
+    return () => unsub();
+  }, [story]);
 
   async function handleLike(userId, isLiked) {
     console.log(userId);
@@ -250,7 +266,8 @@ function Book() {
         <StyledTextWrapper>
           <StyledH1>{story.title}</StyledH1>
           <StyledSubheading>
-            By <span>{story.author}</span> | Genre: <span>{story.genre}</span>
+            By: <span>{author.displayName}</span> | Genre:{" "}
+            <span>{story.genre}</span>
           </StyledSubheading>
           <StyledSynopsis>{story.synopsis}</StyledSynopsis>
         </StyledTextWrapper>
@@ -282,45 +299,49 @@ function Book() {
       )}
       <StyledLikes>
         <span>
-          <StyledButton
-            onClick={() =>
-              handleLike(
-                currentUser.uid,
-                story.likes?.find((like) => like === currentUser.uid)
-              )
-            }
-          >
-            {story.likes?.find((like) => like === currentUser.uid) ? (
-              <ion-icon name="heart"></ion-icon>
-            ) : (
-              <ion-icon name="heart-outline"></ion-icon>
-            )}
-            <Tooltip>
-              {story.likes?.find((like) => like === currentUser.uid)
-                ? "Remove Like"
-                : "Like Story"}
-            </Tooltip>
-          </StyledButton>
+          {currentUser?.uid && (
+            <StyledButton
+              onClick={() =>
+                handleLike(
+                  currentUser.uid,
+                  story.likes?.find((like) => like === currentUser.uid)
+                )
+              }
+            >
+              {story.likes?.find((like) => like === currentUser.uid) ? (
+                <ion-icon name="heart"></ion-icon>
+              ) : (
+                <ion-icon name="heart-outline"></ion-icon>
+              )}
+              <Tooltip>
+                {story.likes?.find((like) => like === currentUser.uid)
+                  ? "Remove Like"
+                  : "Like Story"}
+              </Tooltip>
+            </StyledButton>
+          )}
           {story.likes?.length || 0} likes
-          <StyledButton
-            onClick={() =>
-              handleFvorite(
-                currentUser.uid,
-                user?.favorites?.find((favorite) => favorite === story.id)
-              )
-            }
-          >
-            {user?.favorites?.find((favorite) => favorite === story.id) ? (
-              <ion-icon className="icon-star" name="star"></ion-icon>
-            ) : (
-              <ion-icon className="icon-star" name="star-outline"></ion-icon>
-            )}
-            <Tooltip>
-              {user?.favorites?.find((favorite) => favorite === story.id)
-                ? "Remove Favorite"
-                : "Favorite Story"}
-            </Tooltip>
-          </StyledButton>
+          {currentUser?.uid && (
+            <StyledButton
+              onClick={() =>
+                handleFvorite(
+                  currentUser.uid,
+                  user?.favorites?.find((favorite) => favorite === story.id)
+                )
+              }
+            >
+              {user?.favorites?.find((favorite) => favorite === story.id) ? (
+                <ion-icon className="icon-star" name="star"></ion-icon>
+              ) : (
+                <ion-icon className="icon-star" name="star-outline"></ion-icon>
+              )}
+              <Tooltip>
+                {user?.favorites?.find((favorite) => favorite === story.id)
+                  ? "Remove Favorite"
+                  : "Favorite Story"}
+              </Tooltip>
+            </StyledButton>
+          )}
         </span>
       </StyledLikes>
       <Comments storyId={story.id} />
