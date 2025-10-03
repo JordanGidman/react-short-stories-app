@@ -201,6 +201,7 @@ function WriteBook() {
         author: currentUser.displayName,
         isSeedData: false,
         hidden: false,
+        randomNumber: Math.random(),
       });
 
       //add the story id to the stories array of the user that created it

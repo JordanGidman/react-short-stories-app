@@ -25,11 +25,15 @@ const StyledSocials = styled.ul`
   font-weight: 600;
   text-transform: uppercase;
   div {
-    display: flex;
-    align-items: left;
-    gap: 2rem;
     /* justify-content: space-between; */
   }
+`;
+
+const StyledSocialsList = styled.ul`
+  display: flex;
+  align-items: left;
+  list-style: none;
+  gap: 2rem;
 `;
 
 const StyledSocialItem = styled.li`
@@ -135,7 +139,7 @@ function Footer() {
     <StyledFooter>
       <StyledSocials>
         <p>Tell Your Story</p>
-        <div>
+        <StyledSocialsList>
           <StyledSocialItem>
             <ion-icon className="icon" name="logo-facebook"></ion-icon>
           </StyledSocialItem>
@@ -148,7 +152,7 @@ function Footer() {
           <StyledSocialItem>
             <ion-icon className="icon" name="mail-outline"></ion-icon>
           </StyledSocialItem>
-        </div>
+        </StyledSocialsList>
       </StyledSocials>
       <StyledNavLinks>
         <StyledNavItem>

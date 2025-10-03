@@ -5,7 +5,15 @@ import heroImg from "../img/hero-img.jpg";
 import Button from "../components/Button";
 import Featured from "../components/Featured";
 import { useEffect, useState } from "react";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  startAt,
+  where,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
@@ -281,43 +289,55 @@ function Home() {
   console.log(staffPicks);
 
   useEffect(() => {
-    try {
-      async function fetchStories() {
+    async function fetchStories() {
+      try {
+        const rand = Math.random();
         const storiesRef = collection(db, "stories");
 
-        const q = query(storiesRef, where("isSeedData", "==", true));
+        // First attempt: grab 5 random stories starting from rand
+        let q = query(
+          storiesRef,
+          where("isSeedData", "==", true),
+          orderBy("randomNumber"),
+          startAt(rand),
+          limit(5)
+        );
 
-        const querySnapshot = await getDocs(q);
-
-        const fetchedStories = querySnapshot.docs.map((doc) => ({
+        let querySnapshot = await getDocs(q);
+        let fetchedStories = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
 
-        console.log("fetchedStories", fetchedStories);
+        // If not enough (e.g. at end of range), wrap around and grab from start
+        if (fetchedStories.length < 5) {
+          const remaining = 5 - fetchedStories.length;
+          const q2 = query(
+            storiesRef,
+            where("isSeedData", "==", true),
+            orderBy("randomNumber"),
+            limit(remaining)
+          );
 
-        setStory(
-          fetchedStories[Math.floor(Math.random() * fetchedStories.length)]
-        );
+          const qs2 = await getDocs(q2);
+          fetchedStories = [
+            ...fetchedStories,
+            ...qs2.docs.map((doc) => ({ id: doc.id, ...doc.data() })),
+          ];
+        }
 
-        //This should of course not be random but there arent any staff and there arent any real stories either. But if there were i would just have a button for staff members on each story they can click to recommend which would save the storyId to an array on the db called recommendations. Then i simply pull one for each staff member here.
-        setStaffPicks(() => {
-          const shuffled = [...fetchedStories].sort(() => 0.5 - Math.random());
-          return shuffled.slice(0, 3);
-        });
-
-        //This should of course be finding the story with the most recent createdAt which would be as easy as checking for the smallest number for the timestamp. The issue here is that it will always just be my test story, as that is the most recent which isnt a good representation of a live site.
-        setFreshStory(
-          fetchedStories[Math.floor(Math.random() * fetchedStories.length)]
-        );
+        // Assign them to UI slots
+        setStory(fetchedStories[0]);
+        setStaffPicks(fetchedStories.slice(1, 4));
+        setFreshStory(fetchedStories[4]);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching stories:", error);
         setLoading(false);
       }
-
-      fetchStories();
-    } catch (error) {
-      console.error("Error fetching story:", error);
-      setLoading(false);
     }
+
+    fetchStories();
   }, []);
 
   function resizePicsum(url, width, height) {
