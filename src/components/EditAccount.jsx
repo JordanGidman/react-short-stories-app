@@ -1,9 +1,18 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { AuthContext } from "../context/AuthContext";
-import { doc, onSnapshot, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  onSnapshot,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import Button from "./Button";
+import { updateProfile } from "firebase/auth";
 
 const StyledEditAccount = styled.div`
   /* height: 100%; */
@@ -97,6 +106,7 @@ function EditAccount() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("New Email");
   const [password, setPassword] = useState("New Password");
+  const [stories, setStories] = useState();
 
   console.log(currentUser);
   console.log(fullName);
@@ -127,6 +137,30 @@ function EditAccount() {
       await updateDoc(doc(db, "users", currentUser.uid), {
         displayName,
       });
+
+      //Update the author of every book this user has made
+
+      const storiesRef = collection(db, "stories");
+      const q = query(storiesRef, where("creatorID", "==", currentUser.uid));
+
+      const querySnapshot = await getDocs(q);
+      const updates = querySnapshot.docs.map((storyDoc) =>
+        updateDoc(storyDoc.ref, { author: displayName })
+      );
+
+      //Ensure all updates are finished before moving on.
+      await Promise.all(updates);
+
+      // Update profile
+      updateProfile(currentUser, {
+        displayName,
+      })
+        .then(() => {
+          console.log("Profile Updated");
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
 
       //Show toast notification
     }

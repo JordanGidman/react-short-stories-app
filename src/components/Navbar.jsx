@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import Button from "./Button";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
+import { collection, doc, onSnapshot } from "firebase/firestore";
 
 const StyledNav = styled.nav`
   display: flex;
@@ -82,7 +83,26 @@ const StyledLink = styled(NavLink)`
 
 function Navbar() {
   const { currentUser } = useContext(AuthContext);
+  const [userInfo, setUserInfo] = useState();
+
   // console.log("Current User:", currentUser?.displayName);
+  console.log(currentUser);
+
+  useEffect(() => {
+    if (!currentUser?.uid) return;
+
+    const userRef = doc(db, "users", currentUser.uid);
+
+    const unsub = onSnapshot(userRef, (docSnap) => {
+      if (docSnap.exists()) {
+        setUserInfo({ id: docSnap.id, ...docSnap.data() });
+      } else {
+        console.log("No user found");
+      }
+    });
+
+    return () => unsub();
+  }, [currentUser]);
 
   const navigate = useNavigate();
 
@@ -116,7 +136,7 @@ function Navbar() {
           {currentUser ? (
             <StyledButton>
               <StyledLink to={`/account/${currentUser.uid}`}>
-                {currentUser.displayName}
+                {userInfo?.displayName}
               </StyledLink>
             </StyledButton>
           ) : (
