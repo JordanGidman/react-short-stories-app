@@ -12,6 +12,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../firebase";
+import Search from "../components/Search";
 
 const StyledStoryList = styled.div`
   display: flex;
@@ -77,59 +78,59 @@ const StyledList = styled.ul`
   gap: 4rem;
 `;
 
-const StyledSorting = styled.div`
-  display: flex;
-  padding: 2rem 0rem;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-`;
+// const StyledSorting = styled.div`
+//   display: flex;
+//   padding: 2rem 0rem;
+//   align-items: center;
+//   justify-content: space-between;
+//   width: 100%;
+// `;
 
-const StyledSearch = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
-  margin-right: 2rem;
+// const StyledSearch = styled.div`
+//   display: flex;
+//   align-items: center;
+//   gap: 1rem;
+//   width: 100%;
+//   margin-right: 2rem;
 
-  .icon {
-    font-size: 2.4rem;
-    color: #1c1f2e;
-  }
-`;
+//   .icon {
+//     font-size: 2.4rem;
+//     color: #1c1f2e;
+//   }
+// `;
 
-const StyledSearchBar = styled.input`
-  font-size: 1.6rem;
-  border-radius: 1.6rem;
-  /* width: 50%; */
-  flex: 1;
-  padding: 1rem 2rem;
-  border: none;
-  border-bottom: 1px solid rgb(0, 0, 0, 0.2);
-  text-transform: capitalize;
-  font-style: italic;
-  color: #1c1f2e;
-`;
+// const StyledSearchBar = styled.input`
+//   font-size: 1.6rem;
+//   border-radius: 1.6rem;
+//   /* width: 50%; */
+//   flex: 1;
+//   padding: 1rem 2rem;
+//   border: none;
+//   border-bottom: 1px solid rgb(0, 0, 0, 0.2);
+//   text-transform: capitalize;
+//   font-style: italic;
+//   color: #1c1f2e;
+// `;
 
-const StyledSelect = styled.select`
-  font-size: 1.6rem;
-  border-radius: 1.6rem;
-  width: 20rem;
-  padding: 1rem 2rem;
-  border: none;
-  border-bottom: 1px solid rgb(0, 0, 0, 0.2);
-  text-transform: capitalize;
-  font-style: italic;
-  color: #1c1f2e;
+// const StyledSelect = styled.select`
+//   font-size: 1.6rem;
+//   border-radius: 1.6rem;
+//   width: 20rem;
+//   padding: 1rem 2rem;
+//   border: none;
+//   border-bottom: 1px solid rgb(0, 0, 0, 0.2);
+//   text-transform: capitalize;
+//   font-style: italic;
+//   color: #1c1f2e;
 
-  &[data-chosen-placeholder] {
-    color: rgb(0, 0, 0, 0.5);
-  }
-`;
+//   &[data-chosen-placeholder] {
+//     color: rgb(0, 0, 0, 0.5);
+//   }
+// `;
 
-const StyledOption = styled.option`
-  color: #1c1f2e;
-`;
+// const StyledOption = styled.option`
+//   color: #1c1f2e;
+// `;
 
 function StoryList() {
   //Here we run into a problem, the db has only the test stories i have added. Meaning theres nothing to pull, i have 2 options here i can either fill the db manually or programatically with random stories
@@ -207,47 +208,6 @@ function StoryList() {
     return <div>Loading...</div>;
   }
 
-  // function validateImage(url) {
-  //   return new Promise((resolve) => {
-  //     const img = new Image();
-  //     img.onload = () => resolve(url);
-  //     img.onerror = () =>
-  //       resolve(
-  //         faker.image.urlPicsumPhotos({
-  //           category: "animals",
-  //           blur: 0,
-  //         })
-  //       );
-  //     img.src = url;
-  //   });
-  // }
-
-  // useEffect(() => {
-  //   async function createRandomStories() {
-  //     const randomStories = await Promise.all(
-  //       Array.from({ length: 20 }, async () => {
-  //         const fakerUrl = faker.image.urlLoremFlickr({ category: "book" });
-  //         const validUrl = await validateImage(fakerUrl);
-
-  //         return {
-  //           id: faker.string.uuid(),
-  //           title: faker.word.words({ length: { min: 2, max: 5 } }),
-  //           author: faker.person.fullName(),
-  //           storyText: faker.lorem.paragraphs(),
-  //           synopsis: faker.lorem.sentences(2),
-  //           genre: genre.genre,
-  //           img: validUrl, // always valid
-  //         };
-  //       })
-  //     );
-
-  //     setStories(randomStories);
-  //     setLoading(false);
-  //   }
-
-  //   createRandomStories();
-  // }, [genre]);
-
   return (
     <StyledStoryList>
       <Navbar />
@@ -264,7 +224,7 @@ function StoryList() {
             </StyledSubheading>
           </StyledWrapper>
         </StyledHeader>
-        <StyledSorting>
+        {/* <StyledSorting>
           <StyledSearch>
             <ion-icon name="search-outline" className="icon"></ion-icon>
             <StyledSearchBar
@@ -291,7 +251,13 @@ function StoryList() {
             <StyledOption value="newest">Newest</StyledOption>
             <StyledOption value="mostlikes">Most likes</StyledOption>
           </StyledSelect>
-        </StyledSorting>
+        </StyledSorting> */}
+        <Search
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          search={search}
+          setSearch={setSearch}
+        />
         <StyledList>
           {sortedStories
             .filter(

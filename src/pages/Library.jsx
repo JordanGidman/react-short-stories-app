@@ -104,6 +104,7 @@ function Library() {
     "Other",
   ];
 
+  //Im sorry if you see this. But it has to be done for the specific positioning i want to have.
   //I could do this randomly with Math.random but i have a specific layout in mind and this is just easier - Not the cleanest but it works for now
   //I could also do this with a json file and import it but again this works for now
   //The spans array determines how many columns each genre card spans

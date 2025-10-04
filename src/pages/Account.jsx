@@ -10,7 +10,7 @@ import Button from "../components/Button";
 const StyledAccount = styled.div`
   width: 100vw;
   height: 100vh;
-  padding: 8% 6% 2% 6%;
+  padding: 8% 2% 2% 2%;
   display: grid;
   grid-template-columns: 25% 75%;
 `;
@@ -30,7 +30,8 @@ const StyledWrapper = styled.div`
   flex-direction: column;
   /* overflow-y: scroll; */
   height: 100%;
-  width: 100%;
+  width: auto;
+  /* flex: 1; */
   min-height: 0;
   overflow-y: visible;
 `;

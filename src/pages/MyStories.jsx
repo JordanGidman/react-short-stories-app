@@ -3,6 +3,7 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  onSnapshot,
   query,
   updateDoc,
   where,
@@ -16,64 +17,32 @@ import styled from "styled-components";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import Search from "../components/Search";
 // import Footer from "../components/Footer";
 
 //Just realizing i likely want this to just be a component on the account page rather than its own page. But thats tomorrows problem. Likely this will be moved to the accounts page later on.
 
 const StyledMyStories = styled.div`
-  /* display: flex;
-  flex-direction: column;
-  align-items: center; */
-
-  /* width: 100vw;
-  gap: 2rem;
-  padding: 0% 5%;
-  padding-top: 8rem;
-  background-color: #f9f9f9; */
-
   height: 100%;
 `;
 
-// const StyledHeader = styled.header`
-//   padding: 0rem 4rem;
-//   display: grid;
-//   grid-template-columns: 40% 60%;
-//   height: 50vh;
-//   width: 95vw;
-//   background-image: url(${mystories});
-//   background-color: #fff;
-//   background-size: 30% auto;
-//   background-repeat: no-repeat;
-//   background-position: left 2rem center;
-
-//   align-items: center;
-//   justify-content: space-between;
-//   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
-//   margin-bottom: 3rem;
-// `;
+const StyledHead = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  flex-wrap: nowrap;
+`;
 
 const StyledH1 = styled.h1`
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   color: rgb(28, 31, 46, 0.8);
-  padding-bottom: 2rem;
   text-transform: uppercase;
   font-family: "Playfair Display", serif;
   font-weight: 600;
   font-style: italic;
+  white-space: nowrap;
 `;
-// const StyledSubheading = styled.p`
-//   font-size: 1.8rem;
-//   padding-bottom: 4rem;
-// `;
-
-// const StyledWrapper = styled.div`
-//   display: flex;
-//   width: 100%;
-//   flex-direction: column;
-//   align-items: flex-start;
-//   justify-content: flex-start;
-//   padding: 1.2rem 4rem;
-// `;
 
 const StyledStoryList = styled.ul`
   display: flex;
@@ -88,14 +57,14 @@ const StyledStoryList = styled.ul`
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
   overflow-y: scroll;
   overflow-x: hidden;
-  /* &::-webkit-scrollbar {
+  &::-webkit-scrollbar {
     display: none;
-  } */
+  }
 `;
 
 const StyledListItem = styled.li`
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(${(props) => props.$span}, 1fr);
   align-items: center;
   justify-content: space-between;
   text-align: center;
@@ -120,7 +89,7 @@ const StyledButtons = styled.div`
   align-items: center;
   justify-content: center;
   gap: 2rem;
-  grid-column: 6 / -1;
+  /* grid-column: 6 / -1; */
 `;
 
 const StyledButton = styled.button`
@@ -169,7 +138,7 @@ const Tooltip = styled.span`
   font-size: 1.2rem;
   white-space: nowrap;
 
-  z-index: 1;
+  z-index: 999;
 
   /* arrow, ill be honest i took this from the internet, thank you random person */
   &::after {
@@ -250,28 +219,39 @@ function MyStories() {
   const [currentStory, setCurrentStory] = useState(null);
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [sortBy, setSortBy] = useState("placeholder");
+  const sortedStories = [...stories].sort((a, b) => {
+    if (sortBy === "newest")
+      return b.createdAt.seconds !== a.createdAt.seconds
+        ? b.createdAt.seconds - a.createdAt.seconds
+        : b.createdAt.nanoseconds - a.createdAt.nanoseconds;
+    if (sortBy === "oldest")
+      return b.createdAt.seconds !== a.createdAt.seconds
+        ? a.createdAt.seconds - b.createdAt.seconds
+        : a.createdAt.nanoseconds - b.createdAt.nanoseconds;
+
+    if (sortBy === "mostlikes")
+      return (b.likes?.length || 0) - (a.likes?.length || 0);
+    return 0;
+  });
+  const [search, setSearch] = useState("");
   //Did not know this was even an option. I have been using a context for this so i will continue to do so for consistency but will use the below in future projects.
   // const currentUser = auth.currentUser;
 
   console.log(stories);
 
   useEffect(() => {
-    async function fetchStories() {
-      setLoading(true);
-      const storiesRef = collection(db, "stories");
+    if (!currentUser?.uid) return;
 
-      const q = query(storiesRef, where("creatorID", "==", currentUser.uid));
+    setLoading(true);
 
-      const querySnapshot = await getDocs(q);
+    const storiesRef = collection(db, "stories");
+    const q = query(storiesRef, where("creatorID", "==", currentUser.uid));
 
-      querySnapshot.forEach((doc) => {
-        console.log(doc.id, " => ", doc.data());
-      });
-
+    // Use onSnapshot instead of getDocs
+    const unsub = onSnapshot(q, (querySnapshot) => {
       const fetchedStories = querySnapshot.docs
-        .sort((a, b) => {
-          return b.data().createdAt - a.data().createdAt;
-        })
+        .sort((a, b) => b.data().createdAt - a.data().createdAt)
         .map((doc) => ({
           id: doc.id,
           ...doc.data(),
@@ -279,9 +259,10 @@ function MyStories() {
 
       setStories(fetchedStories);
       setLoading(false);
-    }
+    });
 
-    fetchStories();
+    // Cleanup subscription on unmount
+    return () => unsub();
   }, [currentUser]);
 
   function handleEdit(story) {
@@ -346,77 +327,94 @@ function MyStories() {
           </StyledSubheading>
         </StyledWrapper>
       </StyledHeader> */}
-      <StyledH1>My Stories</StyledH1>
+      <StyledHead>
+        <StyledH1>My Stories</StyledH1>
+        <Search
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          search={search}
+          setSearch={setSearch}
+        />
+      </StyledHead>
       <StyledStoryList>
         {loading ? (
           <div>Loading...</div>
         ) : (
-          stories.map((story) => (
-            <StyledListItem key={story.id}>
-              <StyledImg $backgroundImage={story.img} alt={story.title} />
-              <StyledTitle
-                to={`/library/${story.genre.split("-").join(" ")}/book/${
-                  story.id
-                }`}
-              >
-                {story.title}
-              </StyledTitle>
-              <StyledItemText>{story.genre}</StyledItemText>
-              <StyledItemText>
-                Created:{" "}
-                {new Date(story.createdAt?.seconds * 1000).toLocaleDateString(
-                  "en-US"
-                )}
-              </StyledItemText>
-              {story.editedAt && (
+          sortedStories
+            .filter(
+              (story) =>
+                (story.hidden !== true &&
+                  story.author.toLowerCase().includes(search)) ||
+                story.title.toLowerCase().includes(search)
+            )
+            .map((story) => (
+              <StyledListItem key={story.id} $span={story.editedAt ? 6 : 5}>
+                <StyledImg $backgroundImage={story.img} alt={story.title} />
+                <StyledTitle
+                  to={`/library/${story.genre.split("-").join(" ")}/book/${
+                    story.id
+                  }`}
+                >
+                  {story.title}
+                </StyledTitle>
+                <StyledItemText>{story.genre}</StyledItemText>
                 <StyledItemText>
-                  Edited:{" "}
-                  {new Date(story.editedAt?.seconds * 1000).toLocaleDateString(
+                  Created:{" "}
+                  {new Date(story.createdAt?.seconds * 1000).toLocaleDateString(
                     "en-US"
                   )}
                 </StyledItemText>
-              )}
+                {story.editedAt && (
+                  <StyledItemText>
+                    Edited:{" "}
+                    {new Date(
+                      story.editedAt?.seconds * 1000
+                    ).toLocaleDateString("en-US")}
+                  </StyledItemText>
+                )}
 
-              <StyledButtons>
-                <StyledButton>
-                  <ion-icon
-                    name="create-outline"
-                    className="icon icon-edit"
-                    onClick={() => handleEdit(story)}
-                  ></ion-icon>
-                  <Tooltip>Edit Story</Tooltip>
-                </StyledButton>
-                <StyledButton onClick={() => handleTogglePrivacy(story.id)}>
-                  {!story.hidden ? (
+                <StyledButtons>
+                  <StyledButton>
                     <ion-icon
-                      name="lock-open-outline"
-                      className="icon icon-lock"
+                      name="create-outline"
+                      className="icon icon-edit"
+                      onClick={() => handleEdit(story)}
                     ></ion-icon>
-                  ) : (
+                    <Tooltip>Edit Story</Tooltip>
+                  </StyledButton>
+                  <StyledButton onClick={() => handleTogglePrivacy(story.id)}>
+                    {!story.hidden ? (
+                      <ion-icon
+                        name="lock-open-outline"
+                        className="icon icon-lock"
+                      ></ion-icon>
+                    ) : (
+                      <ion-icon
+                        name="lock-closed-outline"
+                        className="icon icon-lock"
+                      ></ion-icon>
+                    )}
+                    <Tooltip>
+                      {story.hidden
+                        ? "Make Story Public"
+                        : "Make Story Private"}
+                    </Tooltip>
+                  </StyledButton>
+                  <StyledButton
+                    onClick={() => {
+                      setModalOpen(true);
+                      setCurrentStory(story);
+                    }}
+                  >
                     <ion-icon
-                      name="lock-closed-outline"
-                      className="icon icon-lock"
+                      name="trash-outline"
+                      className="icon icon-delete"
                     ></ion-icon>
-                  )}
-                  <Tooltip>
-                    {story.hidden ? "Make Story Public" : "Make Story Private"}
-                  </Tooltip>
-                </StyledButton>
-                <StyledButton
-                  onClick={() => {
-                    setModalOpen(true);
-                    setCurrentStory(story);
-                  }}
-                >
-                  <ion-icon
-                    name="trash-outline"
-                    className="icon icon-delete"
-                  ></ion-icon>
-                  <Tooltip className="tooltip-delete">Delete Story</Tooltip>
-                </StyledButton>
-              </StyledButtons>
-            </StyledListItem>
-          ))
+                    <Tooltip className="tooltip-delete">Delete Story</Tooltip>
+                  </StyledButton>
+                </StyledButtons>
+              </StyledListItem>
+            ))
         )}
       </StyledStoryList>
 

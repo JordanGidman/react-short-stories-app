@@ -14,16 +14,23 @@ import {
 } from "firebase/firestore";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "./Button";
+import Search from "./Search";
 
 const StyledFavorites = styled.div`
   height: 100%;
   min-height: 0;
 `;
 
-const StyledH1 = styled.h1`
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  color: rgb(28, 31, 46, 0.8);
+const StyledHead = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2rem;
   padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+`;
+
+const StyledH1 = styled.h1`
+  color: rgb(28, 31, 46, 0.8);
   text-transform: uppercase;
   font-family: "Playfair Display", serif;
   font-weight: 600;
@@ -44,9 +51,9 @@ const StyledStoryList = styled.ul`
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
   overflow-y: scroll;
 
-  /* &::-webkit-scrollbar {
+  &::-webkit-scrollbar {
     display: none;
-  } */
+  }
 `;
 
 const StyledListItem = styled.li`
@@ -154,9 +161,25 @@ function Favorites() {
   //Display data in a list similar to my stories but with the only button being to unfavorite or view
   const { currentUser } = useContext(AuthContext);
   const [favorites, setFavorites] = useState(null);
-  const [stories, setStories] = useState(null);
+  const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [sortBy, setSortBy] = useState("placeholder");
+  const sortedStories = [...stories].sort((a, b) => {
+    if (sortBy === "newest")
+      return b.createdAt.seconds !== a.createdAt.seconds
+        ? b.createdAt.seconds - a.createdAt.seconds
+        : b.createdAt.nanoseconds - a.createdAt.nanoseconds;
+    if (sortBy === "oldest")
+      return b.createdAt.seconds !== a.createdAt.seconds
+        ? a.createdAt.seconds - b.createdAt.seconds
+        : a.createdAt.nanoseconds - b.createdAt.nanoseconds;
+
+    if (sortBy === "mostlikes")
+      return (b.likes?.length || 0) - (a.likes?.length || 0);
+    return 0;
+  });
+  const [search, setSearch] = useState("");
 
   console.log(favorites);
   console.log(stories);
@@ -209,47 +232,62 @@ function Favorites() {
 
   return (
     <StyledFavorites>
-      <StyledH1>Favorites</StyledH1>
+      <StyledHead>
+        <StyledH1>Favorites</StyledH1>
+        <Search
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          search={search}
+          setSearch={setSearch}
+        />
+      </StyledHead>
       <StyledStoryList>
         {loading ? (
           <div>Loading...</div>
         ) : (
-          stories?.map((story) => (
-            <StyledListItem key={story.id}>
-              <StyledImg $backgroundImage={story.img} alt={story.title} />
-              <StyledTitle
-                to={`/library/${story.genre.split("-").join(" ")}/book/${
-                  story.id
-                }`}
-              >
-                {story.title}
-              </StyledTitle>
-              <StyledItemText>{story.genre}</StyledItemText>
-              <StyledButtons>
-                <StyledButton
-                  disabled={loading}
-                  onClick={() => {
-                    navigate(`/library/${story.genre}/book/${story.id}`);
-                  }}
+          sortedStories
+            ?.filter(
+              (story) =>
+                (story.hidden !== true &&
+                  story.author.toLowerCase().includes(search)) ||
+                story.title.toLowerCase().includes(search)
+            )
+            .map((story) => (
+              <StyledListItem key={story.id}>
+                <StyledImg $backgroundImage={story.img} alt={story.title} />
+                <StyledTitle
+                  to={`/library/${story.genre.split("-").join(" ")}/book/${
+                    story.id
+                  }`}
                 >
-                  <ion-icon
-                    className="icon icon-open"
-                    name="open-outline"
-                  ></ion-icon>
-                  <Tooltip>Read</Tooltip>
-                </StyledButton>
-                <StyledButton
-                  disabled={loading}
-                  onClick={() => {
-                    handleUnfavorite(story.id);
-                  }}
-                >
-                  <ion-icon className="icon icon-star" name="star"></ion-icon>
-                  <Tooltip>Remove from favorites</Tooltip>
-                </StyledButton>
-              </StyledButtons>
-            </StyledListItem>
-          ))
+                  {story.title}
+                </StyledTitle>
+                <StyledItemText>{story.genre}</StyledItemText>
+                <StyledButtons>
+                  <StyledButton
+                    disabled={loading}
+                    onClick={() => {
+                      navigate(`/library/${story.genre}/book/${story.id}`);
+                    }}
+                  >
+                    <ion-icon
+                      className="icon icon-open"
+                      name="open-outline"
+                    ></ion-icon>
+                    <Tooltip>Read</Tooltip>
+                  </StyledButton>
+                  <StyledButton
+                    disabled={loading}
+                    onClick={() => {
+                      handleUnfavorite(story.id);
+                    }}
+                  >
+                    <ion-icon className="icon icon-star" name="star"></ion-icon>
+                    <Tooltip>Remove from favorites</Tooltip>
+                  </StyledButton>
+                </StyledButtons>
+              </StyledListItem>
+            ))
         )}
       </StyledStoryList>
     </StyledFavorites>
