@@ -148,11 +148,8 @@ const StyledButton = styled(Button)`
 `;
 
 function WriteBook() {
-  //Need to refactor the inputs to be controlled components.
-  //Need a check for user authentication before allowing access to this page - same for any comp that requires a signed in user
   //Need a check for isLoading state to show a loading spinner while the page is loading
   //Need to add error handling for the form submission
-  //Need to add form validation to make sure all required fields are filled out
   //Need to add a way to save a draft of the story
   //Need to navigate user to the page of the story they just created.
 
@@ -172,6 +169,35 @@ function WriteBook() {
   async function handleSubmit(e) {
     console.log(e);
     e.preventDefault();
+
+    //Form validation
+    const allowedChars = /^[a-zA-Z0-9\s.,!?'"-:;()\n\r]+$/;
+    //Make sure required fields arent empty
+    if (!title || !genre || !synopsis || !storyText) {
+      alert("Please fill all required fields marked with *");
+      return;
+    }
+    //Make sure no special characters are being used and the title and synopsis arent too long and the story is more than 10 characters to avoid accidental submissions.
+    if (!allowedChars.test(title) || title.split("").length > 100) {
+      alert(
+        "Title must be less than 100 characters long, and must NOT contain any special characters"
+      );
+      return;
+    }
+
+    if (!allowedChars.test(synopsis) || synopsis.split("").length > 500) {
+      alert(
+        "Synopsis must be less than 500 characters long, and must NOT contain any special characters"
+      );
+      return;
+    }
+
+    if (!allowedChars.test(storyText) || storyText.split("").length < 10) {
+      alert(
+        "story must be more than 10 characters long, and must NOT contain any special characters"
+      );
+      return;
+    }
 
     //Capture input data not using controlled components because of issues saving to firebase will refactor later
     // const title = e.target[0].value;
@@ -288,7 +314,7 @@ function WriteBook() {
           />
           <ReactQuill
             theme="snow"
-            placeholder="Write your story here..."
+            placeholder="Write your story here... *"
             className="text-editor"
             value={storyText}
             onChange={(value) => setStoryText(value)}

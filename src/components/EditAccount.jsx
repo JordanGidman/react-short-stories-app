@@ -132,6 +132,29 @@ function EditAccount() {
   async function handleDetailsChange(e) {
     e.preventDefault();
 
+    //Form validation
+    //Form validation
+    const allowedChars = /^[a-zA-Z0-9\s.,!?'"-:;()\n\r]+$/;
+    //Make sure required fields arent empty
+    if (!displayName || !fullName) {
+      alert("Please fill all required fields marked with *");
+      return;
+    }
+    //Make sure no special characters are being used and the lengths arent longer than they should be.
+    if (!allowedChars.test(fullName) || fullName.split("").length > 30) {
+      alert(
+        "full name must be less than 30 characters long, and must NOT contain any special characters"
+      );
+      return;
+    }
+
+    if (!allowedChars.test(displayName) || displayName.split("").length > 20) {
+      alert(
+        "display name must be less than 20 characters long, and must NOT contain any special characters"
+      );
+      return;
+    }
+
     if (displayName !== currentUser.displayName) {
       //Update the displayName field on the db
       await updateDoc(doc(db, "users", currentUser.uid), {

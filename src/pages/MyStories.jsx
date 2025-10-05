@@ -1,4 +1,5 @@
 import {
+  arrayRemove,
   collection,
   deleteDoc,
   doc,
@@ -19,8 +20,6 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Search from "../components/Search";
 // import Footer from "../components/Footer";
-
-//Just realizing i likely want this to just be a component on the account page rather than its own page. But thats tomorrows problem. Likely this will be moved to the accounts page later on.
 
 const StyledMyStories = styled.div`
   height: 100%;
@@ -279,14 +278,6 @@ function MyStories() {
       //Get the relevant story from firebase
       const story = stories.find((story) => story.id === storyId);
       const storyRef = doc(db, "stories", storyId);
-      console.log(storyRef);
-
-      //Change it in the stories state as well to force a re-render
-      setStories((prevStories) =>
-        prevStories.map((s) =>
-          s.id === storyId ? { ...s, hidden: !s.hidden } : s
-        )
-      );
 
       await updateDoc(storyRef, {
         hidden: !story.hidden,
@@ -301,12 +292,20 @@ function MyStories() {
   async function handleDelete(storyId) {
     // Logic to handle deleting the story
     setLoading(true);
+    const story = stories.find((story) => story.id === storyId);
+    const userRef = doc(db, "users", currentUser.uid);
     try {
+      //Remove story id from users stories array.
+      await updateDoc(userRef, {
+        stories: arrayRemove(story.id),
+      });
+
+      //Delete the story
       await deleteDoc(doc(db, "stories", storyId));
-      //Also want to remove the story from the stories state to force a re-render
-      setStories((prevStories) =>
-        prevStories.filter((story) => story.id !== storyId)
-      );
+      // //Also want to remove the story from the stories state to force a re-render
+      // setStories((prevStories) =>
+      //   prevStories.filter((story) => story.id !== storyId)
+      // );
     } catch (err) {
       console.log(err.message);
     } finally {
@@ -316,17 +315,6 @@ function MyStories() {
 
   return (
     <StyledMyStories>
-      {/* <Navbar /> */}
-      {/* <StyledHeader>
-        <StyledWrapper />
-        <StyledWrapper>
-          <StyledH1>My Stories</StyledH1>
-          <StyledSubheading>
-            Here are your stories. You can edit, delete, or read them all from
-            here.
-          </StyledSubheading>
-        </StyledWrapper>
-      </StyledHeader> */}
       <StyledHead>
         <StyledH1>My Stories</StyledH1>
         <Search
