@@ -15,6 +15,7 @@ import Navbar from "../components/Navbar";
 import DOMPurify from "dompurify";
 import Comments from "../components/Comments";
 import { AuthContext } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 const StyledBook = styled.div`
   display: flex;
@@ -228,16 +229,18 @@ function Book() {
         await updateDoc(doc(db, "stories", story.id), {
           likes: arrayUnion(userId),
         });
+        toast.success("Story Liked.");
       } else {
         await updateDoc(doc(db, "stories", story.id), {
           likes: arrayRemove(userId),
         });
+        toast.success("Like removed.");
       }
     } catch (err) {
       console.log(err);
     }
   }
-  async function handleFvorite(userId, isFavorite) {
+  async function handleFavorite(userId, isFavorite) {
     console.log(userId);
     console.log(isFavorite);
 
@@ -246,10 +249,12 @@ function Book() {
         await updateDoc(doc(db, "users", currentUser?.uid), {
           favorites: arrayUnion(story.id),
         });
+        toast.success(`${story.title} favorited`);
       } else {
         await updateDoc(doc(db, "users", currentUser?.uid), {
           favorites: arrayRemove(story.id),
         });
+        toast.success(`removed ${story.title} from favorites`);
       }
     } catch (err) {
       console.log(err.message);
@@ -324,7 +329,7 @@ function Book() {
           {currentUser?.uid && (
             <StyledButton
               onClick={() =>
-                handleFvorite(
+                handleFavorite(
                   currentUser.uid,
                   user?.favorites?.find((favorite) => favorite === story.id)
                 )

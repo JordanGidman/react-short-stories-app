@@ -60,7 +60,7 @@ const StyledHeader = styled.header`
   align-items: center;
   justify-content: space-between;
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
-  /* margin-bottom: 3rem; */
+  margin-bottom: 2rem;
 `;
 
 const StyledWrapper = styled.div`
@@ -76,6 +76,7 @@ const StyledList = styled.ul`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 4rem;
+  margin-top: 2rem;
 `;
 
 // const StyledSorting = styled.div`

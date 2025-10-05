@@ -13,6 +13,7 @@ import {
 import { db } from "../firebase";
 import Button from "./Button";
 import { updateProfile } from "firebase/auth";
+import { toast } from "react-toastify";
 
 const StyledEditAccount = styled.div`
   /* height: 100%; */
@@ -186,6 +187,7 @@ function EditAccount() {
         });
 
       //Show toast notification
+      toast.success("Display name updated successfully");
     }
 
     if (fullName !== currentUser.fullName) {
@@ -195,6 +197,7 @@ function EditAccount() {
       });
 
       //Show toast notification
+      toast.success("Full name updated successfully");
     }
 
     if (email !== "New Email") {

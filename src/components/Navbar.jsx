@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { auth, db } from "../firebase";
 import { collection, doc, onSnapshot } from "firebase/firestore";
+import { toast } from "react-toastify";
 
 const StyledNav = styled.nav`
   display: flex;
@@ -106,6 +107,11 @@ function Navbar() {
 
   const navigate = useNavigate();
 
+  function handleSignOut() {
+    auth.signOut();
+    toast.success("Signed out.");
+  }
+
   return (
     <StyledNav>
       <Ul>
@@ -146,7 +152,7 @@ function Navbar() {
 
         {currentUser && (
           <Li>
-            <Button onClick={() => auth.signOut()}>Log out</Button>
+            <Button onClick={() => handleSignOut()}>Log out</Button>
           </Li>
         )}
       </Ul>

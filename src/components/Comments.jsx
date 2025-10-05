@@ -12,6 +12,7 @@ import CommentCard from "./CommentCard";
 import ReactQuill from "react-quill-new";
 import Button from "./Button";
 import { AuthContext } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 const StyledComments = styled.div`
   display: flex;
@@ -100,6 +101,8 @@ function Comments({ storyId }) {
       setLoading(false);
     } catch (err) {
       console.error("Error submitting comment:", err);
+    } finally {
+      toast.success("Comment posted");
     }
 
     //Clear form

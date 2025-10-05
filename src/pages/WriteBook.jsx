@@ -14,7 +14,8 @@ import {
 import { db } from "../firebase";
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import Footer from "../components/Footer";
 
 const StyledWriteBook = styled.div`
@@ -191,11 +192,9 @@ function WriteBook() {
       );
       return;
     }
-
-    if (!allowedChars.test(storyText) || storyText.split("").length < 10) {
-      alert(
-        "story must be more than 10 characters long, and must NOT contain any special characters"
-      );
+    //we dont need to check for special characters because A) we do want some of them and B) I DOMPurify this before rendering it.
+    if (storyText.split("").length < 10) {
+      alert("story must be more than 10 characters long.");
       return;
     }
 
@@ -235,12 +234,15 @@ function WriteBook() {
         stories: arrayUnion(docRef.id),
       });
       setLoading(false);
-      navigate(`/library/${genre}/book/${docRef.id}`);
+      //Navigate to the book page for this story
+
+      navigate(`/account/${currentUser.uid}/mystories`, {
+        state: { storyCreated: true },
+      });
     } catch (err) {
       //replace with proper error handling later
       console.log(err.message);
     }
-    //Navigate to the book page for this story
   }
 
   return (
@@ -326,6 +328,7 @@ function WriteBook() {
           {/* Maybe a button for saving as draft */}
         </StyledForm>
       </StyledWrapper>
+
       <Footer />
     </StyledWriteBook>
   );

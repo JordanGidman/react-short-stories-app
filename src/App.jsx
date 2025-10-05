@@ -19,8 +19,61 @@ import ScrollToTop from "./helpers/ScrollToTop";
 import Favorites from "./components/Favorites";
 import EditAccount from "./components/EditAccount";
 import ProtectedRoute from "./helpers/ProtectedRoutes";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const StyledApp = styled.div``;
+const StyledApp = styled.div`
+  .Toastify__toast-theme--colored.Toastify__toast--success {
+  }
+`;
+
+const StyledContainer = styled(ToastContainer)`
+  &&&.Toastify__toast-container {
+    /* container overrides if needed */
+  }
+
+  .Toastify__toast {
+    background-color: #1c1f2e;
+    color: #fff;
+    justify-content: center;
+    align-items: center;
+    text-transform: capitalize;
+  }
+
+  .Toastify__toast-body {
+    color: #fff;
+  }
+
+  /* Progress bar */
+  .Toastify__progress-bar {
+    background-color: #ffee34; /* main bar */
+    opacity: 1;
+  }
+
+  .Toastify__progress-bar--default {
+    background-color: rgba(255, 238, 52, 0.3);
+  }
+
+  /* Close button */
+  .Toastify__close-button {
+    color: #fff;
+  }
+
+  .Toastify__close-button:hover {
+    color: #fff;
+    opacity: 0.8;
+  }
+
+  .Toastify__toast-theme--colored.Toastify__toast--success {
+    background-color: red;
+  }
+  /* Success toast icon */
+  .Toastify__toast-icon {
+    svg {
+      fill: #ffee34;
+    }
+  }
+`;
 
 function App() {
   //Need a check for a current user before allowing them to navigate to any page that requires one e.g write/account
@@ -62,8 +115,9 @@ function App() {
   //8 - Clean console logs and comments - Not done
   //9 - About page - Not done
   //10 - Maybe look into replacing none loaded images with a loading spinner instead of a temp image. This may be tricky as im using the images as a backgroundImage url. - Not done
+  //12 - Delete Comments and maybe edit them. - Not done
   //11 - Save drafts (maybe) - Not done.
-  //12 - Favicon
+  //12 - Favicon - Not done
   //13 - Implement delete account functionality - Not done
   //14 - Deployment - Not done
 
@@ -88,7 +142,7 @@ function App() {
               }
             >
               <Route
-                path="account/:id/favorites"
+                path="favorites"
                 element={
                   <ProtectedRoute>
                     <Favorites />
@@ -96,7 +150,7 @@ function App() {
                 }
               />
               <Route
-                path="account/:id/mystories"
+                path="mystories"
                 element={
                   <ProtectedRoute>
                     <MyStories />
@@ -104,7 +158,7 @@ function App() {
                 }
               />
               <Route
-                path="account/:id/edit"
+                path="edit"
                 element={
                   <ProtectedRoute>
                     <EditAccount />
@@ -137,6 +191,17 @@ function App() {
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </BrowserRouter>
+        <StyledContainer
+          position="bottom-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </StyledApp>
     </AuthContextProvider>
   );

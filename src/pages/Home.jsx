@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import heroImg from "../img/hero-img.jpg";
 import Button from "../components/Button";
 import Featured from "../components/Featured";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   collection,
   getDocs,
@@ -15,9 +15,10 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../firebase";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import StoryCard from "../components/StoryCard";
+import { toast } from "react-toastify";
 
 const StyledHero = styled.div`
   background-image: url(${(props) => props.$img});
@@ -287,6 +288,19 @@ function Home() {
   const navigate = useNavigate();
 
   console.log(staffPicks);
+
+  const location = useLocation();
+  const toastShown = useRef(false);
+
+  useEffect(() => {
+    if (location.state?.justSignedIn && !toastShown.current) {
+      toastShown.current = true;
+      toast.success("Signed in");
+    } else if (location.state?.justSignedUp && !toastShown.current) {
+      toastShown.current = true;
+      toast.success("Signed up");
+    }
+  }, [location]);
 
   useEffect(() => {
     async function fetchStories() {

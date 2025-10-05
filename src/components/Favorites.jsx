@@ -15,6 +15,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import Button from "./Button";
 import Search from "./Search";
+import { toast } from "react-toastify";
 
 const StyledFavorites = styled.div`
   height: 100%;
@@ -228,6 +229,7 @@ function Favorites() {
     await updateDoc(doc(db, "users", currentUser?.uid), {
       favorites: arrayRemove(id),
     });
+    toast.success(`Removed story from favorites`);
   }
 
   return (

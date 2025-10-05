@@ -121,7 +121,9 @@ function SignIn() {
           console.log("User signed in:", user);
         }
       );
-      navigate("/");
+      navigate("/", {
+        state: { justSignedIn: true },
+      });
       setIsLoading(false);
     } catch (err) {
       setError(true);

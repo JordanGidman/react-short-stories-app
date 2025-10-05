@@ -193,23 +193,17 @@ function Account() {
           <StyledNavList>
             <StyledNavItem>Dashboard</StyledNavItem>
             <StyledNavItem>
-              <StyledNavLink
-                className="nav-link"
-                to={`account/${id}/favorites`}
-              >
+              <StyledNavLink className="nav-link" to={`favorites`}>
                 Favorites
               </StyledNavLink>
             </StyledNavItem>
             <StyledNavItem>
-              <StyledNavLink
-                className="nav-link"
-                to={`account/${id}/mystories`}
-              >
+              <StyledNavLink className="nav-link" to={`mystories`}>
                 My Stories
               </StyledNavLink>
             </StyledNavItem>
             <StyledNavItem>
-              <StyledNavLink className="nav-link" to={`account/${id}/edit`}>
+              <StyledNavLink className="nav-link" to={`edit`}>
                 Edit Account
               </StyledNavLink>
             </StyledNavItem>

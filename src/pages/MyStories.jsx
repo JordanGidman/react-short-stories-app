@@ -3,22 +3,22 @@ import {
   collection,
   deleteDoc,
   doc,
-  getDocs,
   onSnapshot,
   query,
   updateDoc,
   where,
 } from "firebase/firestore";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { db } from "../firebase";
 import styled from "styled-components";
 // import mystories from "../img/mystories.jpg";
 // import Navbar from "../components/Navbar";
 import Button from "../components/Button";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Search from "../components/Search";
+import { toast } from "react-toastify";
 // import Footer from "../components/Footer";
 
 const StyledMyStories = styled.div`
@@ -234,10 +234,21 @@ function MyStories() {
     return 0;
   });
   const [search, setSearch] = useState("");
+  // const notify = () => toast("Story deleted.");
   //Did not know this was even an option. I have been using a context for this so i will continue to do so for consistency but will use the below in future projects.
   // const currentUser = auth.currentUser;
 
   console.log(stories);
+
+  const location = useLocation();
+  const toastShown = useRef(false);
+
+  useEffect(() => {
+    if (location.state?.storyCreated && !toastShown.current) {
+      toastShown.current = true;
+      toast.success("Story submitted!");
+    }
+  }, [location]);
 
   useEffect(() => {
     if (!currentUser?.uid) return;
@@ -282,6 +293,9 @@ function MyStories() {
       await updateDoc(storyRef, {
         hidden: !story.hidden,
       });
+      toast.success(
+        `Made ${story.title} ${story.hidden ? "Private" : "Public"}`
+      );
     } catch (err) {
       console.log(err.message);
     } finally {
@@ -309,6 +323,7 @@ function MyStories() {
     } catch (err) {
       console.log(err.message);
     } finally {
+      toast.success("Story deleted!");
       setLoading(false);
     }
   }
@@ -373,19 +388,19 @@ function MyStories() {
                   <StyledButton onClick={() => handleTogglePrivacy(story.id)}>
                     {!story.hidden ? (
                       <ion-icon
-                        name="lock-open-outline"
+                        name="lock-closed-outline"
                         className="icon icon-lock"
                       ></ion-icon>
                     ) : (
                       <ion-icon
-                        name="lock-closed-outline"
+                        name="lock-open-outline"
                         className="icon icon-lock"
                       ></ion-icon>
                     )}
                     <Tooltip>
                       {story.hidden
-                        ? "Make Story Public"
-                        : "Make Story Private"}
+                        ? "Make Story Private"
+                        : "Make Story Public"}
                     </Tooltip>
                   </StyledButton>
                   <StyledButton
@@ -428,6 +443,7 @@ function MyStories() {
           </StyledButtons>
         </StyledModalContent>
       </StyledModal>
+
       {/* <Footer /> */}
     </StyledMyStories>
   );

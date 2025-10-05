@@ -102,7 +102,9 @@ function SignUp() {
         fullName,
         stories: [],
       });
-      navigate("/");
+      navigate("/", {
+        state: { justSignedUp: true },
+      });
       setIsLoading(false);
     } catch (err) {
       //replace with proper error handling later
