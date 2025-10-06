@@ -225,11 +225,14 @@ function Favorites() {
 
   async function handleUnfavorite(id) {
     console.log(id);
-
-    await updateDoc(doc(db, "users", currentUser?.uid), {
-      favorites: arrayRemove(id),
-    });
-    toast.success(`Removed story from favorites`);
+    try {
+      await updateDoc(doc(db, "users", currentUser?.uid), {
+        favorites: arrayRemove(id),
+      });
+      toast.success(`Removed story from favorites`);
+    } catch (error) {
+      toast.error(`Unfavorite failed. Please try again later`);
+    }
   }
 
   return (

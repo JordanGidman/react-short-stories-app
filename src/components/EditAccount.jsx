@@ -14,6 +14,7 @@ import { db } from "../firebase";
 import Button from "./Button";
 import { updateProfile } from "firebase/auth";
 import { toast } from "react-toastify";
+import Error from "../pages/Error";
 
 const StyledEditAccount = styled.div`
   /* height: 100%; */
@@ -108,6 +109,7 @@ function EditAccount() {
   const [email, setEmail] = useState("New Email");
   const [password, setPassword] = useState("New Password");
   const [stories, setStories] = useState();
+  const [error, setError] = useState(null);
 
   console.log(currentUser);
   console.log(fullName);
@@ -118,16 +120,20 @@ function EditAccount() {
 
     const userRef = doc(db, "users", currentUser.uid);
 
-    const unsub = onSnapshot(userRef, (docSnap) => {
-      if (docSnap.exists()) {
-        setDisplayName(docSnap.data().displayName);
-        setFullName(docSnap.data().fullName);
-      } else {
-        console.log("No such user exists");
-      }
-    });
+    try {
+      const unsub = onSnapshot(userRef, (docSnap) => {
+        if (docSnap.exists()) {
+          setDisplayName(docSnap.data().displayName);
+          setFullName(docSnap.data().fullName);
+        } else {
+          console.log("No such user exists");
+        }
+      });
 
-    return () => unsub();
+      return () => unsub();
+    } catch (error) {
+      setError(error);
+    }
   }, [currentUser]);
 
   async function handleDetailsChange(e) {
@@ -138,19 +144,19 @@ function EditAccount() {
     const allowedChars = /^[a-zA-Z0-9\s.,!?'"-:;()\n\r]+$/;
     //Make sure required fields arent empty
     if (!displayName || !fullName) {
-      alert("Please fill all required fields marked with *");
+      toast.error("Please fill all required fields marked with *");
       return;
     }
     //Make sure no special characters are being used and the lengths arent longer than they should be.
     if (!allowedChars.test(fullName) || fullName.split("").length > 30) {
-      alert(
+      toast.error(
         "full name must be less than 30 characters long, and must NOT contain any special characters"
       );
       return;
     }
 
     if (!allowedChars.test(displayName) || displayName.split("").length > 20) {
-      alert(
+      toast.error(
         "display name must be less than 20 characters long, and must NOT contain any special characters"
       );
       return;
@@ -215,60 +221,66 @@ function EditAccount() {
   }
 
   return (
-    <StyledEditAccount>
-      <StyledH1>Edit Account</StyledH1>
-      <StyledForm onSubmit={(e) => handleDetailsChange(e)}>
-        <StyledField>
-          <p>Display Name: </p>
-          <StyledInput
-            type="text"
-            name="displayName"
-            value={displayName}
-            onChange={(e) => setDisplayName(e.target.value)}
-          />
-        </StyledField>
-        <StyledField>
-          <p>Full Name: </p>
-          <StyledInput
-            type="text"
-            name="fullName"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-          />
-        </StyledField>
-        <StyledField>
-          <p>Email: </p>
-          <StyledInput
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            disabled={true}
-          />
-          <Tooltip>
-            Apologies but firebase auth requires real email verfication to
-            change email and password and as this is a portfolio piece i do not
-            expect users to use a real email. If you did you can delete your
-            account at any time from this page.
-          </Tooltip>
-        </StyledField>
-        <StyledField>
-          <p>Password: </p>
-          <StyledInput
-            type="text"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            disabled={true}
-          />
-          <Tooltip>
-            Apologies but firebase auth requires real email verfication to
-            change email and password and as this is a portfolio piece i do not
-            expect users to use a real email. If you did you can delete your
-            account at any time from this page.
-          </Tooltip>
-        </StyledField>
-        <StyledButton>Submit</StyledButton>
-      </StyledForm>
-    </StyledEditAccount>
+    <>
+      {!error ? (
+        <StyledEditAccount>
+          <StyledH1>Edit Account</StyledH1>
+          <StyledForm onSubmit={(e) => handleDetailsChange(e)}>
+            <StyledField>
+              <p>Display Name: </p>
+              <StyledInput
+                type="text"
+                name="displayName"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+              />
+            </StyledField>
+            <StyledField>
+              <p>Full Name: </p>
+              <StyledInput
+                type="text"
+                name="fullName"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+              />
+            </StyledField>
+            <StyledField>
+              <p>Email: </p>
+              <StyledInput
+                type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={true}
+              />
+              <Tooltip>
+                Apologies but firebase auth requires real email verfication to
+                change email and password and as this is a portfolio piece i do
+                not expect users to use a real email. If you did you can delete
+                your account at any time from this page.
+              </Tooltip>
+            </StyledField>
+            <StyledField>
+              <p>Password: </p>
+              <StyledInput
+                type="text"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={true}
+              />
+              <Tooltip>
+                Apologies but firebase auth requires real email verfication to
+                change email and password and as this is a portfolio piece i do
+                not expect users to use a real email. If you did you can delete
+                your account at any time from this page.
+              </Tooltip>
+            </StyledField>
+            <StyledButton>Submit</StyledButton>
+          </StyledForm>
+        </StyledEditAccount>
+      ) : (
+        <Error error={error} />
+      )}
+    </>
   );
 }
 

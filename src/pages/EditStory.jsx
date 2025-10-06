@@ -15,6 +15,8 @@ import { db } from "../firebase";
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
+import Error from "../pages/Error";
+import { toast } from "react-toastify";
 
 const StyledEditStory = styled.div`
   display: flex;
@@ -158,6 +160,7 @@ function EditStory() {
   const story = state ? state.story : null;
   const [storyText, setStoryText] = useState(story.storyText || "");
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
 
   async function handleSubmit(e) {
     console.log(e);
@@ -192,9 +195,11 @@ function EditStory() {
 
       setLoading(false);
       navigate(`/library/${genre.split("-").join(" ")}/book/${story.id}`);
-    } catch (err) {
+    } catch (error) {
       //replace with proper error handling later
-      console.log(err.message);
+      setError(error);
+      toast.error(`Editing failed: ${error.message}`);
+      console.log(error.message);
     }
     //Navigate to the book page for this story
   }
@@ -202,76 +207,82 @@ function EditStory() {
   return (
     <StyledEditStory>
       <Navbar />
-      <StyledWrapper>
-        <StyledForm onSubmit={(e) => handleSubmit(e)}>
-          <StyledH1>Edit your story</StyledH1>
-          <TitleInput
-            type="text"
-            defaultValue={story ? story.title : ""}
-            placeholder="Title of your story *"
-            disabled={loading}
-          />
+      {!error ? (
+        <StyledWrapper>
+          <StyledForm onSubmit={(e) => handleSubmit(e)}>
+            <StyledH1>Edit your story</StyledH1>
+            <TitleInput
+              type="text"
+              defaultValue={story ? story.title : ""}
+              placeholder="Title of your story *"
+              disabled={loading}
+            />
 
-          <StyledSelect
-            name="genre"
-            defaultValue={story ? story.genre : "placeholder"}
-            disabled={loading}
-          >
-            <StyledOption
-              name="placeholder"
-              value="placeholder"
-              disabled
-              hidden
+            <StyledSelect
+              name="genre"
+              defaultValue={story ? story.genre : "placeholder"}
+              disabled={loading}
             >
-              Select Genre *
-            </StyledOption>
-            <StyledOption value="Fantasy">Fantasy</StyledOption>
-            <StyledOption value="Science Fiction">Science Fiction</StyledOption>
-            <StyledOption value="Gaming">Gaming</StyledOption>
-            <StyledOption value="Mystery">Mystery</StyledOption>
-            <StyledOption value="Romance">Romance</StyledOption>
-            <StyledOption value="Horror">Horror</StyledOption>
-            <StyledOption value="Thriller">Thriller</StyledOption>
-            <StyledOption value="Historical">Historical</StyledOption>
-            <StyledOption value="Adventure">Adventure</StyledOption>
-            <StyledOption value="Action">Action</StyledOption>
-            <StyledOption value="Crime">Crime</StyledOption>
-            <StyledOption value="Comedy">Comedy</StyledOption>
-            <StyledOption value="Religious">Religious</StyledOption>
-            <StyledOption value="Political">Political</StyledOption>
-            <StyledOption value="Existential">Existential</StyledOption>
-            <StyledOption value="War">War</StyledOption>
-            <StyledOption value="Educational">Educational</StyledOption>
-            <StyledOption value="Drama">Drama</StyledOption>
-            <StyledOption value="Other">Other</StyledOption>
-          </StyledSelect>
+              <StyledOption
+                name="placeholder"
+                value="placeholder"
+                disabled
+                hidden
+              >
+                Select Genre *
+              </StyledOption>
+              <StyledOption value="Fantasy">Fantasy</StyledOption>
+              <StyledOption value="Science Fiction">
+                Science Fiction
+              </StyledOption>
+              <StyledOption value="Gaming">Gaming</StyledOption>
+              <StyledOption value="Mystery">Mystery</StyledOption>
+              <StyledOption value="Romance">Romance</StyledOption>
+              <StyledOption value="Horror">Horror</StyledOption>
+              <StyledOption value="Thriller">Thriller</StyledOption>
+              <StyledOption value="Historical">Historical</StyledOption>
+              <StyledOption value="Adventure">Adventure</StyledOption>
+              <StyledOption value="Action">Action</StyledOption>
+              <StyledOption value="Crime">Crime</StyledOption>
+              <StyledOption value="Comedy">Comedy</StyledOption>
+              <StyledOption value="Religious">Religious</StyledOption>
+              <StyledOption value="Political">Political</StyledOption>
+              <StyledOption value="Existential">Existential</StyledOption>
+              <StyledOption value="War">War</StyledOption>
+              <StyledOption value="Educational">Educational</StyledOption>
+              <StyledOption value="Drama">Drama</StyledOption>
+              <StyledOption value="Other">Other</StyledOption>
+            </StyledSelect>
 
-          <StyledTextarea
-            type="textarea"
-            defaultValue={story ? story.synopsis : ""}
-            placeholder="A short synopsis of your story *"
-            disabled={loading}
-          />
-          <StyledInputBox
-            type="text"
-            defaultValue={story ? story.img : ""}
-            placeholder="Image URL (Firebase no longer allows free image uploads leave blank for a placeholder or put any image url. )"
-            disabled={loading}
-          />
-          <ReactQuill
-            theme="snow"
-            placeholder="Write your story here..."
-            className="text-editor"
-            onChange={setStoryText}
-            readOnly={loading}
-            defaultValue={story ? story.storyText : ""}
-          />
-          <StyledButton disabled={loading}>
-            {loading ? "Posting..." : "Post"}
-          </StyledButton>
-          {/* Maybe a button for saving as draft */}
-        </StyledForm>
-      </StyledWrapper>
+            <StyledTextarea
+              type="textarea"
+              defaultValue={story ? story.synopsis : ""}
+              placeholder="A short synopsis of your story *"
+              disabled={loading}
+            />
+            <StyledInputBox
+              type="text"
+              defaultValue={story ? story.img : ""}
+              placeholder="Image URL (Firebase no longer allows free image uploads leave blank for a placeholder or put any image url. )"
+              disabled={loading}
+            />
+            <ReactQuill
+              theme="snow"
+              placeholder="Write your story here..."
+              className="text-editor"
+              onChange={setStoryText}
+              readOnly={loading}
+              defaultValue={story ? story.storyText : ""}
+            />
+            <StyledButton disabled={loading}>
+              {loading ? "Posting..." : "Post"}
+            </StyledButton>
+            {/* Maybe a button for saving as draft */}
+          </StyledForm>
+        </StyledWrapper>
+      ) : (
+        <Error />
+      )}
     </StyledEditStory>
   );
 }

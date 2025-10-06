@@ -234,6 +234,7 @@ function MyStories() {
     return 0;
   });
   const [search, setSearch] = useState("");
+  const [error, setError] = useState(null);
   // const notify = () => toast("Story deleted.");
   //Did not know this was even an option. I have been using a context for this so i will continue to do so for consistency but will use the below in future projects.
   // const currentUser = auth.currentUser;
@@ -296,8 +297,10 @@ function MyStories() {
       toast.success(
         `Made ${story.title} ${story.hidden ? "Private" : "Public"}`
       );
-    } catch (err) {
-      console.log(err.message);
+    } catch (error) {
+      console.log(error.message);
+      setError(error);
+      toast.error(`Privacy toggle failed: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -320,8 +323,10 @@ function MyStories() {
       // setStories((prevStories) =>
       //   prevStories.filter((story) => story.id !== storyId)
       // );
-    } catch (err) {
-      console.log(err.message);
+    } catch (error) {
+      setError(error);
+      toast.error(`Delete failed: ${error.message}`);
+      console.log(error.message);
     } finally {
       toast.success("Story deleted!");
       setLoading(false);

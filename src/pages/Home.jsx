@@ -18,7 +18,9 @@ import { db } from "../firebase";
 import { useLocation, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import StoryCard from "../components/StoryCard";
+import Error from "../pages/Error";
 import { toast } from "react-toastify";
+import Spinner from "../components/Spinner";
 
 const StyledHero = styled.div`
   background-image: url(${(props) => props.$img});
@@ -285,6 +287,7 @@ function Home() {
   const [freshStory, setFreshStory] = useState();
   const [staffPicks, setStaffPicks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   console.log(staffPicks);
@@ -348,6 +351,7 @@ function Home() {
       } catch (error) {
         console.error("Error fetching stories:", error);
         setLoading(false);
+        setError(error);
       }
     }
 
@@ -361,10 +365,35 @@ function Home() {
     return parts.join("/");
   }
 
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <Spinner />
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <Error
+          error={{ mesage: "Failed to load stories. Please try again later." }}
+        />
+      </>
+    );
+  }
+
   return (
     <div>
       <StyledHero
-        $img={loading ? heroImg : resizePicsum(story?.img, 1920, 1080)}
+        $img={
+          loading
+            ? heroImg
+            : story.img
+            ? resizePicsum(story?.img, 1920, 1080)
+            : "https://picsum.photos/seed/hireme/1920/1080"
+        }
       >
         {/* "https://picsum.photos/seed/a3a60a47-6e80-46bd-a709-f6c759b36964/600/400" */}
         <StyledHeroText>
@@ -394,10 +423,10 @@ function Home() {
             <span>Fresh</span> Arrival
           </h1>
           <div>
-            <p className="author">{freshStory?.author}</p>
-            <p className="title">{freshStory?.title}</p>
+            <p className="author">{freshStory?.author || "Unknown Author"}</p>
+            <p className="title">{freshStory?.title || "Title not found"}</p>
             <div className="underline"></div>
-            <p className="genre">{freshStory?.genre}</p>
+            <p className="genre">{freshStory?.genre || "Genre not found"}</p>
           </div>
           <Button
             onClick={() =>
@@ -414,7 +443,11 @@ function Home() {
         </StyledTextBox>
         <StyledImg
           $backgroundImage={
-            loading ? heroImg : resizePicsum(freshStory?.img, 1280, 720)
+            loading
+              ? heroImg
+              : story.img
+              ? resizePicsum(freshStory?.img, 1280, 720)
+              : "https://picsum.photos/seed/youknowyouwanttohireme/1920/1080"
           }
         ></StyledImg>
       </StyledFresh>

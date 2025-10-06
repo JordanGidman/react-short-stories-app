@@ -6,6 +6,8 @@ import { db } from "../firebase";
 import { doc, onSnapshot } from "firebase/firestore";
 import { AuthContext } from "../context/AuthContext";
 import Button from "../components/Button";
+import Spinner from "../components/Spinner";
+import Error from "../pages/Error";
 
 const StyledAccount = styled.div`
   width: 100vw;
@@ -159,19 +161,34 @@ function Account() {
   const [user, setUser] = useState();
   const [modalOpen, setModalOpen] = useState(false);
   const { currentUser } = useContext(AuthContext);
-  const [loading, isLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!id) return;
+
+    //start loading before snapshot
+    setLoading(true);
+
     const userRef = doc(db, "users", id);
 
-    const unsub = onSnapshot(userRef, (docSnap) => {
-      if (docSnap.exists()) {
-        setUser({ id: docSnap.id, ...docSnap.data() });
-      } else {
-        console.log("No user found");
+    const unsub = onSnapshot(
+      userRef,
+      (docSnap) => {
+        if (docSnap.exists()) {
+          setUser({ id: docSnap.id, ...docSnap.data() });
+          setError(null);
+        } else {
+          setError(new Error("User not found."));
+        }
+        //stop loading after snapshot resolves
+        setLoading(false);
+      },
+      (err) => {
+        setError(err);
+        setLoading(false);
       }
-    });
+    );
 
     return () => unsub();
   }, [id]);
@@ -182,6 +199,14 @@ function Account() {
     //3 Delete the user from the authentication
     //4 Give user Notification
     console.log("Deleting Account...");
+  }
+
+  if (loading) {
+    return <Spinner />;
+  }
+
+  if (error) {
+    return <Error error={error} />;
   }
 
   return (

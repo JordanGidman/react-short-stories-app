@@ -6,6 +6,8 @@ import styled from "styled-components";
 import Button from "../components/Button";
 import Navbar from "../components/Navbar";
 import InputBox from "../components/InputBox";
+import Error from "../pages/Error";
+import { toast } from "react-toastify";
 
 const SigninButton = styled(Button)`
   margin-top: 6rem;
@@ -100,7 +102,7 @@ const StyledFooter = styled.p`
 `;
 
 function SignIn() {
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -125,9 +127,9 @@ function SignIn() {
         state: { justSignedIn: true },
       });
       setIsLoading(false);
-    } catch (err) {
-      setError(true);
-      console.log(err);
+    } catch (error) {
+      setError(error);
+      toast.error(`Error: ${error.message}`);
     }
   }
 

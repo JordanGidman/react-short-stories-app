@@ -4,13 +4,13 @@ import Navbar from "../components/Navbar";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 
-const StyledNotFound = styled.div`
+const StyledError = styled.div`
   height: calc(100vh - 8rem);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100vw;
+  width: 100%;
   gap: 2rem;
   padding: 0% 5%;
 
@@ -74,18 +74,19 @@ const StyledButton = styled(Button)`
   }
 `;
 
-function PageNotFound() {
+function Error({ error }) {
   const navigate = useNavigate();
 
   return (
-    <StyledNotFound>
+    <StyledError>
       <Navbar />
       <StyledInfoBox>
-        <ion-icon name="help-circle-outline" className="large-icon"></ion-icon>
-        <StyledH1>404 - Page Not Found</StyledH1>
+        <ion-icon name="warning-outline" className="large-icon"></ion-icon>
+
+        <StyledH1>An error has occured</StyledH1>
         <StyledSubheading>
-          Sorry, the page you are looking for was not found. If the issue
-          persists please check the URL or go back/return to the homepage.
+          Sorry, an unexpected error has occured:{" "}
+          {error ? error.message : "Error message not found."}
         </StyledSubheading>
         <StyledButtons>
           <StyledButton onClick={() => navigate(-1)}>
@@ -98,8 +99,8 @@ function PageNotFound() {
         </StyledButtons>
       </StyledInfoBox>
       {/* <Footer /> */}
-    </StyledNotFound>
+    </StyledError>
   );
 }
 
-export default PageNotFound;
+export default Error;

@@ -4,7 +4,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { auth, db } from "../firebase";
-import { collection, doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { toast } from "react-toastify";
 
 const StyledNav = styled.nav`

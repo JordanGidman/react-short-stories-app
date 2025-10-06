@@ -13,6 +13,7 @@ import ReactQuill from "react-quill-new";
 import Button from "./Button";
 import { AuthContext } from "../context/AuthContext";
 import { toast } from "react-toastify";
+import Error from "../pages/Error";
 
 const StyledComments = styled.div`
   display: flex;
@@ -66,6 +67,7 @@ function Comments({ storyId }) {
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(true);
   const { currentUser } = useContext(AuthContext);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const docRef = doc(db, "stories", storyId);
@@ -74,6 +76,7 @@ function Comments({ storyId }) {
         setStory({ id: docSnap.id, ...docSnap.data() });
       } else {
         console.log("No such document!");
+        toast.error(`Issue fetching story: $`);
       }
       setLoading(false);
     });
@@ -99,8 +102,9 @@ function Comments({ storyId }) {
       });
       setComment("");
       setLoading(false);
-    } catch (err) {
-      console.error("Error submitting comment:", err);
+    } catch (error) {
+      console.error("Error submitting comment:", error);
+      toast.error(`Comment failed: ${error.message}`);
     } finally {
       toast.success("Comment posted");
     }

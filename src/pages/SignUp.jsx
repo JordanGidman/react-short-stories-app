@@ -9,6 +9,7 @@ import Button from "../components/Button";
 import Navbar from "../components/Navbar";
 import InputBox from "../components/InputBox";
 import { doc, setDoc } from "firebase/firestore";
+import { toast } from "react-toastify";
 
 //Styled components
 const StyledContainer = styled.div`
@@ -64,7 +65,7 @@ const SigninButton = styled(Button)`
 function SignUp() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-
+  const [error, setError] = useState(null);
   async function handleSignUp(e) {
     e.preventDefault();
     setIsLoading(true);
@@ -88,6 +89,8 @@ function SignUp() {
         })
         .catch((error) => {
           console.error("Error signing up:", error);
+          setError(error);
+          toast.error(`Error: ${error.message}`);
         });
       //Update user profile with display name
       await updateProfile(auth.currentUser, {
@@ -109,6 +112,8 @@ function SignUp() {
     } catch (err) {
       //replace with proper error handling later
       console.log(err.message);
+      setError(error);
+      toast.error(`Error: ${error.message}`);
     }
   }
 
@@ -127,6 +132,7 @@ function SignUp() {
           <SigninButton disabled={isLoading}>
             {isLoading ? "Signing Up..." : "Sign Up"}
           </SigninButton>
+          {error && <span>Something went wrong..</span>}
         </StyledForm>
       ) : (
         <Spinner />

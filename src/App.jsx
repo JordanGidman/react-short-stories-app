@@ -21,6 +21,7 @@ import EditAccount from "./components/EditAccount";
 import ProtectedRoute from "./helpers/ProtectedRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Error from "./pages/Error";
 
 const StyledApp = styled.div`
   .Toastify__toast-theme--colored.Toastify__toast--success {
@@ -103,12 +104,13 @@ function App() {
   //18 - Refactor homepage stories pulling so we only pull the amount we need and not the entire collection - Done
   //19 - Search functionality - Done
   //20 - Form validation - Done
+  //21 - Add toast notifications for user feedback writing/deleting/commenting/liking- Not done
+  //22 - Page Not found page completed - Done
 
   //WIP
   //1 - Error handling and loading states (Need to use loading spinner) - Partially done
   //2 - Responsive design - Not done
   //3 - Refactor Book/WriteBook to be Story/WriteStory for consistency - Not Done
-  //4 - Add toast notifications for user feedback writing/deleting/commenting/liking- Not done
   //5 - Animations and transitions - Not done
   //6 - Night reader mode(Maybe) - Not done
   //7 - Finish home page - Partially done
@@ -116,10 +118,13 @@ function App() {
   //9 - About page - Not done
   //10 - Maybe look into replacing none loaded images with a loading spinner instead of a temp image. This may be tricky as im using the images as a backgroundImage url. - Not done
   //12 - Delete Comments and maybe edit them. - Not done
-  //11 - Save drafts (maybe) - Not done.
-  //12 - Favicon - Not done
-  //13 - Implement delete account functionality - Not done
-  //14 - Deployment - Not done
+  //13 - Save drafts (maybe) - Not done.
+  //14 - Change styling of the navbar link we are currently on
+  //15 - Put a loading spinner/component in place of a page that has not yet loaded.
+  //15 - Favicon - Not done
+  //16 - Sorting bug where the 1st in the list is the newest the last should be the oldest. Yet if i change the sorting to be the oldest the one that was last is not now first for some reason and vice versa.
+  //17 - Implement delete account functionality - Not done
+  //18 - Deployment - Not done
 
   return (
     <AuthContextProvider>
@@ -189,6 +194,7 @@ function App() {
             <Route path="library/:genre" element={<StoryList />} />
             <Route path="library/:genre/book/:id" element={<Book />} />
             <Route path="*" element={<PageNotFound />} />
+            <Route path="error" element={<Error />} />
           </Routes>
         </BrowserRouter>
         <StyledContainer

@@ -12,11 +12,13 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Footer from "../components/Footer";
+import Error from "../pages/Error";
+import Spinner from "../components/Spinner";
 
 const StyledWriteBook = styled.div`
   display: flex;
@@ -161,40 +163,42 @@ function WriteBook() {
   const [synopsis, setSynopsis] = useState("");
   const [img, setImg] = useState("https://picsum.photos/seed/hireme/600/400");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   // const { state } = useLocation();
   // const story = state ? state.story : null;
   const navigate = useNavigate();
-
-  // console.log(story);
 
   async function handleSubmit(e) {
     console.log(e);
     e.preventDefault();
 
+    if (!currentUser) {
+      toast.error(`No user logged in.`);
+    }
     //Form validation
     const allowedChars = /^[a-zA-Z0-9\s.,!?'"-:;()\n\r]+$/;
     //Make sure required fields arent empty
     if (!title || !genre || !synopsis || !storyText) {
-      alert("Please fill all required fields marked with *");
+      toast.error("Please fill all required fields marked with *");
       return;
     }
     //Make sure no special characters are being used and the title and synopsis arent too long and the story is more than 10 characters to avoid accidental submissions.
     if (!allowedChars.test(title) || title.split("").length > 100) {
-      alert(
+      toast.error(
         "Title must be less than 100 characters long, and must NOT contain any special characters"
       );
       return;
     }
 
     if (!allowedChars.test(synopsis) || synopsis.split("").length > 500) {
-      alert(
+      toast.error(
         "Synopsis must be less than 500 characters long, and must NOT contain any special characters"
       );
       return;
     }
     //we dont need to check for special characters because A) we do want some of them and B) I DOMPurify this before rendering it.
     if (storyText.split("").length < 10) {
-      alert("story must be more than 10 characters long.");
+      toast.error("story must be more than 10 characters long.");
       return;
     }
 
@@ -233,104 +237,114 @@ function WriteBook() {
       await updateDoc(doc(db, "users", currentUser.uid), {
         stories: arrayUnion(docRef.id),
       });
-      setLoading(false);
+
       //Navigate to the book page for this story
 
       navigate(`/account/${currentUser.uid}/mystories`, {
         state: { storyCreated: true },
       });
-    } catch (err) {
-      //replace with proper error handling later
-      console.log(err.message);
+    } catch (error) {
+      toast.error(`Error: ${error.message}`);
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
-    <StyledWriteBook>
-      <Navbar />
-      <StyledWrapper>
-        <StyledForm onSubmit={(e) => handleSubmit(e)}>
-          <StyledH1>Write your story</StyledH1>
-          <TitleInput
-            type="text"
-            placeholder="Title of your story *"
-            disabled={loading}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+    <>
+      {!error ? (
+        <StyledWriteBook>
+          <Navbar />
 
-          <StyledSelect
-            name="genre"
-            disabled={loading}
-            value={genre}
-            onChange={(e) => setGenre(e.target.value)}
-          >
-            <StyledOption
-              name="placeholder"
-              value="placeholder"
-              disabled
-              hidden
-            >
-              Select Genre *
-            </StyledOption>
-            <StyledOption value="Fantasy">Fantasy</StyledOption>
-            <StyledOption value="Science Fiction">Science Fiction</StyledOption>
-            <StyledOption value="Gaming">Gaming</StyledOption>
-            <StyledOption value="Mystery">Mystery</StyledOption>
-            <StyledOption value="Romance">Romance</StyledOption>
-            <StyledOption value="Horror">Horror</StyledOption>
-            <StyledOption value="Thriller">Thriller</StyledOption>
-            <StyledOption value="Historical">Historical</StyledOption>
-            <StyledOption value="Adventure">Adventure</StyledOption>
-            <StyledOption value="Action">Action</StyledOption>
-            <StyledOption value="Crime">Crime</StyledOption>
-            <StyledOption value="Comedy">Comedy</StyledOption>
-            <StyledOption value="Religious">Religious</StyledOption>
-            <StyledOption value="Political">Political</StyledOption>
-            <StyledOption value="Existential">Existential</StyledOption>
-            <StyledOption value="War">War</StyledOption>
-            <StyledOption value="Educational">Educational</StyledOption>
-            <StyledOption value="Drama">Drama</StyledOption>
-            <StyledOption value="Other">Other</StyledOption>
-          </StyledSelect>
+          <StyledWrapper>
+            <StyledForm onSubmit={(e) => handleSubmit(e)}>
+              <StyledH1>Write your story</StyledH1>
+              <TitleInput
+                type="text"
+                placeholder="Title of your story *"
+                disabled={loading}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
 
-          <StyledTextarea
-            type="textarea"
-            placeholder="A short synopsis of your story *"
-            disabled={loading}
-            value={synopsis}
-            onChange={(e) => setSynopsis(e.target.value)}
-          />
-          <StyledInputBox
-            type="text"
-            placeholder="Image URL (Firebase no longer allows free image uploads leave blank for a placeholder or put any image url. )"
-            disabled={loading}
-            value={img}
-            onChange={(e) =>
-              setImg(
-                e.target.value
-                  ? e.target.value
-                  : "https://picsum.photos/seed/hireme/600/400"
-              )
-            }
-          />
-          <ReactQuill
-            theme="snow"
-            placeholder="Write your story here... *"
-            className="text-editor"
-            value={storyText}
-            onChange={(value) => setStoryText(value)}
-            readOnly={loading}
-          />
-          <StyledButton disabled={loading}>
-            {loading ? "Posting..." : "Post"}
-          </StyledButton>
-          {/* Maybe a button for saving as draft */}
-        </StyledForm>
-      </StyledWrapper>
+              <StyledSelect
+                name="genre"
+                disabled={loading}
+                value={genre}
+                onChange={(e) => setGenre(e.target.value)}
+              >
+                <StyledOption
+                  name="placeholder"
+                  value="placeholder"
+                  disabled
+                  hidden
+                >
+                  Select Genre *
+                </StyledOption>
+                <StyledOption value="Fantasy">Fantasy</StyledOption>
+                <StyledOption value="Science Fiction">
+                  Science Fiction
+                </StyledOption>
+                <StyledOption value="Gaming">Gaming</StyledOption>
+                <StyledOption value="Mystery">Mystery</StyledOption>
+                <StyledOption value="Romance">Romance</StyledOption>
+                <StyledOption value="Horror">Horror</StyledOption>
+                <StyledOption value="Thriller">Thriller</StyledOption>
+                <StyledOption value="Historical">Historical</StyledOption>
+                <StyledOption value="Adventure">Adventure</StyledOption>
+                <StyledOption value="Action">Action</StyledOption>
+                <StyledOption value="Crime">Crime</StyledOption>
+                <StyledOption value="Comedy">Comedy</StyledOption>
+                <StyledOption value="Religious">Religious</StyledOption>
+                <StyledOption value="Political">Political</StyledOption>
+                <StyledOption value="Existential">Existential</StyledOption>
+                <StyledOption value="War">War</StyledOption>
+                <StyledOption value="Educational">Educational</StyledOption>
+                <StyledOption value="Drama">Drama</StyledOption>
+                <StyledOption value="Other">Other</StyledOption>
+              </StyledSelect>
 
-      <Footer />
-    </StyledWriteBook>
+              <StyledTextarea
+                type="textarea"
+                placeholder="A short synopsis of your story *"
+                disabled={loading}
+                value={synopsis}
+                onChange={(e) => setSynopsis(e.target.value)}
+              />
+              <StyledInputBox
+                type="text"
+                placeholder="Image URL (Firebase no longer allows free image uploads leave blank for a placeholder or put any image url. )"
+                disabled={loading}
+                value={img}
+                onChange={(e) =>
+                  setImg(
+                    e.target.value
+                      ? e.target.value
+                      : "https://picsum.photos/seed/hireme/600/400"
+                  )
+                }
+              />
+              <ReactQuill
+                theme="snow"
+                placeholder="Write your story here... *"
+                className="text-editor"
+                value={storyText}
+                onChange={(value) => setStoryText(value)}
+                readOnly={loading}
+              />
+              <StyledButton disabled={loading}>
+                {loading ? "Posting..." : "Post"}
+              </StyledButton>
+              {/* Maybe a button for saving as draft */}
+            </StyledForm>
+          </StyledWrapper>
+
+          <Footer />
+        </StyledWriteBook>
+      ) : (
+        <Error />
+      )}
+    </>
   );
 }
 

@@ -1,22 +1,23 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   arrayRemove,
   arrayUnion,
   doc,
-  getDoc,
   onSnapshot,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import styled from "styled-components";
-import { faker } from "@faker-js/faker";
 import Navbar from "../components/Navbar";
 import DOMPurify from "dompurify";
 import Comments from "../components/Comments";
 import { AuthContext } from "../context/AuthContext";
 import { toast } from "react-toastify";
+import Spinner from "../components/Spinner";
+import Error from "../pages/Error";
 
+// Styled components (unchanged for brevity)
 const StyledBook = styled.div`
   display: flex;
   flex-direction: column;
@@ -38,6 +39,7 @@ const StyledHeader = styled.header`
   background-color: #fff;
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
 `;
+
 const StyledTextWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -46,37 +48,36 @@ const StyledTextWrapper = styled.div`
   width: 100%;
   gap: 2rem;
 `;
+
 const StyledH1 = styled.h1`
   font-size: 7rem;
   font-family: "Playfair Display", serif;
   text-transform: capitalize;
   letter-spacing: 0.1rem;
 `;
+
 const StyledSubheading = styled.p`
   font-size: 1.8rem;
-
   span {
     font-weight: 600;
     color: #333;
   }
 `;
+
 const StyledSynopsis = styled.p`
   font-size: 1.8rem;
   line-height: 1.6;
   color: #555;
 `;
+
 const StyledImgWrapper = styled.div`
   background-image: url(${(props) => props.$backgroundImage});
   background-size: cover;
   background-position: center;
-  /* border-radius: 1.6rem; */
   height: 100%;
   background-repeat: no-repeat;
 `;
-// const StyledImg = styled.img`
-//   border-radius: 1.6rem;
-//   width: 100%;
-// `;
+
 const StyledBody = styled.div`
   display: flex;
   flex-direction: column;
@@ -123,31 +124,26 @@ const StyledButton = styled.button`
   }
 `;
 
-// Tooltip text
 const Tooltip = styled.span`
   visibility: hidden;
   opacity: 0;
   transition: opacity 0.2s ease;
-
   position: absolute;
-  bottom: 125%; /* show above button */
+  bottom: 125%;
   left: 50%;
   transform: translateX(-50%);
-
   background-color: #1c1f2e;
   color: #fff;
   padding: 0.4rem 0.8rem;
   border-radius: 0.4rem;
   font-size: 1.2rem;
   white-space: nowrap;
-
   z-index: 1;
 
-  /* arrow, ill be honest i took this from the internet, thank you random person */
   &::after {
     content: "";
     position: absolute;
-    top: 100%; /* point downwards */
+    top: 100%;
     left: 50%;
     margin-left: -5px;
     border-width: 5px;
@@ -158,111 +154,121 @@ const Tooltip = styled.span`
   ${StyledButton}:hover & {
     visibility: visible;
     opacity: 1;
-    .icon {
-      font-size: 2.4rem;
-    }
   }
 `;
 
 function Book() {
   const { id } = useParams();
-  const [story, setStory] = useState(null);
-  const [loading, setLoading] = useState(true);
   const { currentUser } = useContext(AuthContext);
+
+  // --- State ---
+  const [story, setStory] = useState(null);
   const [user, setUser] = useState(null);
-  const [author, setAuthor] = useState("");
+  const [author, setAuthor] = useState(null);
 
-  console.log(story);
-  console.log(user);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  // --- Story fetch ---
   useEffect(() => {
-    const docRef = doc(db, "stories", id);
+    if (!id) return;
 
-    const unsub = onSnapshot(docRef, (docSnap) => {
-      if (docSnap.exists()) {
-        setStory({ id: docSnap.id, ...docSnap.data() });
-      } else {
-        console.log("No such document!");
+    setLoading(true);
+    const storyRef = doc(db, "stories", id);
+
+    const unsub = onSnapshot(
+      storyRef,
+      (docSnap) => {
+        if (docSnap.exists()) {
+          setStory({ id: docSnap.id, ...docSnap.data() });
+          setError(null);
+        } else {
+          setError(new Error("Story not found."));
+        }
+        setLoading(false);
+      },
+      (err) => {
+        setError(err);
+        setLoading(false);
       }
-      setLoading(false);
-    });
+    );
 
-    return () => unsub(); // cleanup on unmount
+    return () => unsub();
   }, [id]);
 
+  // --- Current user fetch (non-critical) ---
   useEffect(() => {
     if (!currentUser?.uid) return;
 
-    const userRef = doc(db, "users", currentUser?.uid);
-
-    const unsub = onSnapshot(userRef, (docSnap) => {
-      if (docSnap.exists()) {
-        setUser({ id: docSnap.id, ...docSnap.data() });
-      } else {
-        console.log("No such user exists");
-      }
-    });
+    const userRef = doc(db, "users", currentUser.uid);
+    const unsub = onSnapshot(
+      userRef,
+      (docSnap) => {
+        if (docSnap.exists()) {
+          setUser({ id: docSnap.id, ...docSnap.data() });
+        } else {
+          toast.error("Your user data could not be loaded.");
+        }
+      },
+      (err) => toast.error("Error loading your user data.")
+    );
 
     return () => unsub();
   }, [currentUser]);
+
+  // --- Author fetch (non-critical) ---
   useEffect(() => {
     if (!story?.creatorID) return;
 
-    const userRef = doc(db, "users", story.creatorID);
-
-    const unsub = onSnapshot(userRef, (docSnap) => {
-      if (docSnap.exists()) {
-        setAuthor({ id: docSnap.id, ...docSnap.data() });
-      } else {
-        console.log("No such user exists");
-      }
-    });
+    const authorRef = doc(db, "users", story.creatorID);
+    const unsub = onSnapshot(
+      authorRef,
+      (docSnap) => {
+        if (docSnap.exists()) {
+          setAuthor({ id: docSnap.id, ...docSnap.data() });
+        } else {
+          console.log("Could not load author details.");
+        }
+      },
+      (err) => toast.error("Error fetching author data.")
+    );
 
     return () => unsub();
-  }, [story]);
+  }, [story?.creatorID]);
 
+  // --- Like & Favorite handlers ---
   async function handleLike(userId, isLiked) {
-    console.log(userId);
-
     try {
-      if (!isLiked) {
-        await updateDoc(doc(db, "stories", story.id), {
-          likes: arrayUnion(userId),
-        });
-        toast.success("Story Liked.");
-      } else {
-        await updateDoc(doc(db, "stories", story.id), {
-          likes: arrayRemove(userId),
-        });
-        toast.success("Like removed.");
-      }
+      await updateDoc(doc(db, "stories", story.id), {
+        likes: isLiked ? arrayRemove(userId) : arrayUnion(userId),
+      });
+      toast.success(isLiked ? "Like removed." : "Story liked!");
     } catch (err) {
-      console.log(err);
+      toast.error("Could not update like status.");
     }
   }
+
   async function handleFavorite(userId, isFavorite) {
-    console.log(userId);
-    console.log(isFavorite);
-
     try {
-      if (!isFavorite) {
-        await updateDoc(doc(db, "users", currentUser?.uid), {
-          favorites: arrayUnion(story.id),
-        });
-        toast.success(`${story.title} favorited`);
-      } else {
-        await updateDoc(doc(db, "users", currentUser?.uid), {
-          favorites: arrayRemove(story.id),
-        });
-        toast.success(`removed ${story.title} from favorites`);
-      }
+      await updateDoc(doc(db, "users", currentUser.uid), {
+        favorites: isFavorite ? arrayRemove(story.id) : arrayUnion(story.id),
+      });
+      toast.success(
+        isFavorite
+          ? `Removed ${story.title} from favorites.`
+          : `${story.title} favorited!`
+      );
     } catch (err) {
-      console.log(err.message);
+      toast.error("Could not update favorites.");
     }
   }
 
-  if (loading) return <p>Loading...</p>;
-  if (!story) return <p>story not found.</p>;
+  // --- Conditional rendering ---
+  if (loading) return <Spinner />;
+  if (error) return <Error error={error} />;
+
+  // If story exists but author failed — continue rendering
+  // const authorName = author?.displayName || "Unknown author";
 
   return (
     <StyledBook>
@@ -271,84 +277,82 @@ function Book() {
         <StyledTextWrapper>
           <StyledH1>{story.title}</StyledH1>
           <StyledSubheading>
-            By: <span>{author.displayName}</span> | Genre:{" "}
+            By: <span>{story.author || "Unknown author"}</span> | Genre:{" "}
             <span>{story.genre}</span>
           </StyledSubheading>
           <StyledSynopsis>{story.synopsis}</StyledSynopsis>
         </StyledTextWrapper>
-        <StyledImgWrapper $backgroundImage={story.img}>
-          {/* <StyledImg src={story.img} alt={story.title} /> */}
-        </StyledImgWrapper>
+        <StyledImgWrapper $backgroundImage={story.img} />
       </StyledHeader>
+
       {!story.isSeedData ? (
         <StyledBody
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(story.storyText),
           }}
-        ></StyledBody>
+        />
       ) : (
         <StyledBody>
           <p>
             This is a seed data story created using fakerJS. Full styling is{" "}
-            <strong>not</strong> available. For the best example please look at
-            any of the stories titled "Test Story" in the fantasy genre. As
-            these are what user created storied with personalised styling will
-            look like, or create your own short story to share with others!
+            <strong>not</strong> available. For the best example, please view
+            any "Test Story" in the fantasy genre or create your own!
           </p>
           <p>{story.storyText}</p>
-          <p>{story.storyText + " " + story.storyText}</p>
-          <p>{story.storyText}</p>
-          <p>{story.storyText}</p>
-          <p>{story.storyText + " " + story.storyText}</p>
         </StyledBody>
       )}
+
       <StyledLikes>
         <span>
           {currentUser?.uid && (
-            <StyledButton
-              onClick={() =>
-                handleLike(
-                  currentUser.uid,
-                  story.likes?.find((like) => like === currentUser.uid)
-                )
-              }
-            >
-              {story.likes?.find((like) => like === currentUser.uid) ? (
-                <ion-icon name="heart"></ion-icon>
-              ) : (
-                <ion-icon name="heart-outline"></ion-icon>
-              )}
-              <Tooltip>
-                {story.likes?.find((like) => like === currentUser.uid)
-                  ? "Remove Like"
-                  : "Like Story"}
-              </Tooltip>
-            </StyledButton>
-          )}
-          {story.likes?.length || 0} likes
-          {currentUser?.uid && (
-            <StyledButton
-              onClick={() =>
-                handleFavorite(
-                  currentUser.uid,
-                  user?.favorites?.find((favorite) => favorite === story.id)
-                )
-              }
-            >
-              {user?.favorites?.find((favorite) => favorite === story.id) ? (
-                <ion-icon className="icon-star" name="star"></ion-icon>
-              ) : (
-                <ion-icon className="icon-star" name="star-outline"></ion-icon>
-              )}
-              <Tooltip>
-                {user?.favorites?.find((favorite) => favorite === story.id)
-                  ? "Remove Favorite"
-                  : "Favorite Story"}
-              </Tooltip>
-            </StyledButton>
+            <>
+              <StyledButton
+                onClick={() =>
+                  handleLike(
+                    currentUser.uid,
+                    story.likes?.includes(currentUser.uid)
+                  )
+                }
+              >
+                {story.likes?.includes(currentUser.uid) ? (
+                  <ion-icon name="heart"></ion-icon>
+                ) : (
+                  <ion-icon name="heart-outline"></ion-icon>
+                )}
+                <Tooltip>
+                  {story.likes?.includes(currentUser.uid)
+                    ? "Remove Like"
+                    : "Like Story"}
+                </Tooltip>
+              </StyledButton>
+              {story.likes?.length || 0} likes
+              <StyledButton
+                onClick={() =>
+                  handleFavorite(
+                    currentUser.uid,
+                    user?.favorites?.includes(story.id)
+                  )
+                }
+              >
+                {user?.favorites?.includes(story.id) ? (
+                  <ion-icon className="icon-star" name="star"></ion-icon>
+                ) : (
+                  <ion-icon
+                    className="icon-star"
+                    name="star-outline"
+                  ></ion-icon>
+                )}
+                <Tooltip>
+                  {user?.favorites?.includes(story.id)
+                    ? "Remove Favorite"
+                    : "Favorite Story"}
+                </Tooltip>
+              </StyledButton>
+            </>
           )}
         </span>
       </StyledLikes>
+
       <Comments storyId={story.id} />
     </StyledBook>
   );

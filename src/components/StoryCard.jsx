@@ -6,6 +6,9 @@ import Button from "./Button";
 import { Link } from "react-router-dom";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
+import Spinner from "./Spinner";
+import { toast } from "react-toastify";
+import Error from "../pages/Error";
 
 const StyledStoryCard = styled.div`
   display: grid;
@@ -33,7 +36,7 @@ const StyledTextBox = styled.div`
   background-color: #fff;
 `;
 const StyledImageBox = styled.div`
-  background-image: url(${(props) => props.img || props.placeholder});
+  background-image: url(${(props) => props.$img || ""});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -82,45 +85,85 @@ const StyledLink = styled(Link)``;
 function StoryCard({ story }) {
   const [loadedImg, setLoadedImg] = useState(null);
   const [author, setAuthor] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const isCriticalError =
+    !story.title &&
+    !story.synopsis &&
+    (!loadedImg || loadedImg === placeholder) &&
+    (!author || author == "Unknown author");
 
   useEffect(() => {
     if (!story.creatorID) return;
 
     const userRef = doc(db, "users", story.creatorID);
 
-    const unsub = onSnapshot(userRef, (docSnap) => {
-      if (docSnap.exists()) {
-        setAuthor(docSnap.data().displayName);
-      } else {
-        console.log("No such user exists");
-      }
-    });
+    try {
+      const unsub = onSnapshot(
+        userRef,
+        (docSnap) => {
+          if (docSnap.exists()) {
+            setAuthor(docSnap.data().displayName);
+          } else {
+            console.log("No such user exists");
+          }
+        },
+        (error) => {
+          console.log("Error fetching author:", error);
+          setAuthor("Unknown author");
+        }
+      );
 
-    return () => unsub();
+      return () => unsub();
+    } catch (error) {
+      console.log("Snapshot setup failed:", error);
+      setError(error);
+      toast.error(`Error: ${error.message}`);
+    }
   }, [story]);
 
   useEffect(() => {
     if (!story.img) return;
+    setLoading(true);
 
     const img = new Image();
-    img.onload = () => setLoadedImg(story.img);
+    img.onload = () => {
+      setLoadedImg(story.img);
+      setLoading(false);
+    };
+    img.onerror = () => {
+      console.log(`Image failed to load`, story.img);
+      setLoadedImg(placeholder);
+      setLoading(false);
+    };
     img.src = story.img;
   }, [story.img]);
 
+  if (isCriticalError)
+    return (
+      <Error error={{ message: "Error pulling stories from database." }} />
+    );
+
   return (
-    <StyledStoryCard to={`/library/${story.genre}/book/${story.id}`}>
+    // <StyledStoryCard to={`/library/${story.genre}/book/${story.id}`}>
+    <StyledStoryCard>
       <StyledImageBox
-        img={loadedImg}
-        placeholder={placeholder}
+        $img={loadedImg}
+        $placeholder={placeholder}
       ></StyledImageBox>
       <StyledTextBox>
         <div>
-          <StyledAuthor>{author || story.author}</StyledAuthor>
-          <StyledTitle>{story.title}</StyledTitle>
+          <StyledAuthor>
+            {author || story.author || "Unknown Author"}
+          </StyledAuthor>
+          <StyledTitle>{story.title || "Title not found"}</StyledTitle>
         </div>
         {/* <p>{story.storyText}</p> */}
-        <StyledSynopsis>{story.synopsis}</StyledSynopsis>
-        <StyledGenre>{story.genre}</StyledGenre>
+        <StyledSynopsis>
+          {story.synopsis || "Synopsis not found"}
+        </StyledSynopsis>
+        <StyledGenre>{story.genre || "Misc"}</StyledGenre>
         <StyledLink to={`/library/${story.genre}/book/${story.id}`}>
           <StyledButton>Read</StyledButton>
         </StyledLink>
