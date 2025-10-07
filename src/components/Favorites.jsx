@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import Search from "./Search";
 import Spinner from "./Spinner";
 import Error from "../pages/Error"; // assuming this exists
+import Navbar from "./Navbar";
 
 const StyledFavorites = styled.div`
   height: 100%;
@@ -245,7 +246,13 @@ function Favorites() {
     }
   }
 
-  if (loading) return <Spinner />;
+  if (loading)
+    return (
+      <>
+        <Navbar />
+        <Spinner />
+      </>
+    );
   if (error) return <Error error={error} />;
 
   return (

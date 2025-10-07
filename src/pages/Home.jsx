@@ -288,13 +288,13 @@ function Home() {
   const [staffPicks, setStaffPicks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isCriticalError, setIsCriticalError] = useState(false);
+
   const navigate = useNavigate();
-
-  console.log(staffPicks);
-
   const location = useLocation();
   const toastShown = useRef(false);
 
+  // ✅ Handle sign in/up toasts
   useEffect(() => {
     if (location.state?.justSignedIn && !toastShown.current) {
       toastShown.current = true;
@@ -306,12 +306,18 @@ function Home() {
   }, [location]);
 
   useEffect(() => {
+    let cancelled = false;
+
     async function fetchStories() {
+      setLoading(true);
+      setError(null);
+      setIsCriticalError(false);
+
       try {
         const rand = Math.random();
         const storiesRef = collection(db, "stories");
 
-        // First attempt: grab 5 random stories starting from rand
+        // primary query
         let q = query(
           storiesRef,
           where("isSeedData", "==", true),
@@ -321,12 +327,12 @@ function Home() {
         );
 
         let querySnapshot = await getDocs(q);
-        let fetchedStories = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
+        let fetchedStories = querySnapshot.docs.map((d) => ({
+          id: d.id,
+          ...d.data(),
         }));
 
-        // If not enough (e.g. at end of range), wrap around and grab from start
+        //wrap-around to the start of the stories arr if we didn't get enough
         if (fetchedStories.length < 5) {
           const remaining = 5 - fetchedStories.length;
           const q2 = query(
@@ -335,33 +341,64 @@ function Home() {
             orderBy("randomNumber"),
             limit(remaining)
           );
-
           const qs2 = await getDocs(q2);
           fetchedStories = [
             ...fetchedStories,
-            ...qs2.docs.map((doc) => ({ id: doc.id, ...doc.data() })),
+            ...qs2.docs.map((d) => ({ id: d.id, ...d.data() })),
           ];
         }
 
-        // Assign them to UI slots
-        setStory(fetchedStories[0]);
-        setStaffPicks(fetchedStories.slice(1, 4));
-        setFreshStory(fetchedStories[4]);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching stories:", error);
-        setLoading(false);
-        setError(error);
+        if (cancelled) return;
+
+        //Determine critical vs component error using local fetchedStories
+        if (!fetchedStories || fetchedStories.length === 0) {
+          //No stories at all — treat as critical (page can't render)
+          setIsCriticalError(true);
+          setError(new Error("No stories found."));
+          setStory(undefined);
+          setStaffPicks([]);
+          setFreshStory(undefined);
+        } else {
+          //We have at least some stories — non-critical
+          setIsCriticalError(false);
+
+          //Display what is available
+          setStory(fetchedStories[0]);
+          setStaffPicks(fetchedStories.slice(1, 4));
+          setFreshStory(fetchedStories[4]);
+
+          //If we returned fewer than expected, show a warning toast (partial)
+          if (fetchedStories.length < 5) {
+            toast.warn("Missing some stories");
+          }
+
+          setError(null);
+        }
+      } catch (err) {
+        if (cancelled) return;
+        console.error("Error fetching stories:", err);
+        //If fetch failed, treat as critical error so page can't render
+        setError(err);
+        setIsCriticalError(true);
+      } finally {
+        if (!cancelled) setLoading(false);
       }
     }
 
     fetchStories();
+
+    return () => {
+      cancelled = true;
+    };
+    //no dependencies -> run once on mount
   }, []);
 
+  //adjust Picsum sizes
   function resizePicsum(url, width, height) {
+    if (!url) return null;
     const parts = url.split("/");
-    parts[parts.length - 2] = width; // replace 600
-    parts[parts.length - 1] = height; // replace 400
+    parts[parts.length - 2] = width;
+    parts[parts.length - 1] = height;
     return parts.join("/");
   }
 
@@ -374,36 +411,31 @@ function Home() {
     );
   }
 
-  if (error) {
+  if (isCriticalError) {
     return (
-      <>
-        <Error
-          error={{ mesage: "Failed to load stories. Please try again later." }}
-        />
-      </>
+      <Error
+        error={{ message: "Failed to load stories. Please try again later." }}
+      />
     );
   }
 
+  //Normal UI render
   return (
     <div>
       <StyledHero
         $img={
-          loading
-            ? heroImg
-            : story.img
-            ? resizePicsum(story?.img, 1920, 1080)
-            : "https://picsum.photos/seed/hireme/1920/1080"
+          story?.img
+            ? resizePicsum(story.img, 1920, 1080)
+            : "https://picsum.photos/seed/fallback/1920/1080"
         }
       >
-        {/* "https://picsum.photos/seed/a3a60a47-6e80-46bd-a709-f6c759b36964/600/400" */}
         <StyledHeroText>
           <h1>
             What<span>to Read</span>Today
           </h1>
-          {/* replace later with titles from db */}
-          <p className="author">{loading ? "Loading..." : story?.author}</p>
-          <p className="title">{loading ? "Loading..." : story?.title}</p>
-          <p className="genre">{loading ? "Loading..." : story?.genre}</p>
+          <p className="author">{story?.author || "Unknown Author"}</p>
+          <p className="title">{story?.title || "Untitled"}</p>
+          <p className="genre">{story?.genre || "Unknown Genre"}</p>
           <Button
             onClick={() =>
               navigate(`/library/${story?.genre}/book/${story?.id}`)
@@ -416,7 +448,9 @@ function Home() {
           <p>read user written short stories</p>
         </StyledHeroFooter>
       </StyledHero>
+
       <Featured />
+
       <StyledFresh>
         <StyledTextBox>
           <h1>
@@ -430,7 +464,7 @@ function Home() {
           </div>
           <Button
             onClick={() =>
-              navigate(`/library/${freshStory?.genre}/Book/${freshStory.id}`)
+              navigate(`/library/${freshStory?.genre}/book/${freshStory?.id}`)
             }
           >
             Read
@@ -443,14 +477,13 @@ function Home() {
         </StyledTextBox>
         <StyledImg
           $backgroundImage={
-            loading
-              ? heroImg
-              : story.img
-              ? resizePicsum(freshStory?.img, 1280, 720)
-              : "https://picsum.photos/seed/youknowyouwanttohireme/1920/1080"
+            freshStory?.img
+              ? resizePicsum(freshStory.img, 1280, 720)
+              : "https://picsum.photos/seed/fallback2/1920/1080"
           }
         ></StyledImg>
       </StyledFresh>
+
       <StyledPicks>
         <StyledPicksText>
           <h1>
@@ -464,12 +497,18 @@ function Home() {
           </div>
           <div className="underline"></div>
         </StyledPicksText>
+
         <StyledCardsBox>
-          {staffPicks?.map((story) => {
-            return <StoryCard key={story.id} story={story} />;
-          })}
+          {staffPicks.length > 0 ? (
+            staffPicks.map((story) => (
+              <StoryCard key={story.id} story={story} />
+            ))
+          ) : (
+            <p>No staff picks available.</p>
+          )}
         </StyledCardsBox>
       </StyledPicks>
+
       <Footer />
       <Navbar />
     </div>
