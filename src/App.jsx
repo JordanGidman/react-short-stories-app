@@ -1,18 +1,17 @@
 import styled from "styled-components";
 import Home from "./pages/Home";
-import { useContext } from "react";
 import GlobalStyles from "./GlobalStyles";
 import SignIn from "./pages/SignIn";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PageNotFound from "./pages/PageNotFound";
 import SignUp from "./pages/SignUp";
-import { AuthContext, AuthContextProvider } from "./context/AuthContext";
+import { AuthContextProvider } from "./context/AuthContext";
 import About from "./pages/About";
 import Account from "./pages/Account";
-import WriteBook from "./pages/WriteBook";
+import WriteStory from "./pages/WriteStory";
 import Library from "./pages/Library";
 import StoryList from "./pages/StoryList";
-import Book from "./pages/Book";
+import Book from "./pages/Story";
 import MyStories from "./pages/MyStories";
 import EditStory from "./pages/EditStory";
 import ScrollToTop from "./helpers/ScrollToTop";
@@ -22,6 +21,7 @@ import ProtectedRoute from "./helpers/ProtectedRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Error from "./pages/Error";
+import Spinner from "./components/Spinner";
 
 const StyledApp = styled.div`
   .Toastify__toast-theme--colored.Toastify__toast--success {
@@ -106,25 +106,25 @@ function App() {
   //22 - Page Not found page completed - Done
   //23 - Error handling - Done
   //24 - Delete comments - Done
+  //25 - Loading states (Need to use loading spinner) - Done
+  //26 - Put a loading spinner/component in place of a page that has not yet loaded.
+  //27 - Refactor Book/WriteBook to be Story/WriteStory for consistency - Done
+  //28 - Change styling of the navbar link we are currently on
+  //29 - Finish home page - Done
 
   //WIP
-  //1 - Loading states (Need to use loading spinner) - Partially done
-  //2 - Responsive design - Not done
-  //3 - Refactor Book/WriteBook to be Story/WriteStory for consistency - Not Done
-  //5 - Animations and transitions - Not done
-  //6 - Night reader mode(Maybe) - Not done
-  //7 - Finish home page - Partially done
-  //8 - Clean console logs and comments - Not done
-  //9 - About page - Not done
-  //10 - Maybe look into replacing none loaded images with a loading spinner instead of a temp image. This may be tricky as im using the images as a backgroundImage url. - Not done
-  //12 - Edit comments (maybe)
-  //13 - Save drafts (maybe) - Not done.
-  //14 - Change styling of the navbar link we are currently on
-  //15 - Put a loading spinner/component in place of a page that has not yet loaded.
-  //15 - Favicon - Not done
-  //16 - Sorting bug where the 1st in the list is the newest the last should be the oldest. Yet if i change the sorting to be the oldest the one that was last is not now first for some reason and vice versa.
-  //17 - Implement delete account functionality - Not done
-  //18 - Deployment - Not done
+  //1 - Responsive design - Not done
+  //2 - Animations and transitions - Not done
+  //3 - Night reader mode(Maybe) - Not done
+  //4 - About page - Not done
+  //5 - Maybe look into replacing none loaded images with a loading spinner instead of a temp image. This may be tricky as im using the images as a backgroundImage url. - Not done
+  //6 - Edit comments (maybe)
+  //7 - Save drafts (maybe) - Not done
+  //8 - Favicon - Not done
+  //9 - Sorting bug where the 1st in the list is the newest the last should be the oldest. Yet if i change the sorting to be the oldest the one that was last is not now first for some reason and vice versa.
+  //10 - Implement delete account functionality - Not done
+  //11 - Clean console logs and comments - Not done
+  //12 - Deployment - Not done
 
   return (
     <AuthContextProvider>
@@ -176,7 +176,7 @@ function App() {
               path="write"
               element={
                 <ProtectedRoute>
-                  <WriteBook />
+                  <WriteStory />
                 </ProtectedRoute>
               }
             />
@@ -192,9 +192,10 @@ function App() {
 
             <Route path="library" element={<Library />} />
             <Route path="library/:genre" element={<StoryList />} />
-            <Route path="library/:genre/book/:id" element={<Book />} />
+            <Route path="library/:genre/story/:id" element={<Book />} />
             <Route path="*" element={<PageNotFound />} />
             <Route path="error" element={<Error />} />
+            <Route path="spinner" element={<Spinner />} />
           </Routes>
         </BrowserRouter>
         <StyledContainer

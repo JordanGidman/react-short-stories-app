@@ -202,7 +202,7 @@ function Account() {
   }
 
   if (loading) {
-    return <Spinner />;
+    return <Spinner $height={"calc(100vh - 8rem)"} />;
   }
 
   if (error) {

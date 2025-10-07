@@ -294,7 +294,7 @@ function Home() {
   const location = useLocation();
   const toastShown = useRef(false);
 
-  // ✅ Handle sign in/up toasts
+  //Handle sign in/up toasts
   useEffect(() => {
     if (location.state?.justSignedIn && !toastShown.current) {
       toastShown.current = true;
@@ -406,7 +406,7 @@ function Home() {
     return (
       <>
         <Navbar />
-        <Spinner />
+        <Spinner $height={"calc(100vh - 8rem)"} />
       </>
     );
   }
@@ -422,32 +422,36 @@ function Home() {
   //Normal UI render
   return (
     <div>
-      <StyledHero
-        $img={
-          story?.img
-            ? resizePicsum(story.img, 1920, 1080)
-            : "https://picsum.photos/seed/fallback/1920/1080"
-        }
-      >
-        <StyledHeroText>
-          <h1>
-            What<span>to Read</span>Today
-          </h1>
-          <p className="author">{story?.author || "Unknown Author"}</p>
-          <p className="title">{story?.title || "Untitled"}</p>
-          <p className="genre">{story?.genre || "Unknown Genre"}</p>
-          <Button
-            onClick={() =>
-              navigate(`/library/${story?.genre}/book/${story?.id}`)
-            }
-          >
-            read now
-          </Button>
-        </StyledHeroText>
-        <StyledHeroFooter>
-          <p>read user written short stories</p>
-        </StyledHeroFooter>
-      </StyledHero>
+      {!loading ? (
+        <StyledHero
+          $img={
+            story?.img
+              ? resizePicsum(story.img, 1920, 1080)
+              : "https://picsum.photos/seed/fallback/1920/1080"
+          }
+        >
+          <StyledHeroText>
+            <h1>
+              What<span>to Read</span>Today
+            </h1>
+            <p className="author">{story?.author || "Unknown Author"}</p>
+            <p className="title">{story?.title || "Untitled"}</p>
+            <p className="genre">{story?.genre || "Unknown Genre"}</p>
+            <Button
+              onClick={() =>
+                navigate(`/library/${story?.genre}/book/${story?.id}`)
+              }
+            >
+              read now
+            </Button>
+          </StyledHeroText>
+          <StyledHeroFooter>
+            <p>read user written short stories</p>
+          </StyledHeroFooter>
+        </StyledHero>
+      ) : (
+        <Spinner />
+      )}
 
       <Featured />
 

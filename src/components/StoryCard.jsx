@@ -36,7 +36,7 @@ const StyledTextBox = styled.div`
   background-color: #fff;
 `;
 const StyledImageBox = styled.div`
-  background-image: url(${(props) => props.$img || ""});
+  background-image: url(${(props) => props.$img || props.$placeholder});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -148,10 +148,14 @@ function StoryCard({ story }) {
   return (
     // <StyledStoryCard to={`/library/${story.genre}/book/${story.id}`}>
     <StyledStoryCard>
-      <StyledImageBox
-        $img={loadedImg}
-        $placeholder={placeholder}
-      ></StyledImageBox>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <StyledImageBox
+          $img={loadedImg}
+          $placeholder={placeholder}
+        ></StyledImageBox>
+      )}
       <StyledTextBox>
         <div>
           <StyledAuthor>
@@ -164,7 +168,7 @@ function StoryCard({ story }) {
           {story.synopsis || "Synopsis not found"}
         </StyledSynopsis>
         <StyledGenre>{story.genre || "Misc"}</StyledGenre>
-        <StyledLink to={`/library/${story.genre}/book/${story.id}`}>
+        <StyledLink to={`/library/${story.genre}/story/${story.id}`}>
           <StyledButton>Read</StyledButton>
         </StyledLink>
       </StyledTextBox>

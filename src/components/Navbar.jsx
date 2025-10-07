@@ -57,12 +57,14 @@ const StyledButton = styled.button`
 
 const StyledLink = styled(NavLink)`
   background-color: transparent;
-  font-weight: 300;
+  font-weight: 500;
   border: none;
   color: #fff;
   font-size: 1.6rem;
   transition: all 0.3s ease-in-out;
   text-transform: capitalize;
+  padding: 1rem 2rem;
+  text-transform: uppercase;
 
   span {
     background-color: #ffbe0b;
@@ -75,9 +77,17 @@ const StyledLink = styled(NavLink)`
     border-radius: 2rem;
     padding: 0.6rem 4rem;
   }
-  &:hover {
-    scale: 1.1;
-    cursor: pointer;
+  &:hover,
+  &.active {
+    background-color: #ffee34;
+    border: none;
+    color: #000;
+
+    transition: all 0.3s ease-in-out;
+
+    border-radius: 2rem;
+
+    box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.2);
   }
 `;
 // const styledMainLinks = styled.div``;
@@ -116,18 +126,14 @@ function Navbar() {
     <StyledNav>
       <Ul>
         <Li>
-          <Button onClick={() => navigate("/")}>LOGO</Button>
+          <StyledLink to={"/"}>LOGO</StyledLink>
         </Li>
 
         <Li>
-          <StyledButton onClick={() => navigate("/write")}>
-            Write Story
-          </StyledButton>
+          <StyledLink to={"/write"}>Write Story</StyledLink>
         </Li>
         <Li>
-          <StyledButton onClick={() => navigate("/library")}>
-            Library
-          </StyledButton>
+          <StyledLink to={"/library"}>Library</StyledLink>
         </Li>
 
         {/* {currentUser && (
@@ -140,11 +146,9 @@ function Navbar() {
 
         <Li>
           {currentUser ? (
-            <StyledButton>
-              <StyledLink to={`/account/${currentUser.uid}`}>
-                {userInfo?.displayName}
-              </StyledLink>
-            </StyledButton>
+            <StyledLink to={`/account/${currentUser.uid}`}>
+              {userInfo?.displayName}
+            </StyledLink>
           ) : (
             <Button onClick={() => navigate("/signin")}>Sign In</Button>
           )}

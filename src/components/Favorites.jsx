@@ -155,6 +155,7 @@ function Favorites() {
   const [favorites, setFavorites] = useState(null);
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [dataLoading, setDataLoading] = useState(false);
   const [error, setError] = useState(null);
   const [sortBy, setSortBy] = useState("placeholder");
   const [search, setSearch] = useState("");
@@ -212,7 +213,7 @@ function Favorites() {
       return;
     }
 
-    setLoading(true);
+    setDataLoading(true);
     const storiesRef = collection(db, "stories");
     const q = query(storiesRef, where(documentId(), "in", favorites));
 
@@ -220,13 +221,13 @@ function Favorites() {
       q,
       (docSnap) => {
         setStories(docSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-        setLoading(false);
+        setDataLoading(false);
         setError(null);
       },
       (err) => {
         console.error("Error loading stories:", err);
         setError(err);
-        setLoading(false);
+        setDataLoading(false);
         toast.error("Could not load favorite stories.");
       }
     );
@@ -250,7 +251,7 @@ function Favorites() {
     return (
       <>
         <Navbar />
-        <Spinner />
+        <Spinner $height={"calc(100vh - 8rem)"} />
       </>
     );
   if (error) return <Error error={error} />;
@@ -267,46 +268,50 @@ function Favorites() {
         />
       </StyledHead>
 
-      <StyledStoryList>
-        {sortedStories
-          ?.filter(
-            (story) =>
-              (story.hidden !== true &&
-                story.author.toLowerCase().includes(search)) ||
-              story.title.toLowerCase().includes(search)
-          )
-          .map((story) => (
-            <StyledListItem key={story.id}>
-              <StyledImg $backgroundImage={story.img} alt={story.title} />
-              <StyledTitle
-                to={`/library/${story.genre.split("-").join(" ")}/book/${
-                  story.id
-                }`}
-              >
-                {story.title}
-              </StyledTitle>
-              <StyledItemText>{story.genre}</StyledItemText>
-              <StyledButtons>
-                <StyledButton
-                  onClick={() =>
-                    navigate(`/library/${story.genre}/book/${story.id}`)
-                  }
+      {dataLoading ? (
+        <Spinner $height={"100%"} />
+      ) : (
+        <StyledStoryList>
+          {sortedStories
+            ?.filter(
+              (story) =>
+                (story.hidden !== true &&
+                  story.author.toLowerCase().includes(search)) ||
+                story.title.toLowerCase().includes(search)
+            )
+            .map((story) => (
+              <StyledListItem key={story.id}>
+                <StyledImg $backgroundImage={story.img} alt={story.title} />
+                <StyledTitle
+                  to={`/library/${story.genre.split("-").join(" ")}/book/${
+                    story.id
+                  }`}
                 >
-                  <ion-icon
-                    class="icon icon-open"
-                    name="open-outline"
-                  ></ion-icon>
-                  <Tooltip>Read</Tooltip>
-                </StyledButton>
+                  {story.title}
+                </StyledTitle>
+                <StyledItemText>{story.genre}</StyledItemText>
+                <StyledButtons>
+                  <StyledButton
+                    onClick={() =>
+                      navigate(`/library/${story.genre}/book/${story.id}`)
+                    }
+                  >
+                    <ion-icon
+                      class="icon icon-open"
+                      name="open-outline"
+                    ></ion-icon>
+                    <Tooltip>Read</Tooltip>
+                  </StyledButton>
 
-                <StyledButton onClick={() => handleUnfavorite(story.id)}>
-                  <ion-icon class="icon icon-star" name="star"></ion-icon>
-                  <Tooltip>Remove from favorites</Tooltip>
-                </StyledButton>
-              </StyledButtons>
-            </StyledListItem>
-          ))}
-      </StyledStoryList>
+                  <StyledButton onClick={() => handleUnfavorite(story.id)}>
+                    <ion-icon class="icon icon-star" name="star"></ion-icon>
+                    <Tooltip>Remove from favorites</Tooltip>
+                  </StyledButton>
+                </StyledButtons>
+              </StyledListItem>
+            ))}
+        </StyledStoryList>
+      )}
     </StyledFavorites>
   );
 }

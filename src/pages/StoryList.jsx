@@ -1,37 +1,31 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import StoryCard from "../components/StoryCard";
 import Navbar from "../components/Navbar";
 import styled from "styled-components";
 import book from "../img/book.png";
-import {
-  collection,
-  getDocs,
-  onSnapshot,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 import Search from "../components/Search";
+import Spinner from "../components/Spinner";
 
 const StyledStoryList = styled.div`
   display: flex;
   flex-direction: column;
   padding-top: 8.2rem;
   align-items: center;
-  /* justify-content: center; */
   width: 100vw;
   gap: 2rem;
   padding: 0% 5%;
   padding-top: 8rem;
   background-color: #f9f9f9;
-
   min-height: 100vh;
 `;
 
 const StyledContainer = styled.div`
   margin-bottom: 3rem;
 `;
+
 const StyledH1 = styled.h1`
   font-size: 6.4rem;
   text-align: left;
@@ -39,6 +33,7 @@ const StyledH1 = styled.h1`
   font-family: "Playfair Display", serif;
   text-transform: capitalize;
 `;
+
 const StyledSubheading = styled.p`
   font-size: 1.6rem;
   padding-bottom: 4rem;
@@ -79,61 +74,102 @@ const StyledList = styled.ul`
   margin-top: 2rem;
 `;
 
-function StoryList() {
-  //Here we run into a problem, the db has only the test stories i have added. Meaning theres nothing to pull, i have 2 options here i can either fill the db manually or programatically with random stories
-  //Or i can use an api, however the only free one i have found returns a random short story that has no genre, so i would have to assign them randomly just to have some sample data.
+const StyledMessage = styled.p`
+  font-size: 2rem;
+  text-align: center;
+  margin-top: 4rem;
+  color: #555;
+`;
 
-  //Somehow i didnt know about this tool until now but i will be using faker to fake the data for this
-  //I will also need to pull in the results from the DB as i want it all to function normally even if it is just populated by dummy data
-  const genre = useParams();
+function StoryList() {
+  const { genre } = useParams();
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [sortBy, setSortBy] = useState("placeholder");
-  const sortedStories = [...stories].sort((a, b) => {
-    if (sortBy === "newest")
-      return b.createdAt.seconds !== a.createdAt.seconds
-        ? b.createdAt.seconds - a.createdAt.seconds
-        : b.createdAt.nanoseconds - a.createdAt.nanoseconds;
-    if (sortBy === "oldest")
-      return b.createdAt.seconds !== a.createdAt.seconds
-        ? a.createdAt.seconds - b.createdAt.seconds
-        : a.createdAt.nanoseconds - b.createdAt.nanoseconds;
-
-    if (sortBy === "mostlikes")
-      return (b.likes?.length || 0) - (a.likes?.length || 0);
-    return 0;
-  });
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    const storiesRef = collection(db, "stories");
+    setLoading(true);
+    setError(null);
 
-    // Capitalize genre to match stored format
-    const genreName = genre.genre
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
+    try {
+      const storiesRef = collection(db, "stories");
 
-    console.log("Genre:", genreName);
+      // Capitalize genre to match stored format
+      const genreName = genre
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
 
-    const q = query(storiesRef, where("genre", "==", genreName));
+      const q = query(storiesRef, where("genre", "==", genreName));
 
-    // Subscribe to real-time updates
-    const unsub = onSnapshot(q, (docSnap) => {
-      const fetchedStories = docSnap.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setStories(fetchedStories);
+      // Real-time listener
+      const unsub = onSnapshot(
+        q,
+        (snapshot) => {
+          const fetchedStories = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setStories(fetchedStories);
+          setLoading(false);
+        },
+        (err) => {
+          console.error("Error fetching stories:", err);
+          setError("Failed to load stories. Please try again later.");
+          setLoading(false);
+        }
+      );
+
+      return () => unsub();
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      setError("Something went wrong while loading stories.");
       setLoading(false);
-    });
-
-    // Clean up the listener when the component unmounts or genre changes
-    return () => unsub();
+    }
   }, [genre]);
 
+  // Sorting logic
+  const sortedStories = [...stories].sort((a, b) => {
+    if (sortBy === "newest") {
+      return b.createdAt?.seconds - a.createdAt?.seconds || 0;
+    }
+    if (sortBy === "oldest") {
+      return a.createdAt?.seconds - b.createdAt?.seconds || 0;
+    }
+    if (sortBy === "mostlikes") {
+      return (b.likes?.length || 0) - (a.likes?.length || 0);
+    }
+    return 0;
+  });
+
+  // Filter + render
+  const filteredStories = sortedStories.filter(
+    (story) =>
+      story.hidden !== true &&
+      (story.title?.toLowerCase().includes(search.toLowerCase()) ||
+        story.author?.toLowerCase().includes(search.toLowerCase()))
+  );
+
+  //Loading state
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <StyledStoryList>
+        <Navbar />
+        <Spinner $fullscreen={true} />
+      </StyledStoryList>
+    );
+  }
+
+  //Error state
+  if (error) {
+    return (
+      <StyledStoryList>
+        <Navbar />
+        <StyledMessage>{error}</StyledMessage>
+      </StyledStoryList>
+    );
   }
 
   return (
@@ -143,12 +179,11 @@ function StoryList() {
         <StyledHeader>
           <StyledWrapper />
           <StyledWrapper>
-            <StyledH1>{genre.genre}</StyledH1>
+            <StyledH1>{genre}</StyledH1>
             <StyledSubheading>
-              Here you can browse all the stories in the {genre.genre} genre
-              that our users have created. Feel free to read, like, and share
-              your favorite stories! Aswell as create your own stories to share
-              with the community. Happy reading!
+              Here you can browse all the stories in the {genre} genre that our
+              users have created. Feel free to read, like, and share your
+              favorites, or create your own story to share with the community.
             </StyledSubheading>
           </StyledWrapper>
         </StyledHeader>
@@ -159,17 +194,11 @@ function StoryList() {
           search={search}
           setSearch={setSearch}
         />
+
         <StyledList>
-          {sortedStories
-            .filter(
-              (story) =>
-                (story.hidden !== true &&
-                  story.author.toLowerCase().includes(search)) ||
-                story.title.toLowerCase().includes(search)
-            )
-            .map((story) => (
-              <StoryCard key={story.id} story={story} />
-            ))}
+          {filteredStories.map((story) => (
+            <StoryCard key={story.id} story={story} />
+          ))}
         </StyledList>
       </StyledContainer>
     </StyledStoryList>
@@ -177,8 +206,3 @@ function StoryList() {
 }
 
 export default StoryList;
-
-//  <Link to="/library">Back to genres</Link>
-// {stories.map((story, index) => (
-// <StoryCard key={index} story={story} />
-// ))}

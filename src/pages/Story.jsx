@@ -15,7 +15,7 @@ import Comments from "../components/Comments";
 import { AuthContext } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
-import Error from "../pages/Error";
+import Error from "./Error";
 
 // Styled components (unchanged for brevity)
 const StyledBook = styled.div`

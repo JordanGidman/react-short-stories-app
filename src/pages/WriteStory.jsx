@@ -17,7 +17,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Footer from "../components/Footer";
-import Error from "../pages/Error";
+import Error from "./Error";
 import Spinner from "../components/Spinner";
 
 const StyledWriteBook = styled.div`

@@ -19,6 +19,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Search from "../components/Search";
 import { toast } from "react-toastify";
+import Spinner from "../components/Spinner";
 // import Footer from "../components/Footer";
 
 const StyledMyStories = styled.div`
@@ -346,7 +347,7 @@ function MyStories() {
       </StyledHead>
       <StyledStoryList>
         {loading ? (
-          <div>Loading...</div>
+          <Spinner $height={"100%"} />
         ) : (
           sortedStories
             .filter(
