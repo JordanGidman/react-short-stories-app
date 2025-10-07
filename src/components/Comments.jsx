@@ -69,6 +69,8 @@ function Comments({ storyId }) {
   const { currentUser } = useContext(AuthContext);
   const [error, setError] = useState(null);
 
+  console.log(story?.comments);
+
   useEffect(() => {
     const docRef = doc(db, "stories", storyId);
     const unsubscribe = onSnapshot(docRef, (docSnap) => {
@@ -114,6 +116,8 @@ function Comments({ storyId }) {
     console.log("Submitting comment:", comment);
   }
 
+  function handleDeleteComment() {}
+
   return (
     <StyledComments>
       <h3>
@@ -124,7 +128,7 @@ function Comments({ storyId }) {
       <StyledList>
         {story?.comments?.length > 0 &&
           story.comments.map((comment, index) => (
-            <CommentCard key={index} comment={comment} />
+            <CommentCard key={index} comment={comment} story={story} />
           ))}
       </StyledList>
       <StyledForm>

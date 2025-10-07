@@ -13,9 +13,11 @@ import {
   where,
 } from "firebase/firestore";
 import { Link, useNavigate } from "react-router-dom";
-import Button from "./Button";
-import Search from "./Search";
 import { toast } from "react-toastify";
+
+import Search from "./Search";
+import Spinner from "./Spinner";
+import Error from "../pages/Error"; // assuming this exists
 
 const StyledFavorites = styled.div`
   height: 100%;
@@ -45,10 +47,8 @@ const StyledStoryList = styled.ul`
   align-items: center;
   justify-content: flex-start;
   gap: 2rem;
-  /* background-color: #fff; */
   width: 100%;
   height: 92%;
-
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
   overflow-y: scroll;
 
@@ -101,31 +101,26 @@ const StyledButton = styled.button`
   }
 `;
 
-// Tooltip text
 const Tooltip = styled.span`
   visibility: hidden;
   opacity: 0;
   transition: opacity 0.2s ease;
-
   position: absolute;
-  bottom: 125%; /* show above button */
+  bottom: 125%;
   left: 50%;
   transform: translateX(-50%);
-
   background-color: #1c1f2e;
   color: #fff;
   padding: 0.4rem 0.8rem;
   border-radius: 0.4rem;
   font-size: 1.2rem;
   white-space: nowrap;
-
   z-index: 1;
 
-  /* arrow, ill be honest i took this from the internet, thank you random person */
   &::after {
     content: "";
     position: absolute;
-    top: 100%; /* point downwards */
+    top: 100%;
     left: 50%;
     margin-left: -5px;
     border-width: 5px;
@@ -136,9 +131,6 @@ const Tooltip = styled.span`
   ${StyledButton}:hover & {
     visibility: visible;
     opacity: 1;
-    .icon {
-      font-size: 2.4rem;
-    }
   }
 `;
 
@@ -158,14 +150,16 @@ const StyledButtons = styled.div`
 `;
 
 function Favorites() {
-  //Pull story data using ids
-  //Display data in a list similar to my stories but with the only button being to unfavorite or view
   const { currentUser } = useContext(AuthContext);
   const [favorites, setFavorites] = useState(null);
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [error, setError] = useState(null);
   const [sortBy, setSortBy] = useState("placeholder");
+  const [search, setSearch] = useState("");
+  const navigate = useNavigate();
+
+  // Derived sorted stories
   const sortedStories = [...stories].sort((a, b) => {
     if (sortBy === "newest")
       return b.createdAt.seconds !== a.createdAt.seconds
@@ -175,65 +169,84 @@ function Favorites() {
       return b.createdAt.seconds !== a.createdAt.seconds
         ? a.createdAt.seconds - b.createdAt.seconds
         : a.createdAt.nanoseconds - b.createdAt.nanoseconds;
-
     if (sortBy === "mostlikes")
       return (b.likes?.length || 0) - (a.likes?.length || 0);
     return 0;
   });
-  const [search, setSearch] = useState("");
 
-  console.log(favorites);
-  console.log(stories);
-
-  //Pull favorite id's from user
+  // Load user's favorites
   useEffect(() => {
     if (!currentUser?.uid) return;
 
-    const favRef = doc(db, "users", currentUser?.uid);
+    setLoading(true);
+    const favRef = doc(db, "users", currentUser.uid);
 
-    const unsub = onSnapshot(favRef, (docSnap) => {
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-
-        setFavorites(data.favorites);
-      } else {
-        console.log("No favorites");
+    const unsub = onSnapshot(
+      favRef,
+      (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setFavorites(data.favorites || []);
+          setError(null);
+        } else {
+          setError(new Error("User not found"));
+        }
+        setLoading(false);
+      },
+      (err) => {
+        console.error("Error fetching favorites:", err);
+        setError(err);
+        setLoading(false);
+        toast.error("Could not load favorites.");
       }
-    });
+    );
 
     return () => unsub();
   }, [currentUser]);
 
+  // Load stories by favorite IDs
   useEffect(() => {
-    if (!favorites?.length) return;
+    if (!favorites?.length) {
+      setStories([]);
+      return;
+    }
 
+    setLoading(true);
     const storiesRef = collection(db, "stories");
-
     const q = query(storiesRef, where(documentId(), "in", favorites));
 
-    const unsub = onSnapshot(q, (docSnap) => {
-      setStories(
-        docSnap.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }))
-      );
-    });
+    const unsub = onSnapshot(
+      q,
+      (docSnap) => {
+        setStories(docSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+        setLoading(false);
+        setError(null);
+      },
+      (err) => {
+        console.error("Error loading stories:", err);
+        setError(err);
+        setLoading(false);
+        toast.error("Could not load favorite stories.");
+      }
+    );
 
     return () => unsub();
   }, [favorites]);
 
   async function handleUnfavorite(id) {
-    console.log(id);
     try {
       await updateDoc(doc(db, "users", currentUser?.uid), {
         favorites: arrayRemove(id),
       });
-      toast.success(`Removed story from favorites`);
+      toast.success("Removed story from favorites");
     } catch (error) {
-      toast.error(`Unfavorite failed. Please try again later`);
+      console.error(error);
+      toast.error("Unfavorite failed. Please try again later");
     }
   }
+
+  if (loading) return <Spinner />;
+  if (error) return <Error error={error} />;
 
   return (
     <StyledFavorites>
@@ -246,54 +259,46 @@ function Favorites() {
           setSearch={setSearch}
         />
       </StyledHead>
+
       <StyledStoryList>
-        {loading ? (
-          <div>Loading...</div>
-        ) : (
-          sortedStories
-            ?.filter(
-              (story) =>
-                (story.hidden !== true &&
-                  story.author.toLowerCase().includes(search)) ||
-                story.title.toLowerCase().includes(search)
-            )
-            .map((story) => (
-              <StyledListItem key={story.id}>
-                <StyledImg $backgroundImage={story.img} alt={story.title} />
-                <StyledTitle
-                  to={`/library/${story.genre.split("-").join(" ")}/book/${
-                    story.id
-                  }`}
+        {sortedStories
+          ?.filter(
+            (story) =>
+              (story.hidden !== true &&
+                story.author.toLowerCase().includes(search)) ||
+              story.title.toLowerCase().includes(search)
+          )
+          .map((story) => (
+            <StyledListItem key={story.id}>
+              <StyledImg $backgroundImage={story.img} alt={story.title} />
+              <StyledTitle
+                to={`/library/${story.genre.split("-").join(" ")}/book/${
+                  story.id
+                }`}
+              >
+                {story.title}
+              </StyledTitle>
+              <StyledItemText>{story.genre}</StyledItemText>
+              <StyledButtons>
+                <StyledButton
+                  onClick={() =>
+                    navigate(`/library/${story.genre}/book/${story.id}`)
+                  }
                 >
-                  {story.title}
-                </StyledTitle>
-                <StyledItemText>{story.genre}</StyledItemText>
-                <StyledButtons>
-                  <StyledButton
-                    disabled={loading}
-                    onClick={() => {
-                      navigate(`/library/${story.genre}/book/${story.id}`);
-                    }}
-                  >
-                    <ion-icon
-                      className="icon icon-open"
-                      name="open-outline"
-                    ></ion-icon>
-                    <Tooltip>Read</Tooltip>
-                  </StyledButton>
-                  <StyledButton
-                    disabled={loading}
-                    onClick={() => {
-                      handleUnfavorite(story.id);
-                    }}
-                  >
-                    <ion-icon className="icon icon-star" name="star"></ion-icon>
-                    <Tooltip>Remove from favorites</Tooltip>
-                  </StyledButton>
-                </StyledButtons>
-              </StyledListItem>
-            ))
-        )}
+                  <ion-icon
+                    class="icon icon-open"
+                    name="open-outline"
+                  ></ion-icon>
+                  <Tooltip>Read</Tooltip>
+                </StyledButton>
+
+                <StyledButton onClick={() => handleUnfavorite(story.id)}>
+                  <ion-icon class="icon icon-star" name="star"></ion-icon>
+                  <Tooltip>Remove from favorites</Tooltip>
+                </StyledButton>
+              </StyledButtons>
+            </StyledListItem>
+          ))}
       </StyledStoryList>
     </StyledFavorites>
   );

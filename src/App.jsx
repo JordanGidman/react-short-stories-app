@@ -77,11 +77,9 @@ const StyledContainer = styled(ToastContainer)`
 `;
 
 function App() {
-  //Need a check for a current user before allowing them to navigate to any page that requires one e.g write/account
-
   //i wanted to allow images to be used both for the book "cover" and within the post itself however firebase has paywalled its image uploading unfortunately. I will look into alternate db options for the next project.
 
-  //For now im going to use this as a list of features i want to add -
+  //For now im going to use this as a trello board -
 
   //COMPLETED
   //1 - User authentication (signup/signin/signout) - Done
@@ -106,9 +104,11 @@ function App() {
   //20 - Form validation - Done
   //21 - Add toast notifications for user feedback writing/deleting/commenting/liking- Not done
   //22 - Page Not found page completed - Done
+  //23 - Error handling - Done
+  //24 - Delete comments - Done
 
   //WIP
-  //1 - Error handling and loading states (Need to use loading spinner) - Partially done
+  //1 - Loading states (Need to use loading spinner) - Partially done
   //2 - Responsive design - Not done
   //3 - Refactor Book/WriteBook to be Story/WriteStory for consistency - Not Done
   //5 - Animations and transitions - Not done
@@ -117,7 +117,7 @@ function App() {
   //8 - Clean console logs and comments - Not done
   //9 - About page - Not done
   //10 - Maybe look into replacing none loaded images with a loading spinner instead of a temp image. This may be tricky as im using the images as a backgroundImage url. - Not done
-  //12 - Delete Comments and maybe edit them. - Not done
+  //12 - Edit comments (maybe)
   //13 - Save drafts (maybe) - Not done.
   //14 - Change styling of the navbar link we are currently on
   //15 - Put a loading spinner/component in place of a page that has not yet loaded.
