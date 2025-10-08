@@ -236,7 +236,7 @@ function Book() {
     return () => unsub();
   }, [story?.creatorID]);
 
-  // --- Like & Favorite handlers ---
+  //Like & Favorite handlers
   async function handleLike(userId, isLiked) {
     try {
       await updateDoc(doc(db, "stories", story.id), {
@@ -263,7 +263,6 @@ function Book() {
     }
   }
 
-  // --- Conditional rendering ---
   if (loading) return <Spinner />;
   if (error) return <Error error={error} />;
 

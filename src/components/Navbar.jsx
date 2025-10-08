@@ -135,6 +135,9 @@ function Navbar() {
         <Li>
           <StyledLink to={"/library"}>Library</StyledLink>
         </Li>
+        <Li>
+          <StyledLink to={"/about"}>About</StyledLink>
+        </Li>
 
         {/* {currentUser && (
           <Li>

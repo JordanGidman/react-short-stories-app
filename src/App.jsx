@@ -124,7 +124,9 @@ function App() {
   //9 - Sorting bug where the 1st in the list is the newest the last should be the oldest. Yet if i change the sorting to be the oldest the one that was last is not now first for some reason and vice versa.
   //10 - Implement delete account functionality - Not done
   //11 - Clean console logs and comments - Not done
-  //12 - Deployment - Not done
+  //12 - Ability to see likes on storyCards - Not done
+  //12 - Optimizations(Img compression, lazy loading, code splitting, memoization, etc)
+  //13 - Deployment - Not done
 
   return (
     <AuthContextProvider>
@@ -191,6 +193,7 @@ function App() {
             />
 
             <Route path="library" element={<Library />} />
+            <Route path="about" element={<About />} />
             <Route path="library/:genre" element={<StoryList />} />
             <Route path="library/:genre/story/:id" element={<Book />} />
             <Route path="*" element={<PageNotFound />} />
