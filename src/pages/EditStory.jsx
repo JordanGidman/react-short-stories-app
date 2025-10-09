@@ -9,6 +9,7 @@ import {
   arrayUnion,
   collection,
   doc,
+  getDoc,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
@@ -140,6 +141,14 @@ const StyledTextarea = styled.textarea`
   }
 `;
 
+const StyledButtons = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+`;
+
 const StyledButton = styled(Button)`
   width: 30vw;
   align-self: center;
@@ -159,49 +168,97 @@ function EditStory() {
   const { state } = useLocation();
   const story = state ? state.story : null;
   const [storyText, setStoryText] = useState(story.storyText || "");
+  const [title, setTitle] = useState(story.title || "");
+  const [genre, setGenre] = useState(story.genre || "");
+  const [synopsis, setSynopsis] = useState(story.synopsis || "");
+  const [img, setImg] = useState(
+    story.img || "https://picsum.photos/seed/hireme/600/400"
+  );
   const navigate = useNavigate();
   const [error, setError] = useState(null);
 
-  async function handleSubmit(e) {
-    console.log(e);
+  async function handleSubmit(e, saveDraft) {
     e.preventDefault();
+    setLoading(true);
 
-    //Capture input data not using controlled components because of issues saving to firebase will refactor later
-    const title = e.target[0].value;
-    const genre = e.target[1].value;
-
-    console.log("Genre selected:", genre);
-
-    const synopsis = e.target[2].value;
-    const img =
-      e.target[3].value === ""
-        ? "https://picsum.photos/seed/hireme/600/400"
-        : e.target[3].value;
-    // const storyText = e.target[4].value;
-
-    //Save input data to firebase
     try {
-      //Create a new story document and trim the p tag we get back from the library
-      setLoading(true);
+      const userRef = doc(db, "users", currentUser.uid);
+      const userSnap = await getDoc(userRef);
+      const userData = userSnap.data() || {};
+      const isDraft = !!story.draftId;
+      const isStory = !!story.id;
 
-      await updateDoc(doc(db, "stories", story.id), {
-        title,
-        genre,
-        synopsis,
-        img,
-        storyText,
-        editedAt: new Date(),
-      });
+      //Editing a draft
+      if (isDraft && saveDraft) {
+        const updatedDrafts = (userData.drafts || []).map((d) =>
+          d.draftId === story.draftId
+            ? {
+                ...d,
+                title,
+                genre,
+                synopsis,
+                img,
+                storyText,
+                editedAt: new Date(),
+              }
+            : d
+        );
+        await updateDoc(userRef, { drafts: updatedDrafts });
+        toast.success("Draft updated!");
+        navigate(`/account/${currentUser.uid}/drafts`);
+      }
 
-      setLoading(false);
-      navigate(`/library/${genre.split("-").join(" ")}/book/${story.id}`);
+      //Editing an existing story and saving as draft
+      else if (isStory && saveDraft) {
+        const newDraft = {
+          ...story,
+          draftId: crypto.randomUUID(),
+          storyId: story.id,
+          title,
+          genre,
+          synopsis,
+          img,
+          storyText,
+          editedAt: new Date(),
+        };
+        await updateDoc(userRef, { drafts: arrayUnion(newDraft) });
+        toast.success("Draft saved!");
+        navigate(`/account/${currentUser.uid}/drafts`);
+      }
+
+      //Posting a story or draft
+      else {
+        let storyIdToUpdate = story.id;
+        if (isDraft) storyIdToUpdate = story.storyId; // use reference to original story
+
+        await updateDoc(doc(db, "stories", storyIdToUpdate), {
+          title,
+          genre,
+          synopsis,
+          img,
+          storyText,
+          editedAt: new Date(),
+        });
+
+        // If it was a draft remove it from drafts
+        if (isDraft) {
+          const updatedDrafts = (userData.drafts || []).filter(
+            (d) => d.draftId !== story.draftId
+          );
+          await updateDoc(userRef, { drafts: updatedDrafts });
+        }
+
+        toast.success("Story posted!");
+        navigate(
+          `/library/${genre.split("-").join(" ")}/story/${storyIdToUpdate}`
+        );
+      }
     } catch (error) {
-      //replace with proper error handling later
-      setError(error);
-      toast.error(`Editing failed: ${error.message}`);
-      console.log(error.message);
+      console.log(error);
+      toast.error(`Operation failed: ${error.message}`);
+    } finally {
+      setLoading(false);
     }
-    //Navigate to the book page for this story
   }
 
   return (
@@ -213,14 +270,18 @@ function EditStory() {
             <StyledH1>Edit your story</StyledH1>
             <TitleInput
               type="text"
-              defaultValue={story ? story.title : ""}
+              // defaultValue={story ? story.title : ""}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               placeholder="Title of your story *"
               disabled={loading}
             />
 
             <StyledSelect
               name="genre"
-              defaultValue={story ? story.genre : "placeholder"}
+              // defaultValue={story ? story.genre : "placeholder"}
+              value={genre}
+              onChange={(e) => setGenre(e.target.value)}
               disabled={loading}
             >
               <StyledOption
@@ -256,13 +317,15 @@ function EditStory() {
 
             <StyledTextarea
               type="textarea"
-              defaultValue={story ? story.synopsis : ""}
+              value={synopsis}
+              onChange={(e) => setSynopsis(e.target.value)}
               placeholder="A short synopsis of your story *"
               disabled={loading}
             />
             <StyledInputBox
               type="text"
-              defaultValue={story ? story.img : ""}
+              value={img}
+              onChange={(e) => setImg(e.target.value)}
               placeholder="Image URL (Firebase no longer allows free image uploads leave blank for a placeholder or put any image url. )"
               disabled={loading}
             />
@@ -270,14 +333,27 @@ function EditStory() {
               theme="snow"
               placeholder="Write your story here..."
               className="text-editor"
-              onChange={setStoryText}
+              onChange={(content) => setStoryText(content)}
               readOnly={loading}
-              defaultValue={story ? story.storyText : ""}
+              value={storyText}
             />
-            <StyledButton disabled={loading}>
-              {loading ? "Posting..." : "Post"}
-            </StyledButton>
-            {/* Maybe a button for saving as draft */}
+            <StyledButtons>
+              <StyledButton
+                type="button"
+                disabled={loading}
+                onClick={(e) => handleSubmit(e, true)}
+              >
+                {loading ? "Updating..." : "Save Draft"}
+              </StyledButton>
+
+              <StyledButton
+                disabled={loading}
+                type="button"
+                onClick={(e) => handleSubmit(e, false)}
+              >
+                {loading ? "Posting..." : "Post"}
+              </StyledButton>
+            </StyledButtons>
           </StyledForm>
         </StyledWrapper>
       ) : (

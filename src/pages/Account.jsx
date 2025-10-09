@@ -228,6 +228,11 @@ function Account() {
               </StyledNavLink>
             </StyledNavItem>
             <StyledNavItem>
+              <StyledNavLink className="nav-link" to={`drafts`}>
+                Drafts
+              </StyledNavLink>
+            </StyledNavItem>
+            <StyledNavItem>
               <StyledNavLink className="nav-link" to={`edit`}>
                 Edit Account
               </StyledNavLink>

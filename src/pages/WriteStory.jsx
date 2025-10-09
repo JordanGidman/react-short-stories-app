@@ -35,9 +35,11 @@ const StyledWriteBook = styled.div`
 `;
 
 const StyledH1 = styled.h1`
-  font-size: 1.4rem;
-  font-weight: 500;
+  font-size: 1.6rem;
+  font-weight: 600;
   text-transform: capitalize;
+  font-family: "Playfair Display", sans-serif;
+  font-style: italic;
 `;
 
 const StyledForm = styled.form`
@@ -101,6 +103,7 @@ const TitleInput = styled(InputBox)`
   align-items: center;
   justify-content: space-between;
   box-shadow: none;
+  padding-top: 0rem;
 `;
 
 const StyledSelect = styled.select`
@@ -145,9 +148,18 @@ const StyledTextarea = styled.textarea`
   }
 `;
 
+const StyledButtons = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+`;
+
 const StyledButton = styled(Button)`
   width: 30vw;
   align-self: center;
+  font-weight: 600;
 `;
 
 function WriteBook() {
@@ -161,14 +173,14 @@ function WriteBook() {
   const [title, setTitle] = useState("");
   const [genre, setGenre] = useState("placeholder");
   const [synopsis, setSynopsis] = useState("");
-  const [img, setImg] = useState("https://picsum.photos/seed/hireme/600/400");
+  const [img, setImg] = useState(`https://picsum.photos/seed/hireme/600/400`);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   // const { state } = useLocation();
   // const story = state ? state.story : null;
   const navigate = useNavigate();
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e, isDraft) {
     console.log(e);
     e.preventDefault();
 
@@ -216,33 +228,60 @@ function WriteBook() {
 
     //Save input data to firebase
     try {
-      //Create a new story document and trim the p tag we get back from the library
+      let docRef;
+
+      //Create a new story document
       setLoading(true);
-      const docRef = await addDoc(collection(db, "stories"), {
-        title,
-        genre,
-        synopsis,
-        img,
-        storyText,
-        creatorID: currentUser.uid,
-        //Maybe add a isPublished field later for drafts
-        createdAt: new Date(),
-        author: currentUser.displayName,
-        isSeedData: false,
-        hidden: false,
-        randomNumber: Math.random(),
-      });
+      if (!isDraft) {
+        docRef = await addDoc(collection(db, "stories"), {
+          title,
+          genre,
+          synopsis,
+          img,
+          storyText,
+          creatorID: currentUser.uid,
+          createdAt: new Date(),
+          author: currentUser.displayName,
+          isSeedData: false,
+          hidden: false,
+          randomNumber: Math.random(),
+        });
+      } else {
+        //Create a new draft in the users drafts array
+        await updateDoc(doc(db, "users", currentUser.uid), {
+          drafts: arrayUnion({
+            draftId: crypto.randomUUID(),
+            title,
+            genre,
+            synopsis,
+            img,
+            storyText,
+            creatorID: currentUser.uid,
+            createdAt: new Date(),
+            author: currentUser.displayName,
+            isSeedData: false,
+            hidden: false,
+            randomNumber: Math.random(),
+          }),
+        });
+
+        console.log(docRef);
+      }
 
       //add the story id to the stories array of the user that created it
-      await updateDoc(doc(db, "users", currentUser.uid), {
-        stories: arrayUnion(docRef.id),
-      });
+      docRef &&
+        (await updateDoc(doc(db, "users", currentUser.uid), {
+          stories: arrayUnion(docRef.id),
+        }));
 
       //Navigate to the book page for this story
 
-      navigate(`/account/${currentUser.uid}/mystories`, {
-        state: { storyCreated: true },
-      });
+      navigate(
+        `/account/${currentUser.uid}/${isDraft ? "drafts" : "mystories"}`,
+        {
+          state: { storyCreated: true },
+        }
+      );
     } catch (error) {
       toast.error(`Error: ${error.message}`);
     } finally {
@@ -320,7 +359,7 @@ function WriteBook() {
                   setImg(
                     e.target.value
                       ? e.target.value
-                      : "https://picsum.photos/seed/hireme/600/400"
+                      : `https://picsum.photos/seed/hireme/600/400`
                   )
                 }
               />
@@ -332,9 +371,25 @@ function WriteBook() {
                 onChange={(value) => setStoryText(value)}
                 readOnly={loading}
               />
-              <StyledButton disabled={loading}>
-                {loading ? "Posting..." : "Post"}
-              </StyledButton>
+              <StyledButtons>
+                <StyledButton
+                  type="button"
+                  disabled={loading}
+                  //Draft mode
+                  onClick={(e) => handleSubmit(e, true)}
+                >
+                  {loading ? "Saving..." : "Save as draft"}
+                </StyledButton>
+
+                <StyledButton
+                  type="button"
+                  disabled={loading}
+                  //Publish mode
+                  onClick={(e) => handleSubmit(e, false)}
+                >
+                  {loading ? "Posting..." : "Post"}
+                </StyledButton>
+              </StyledButtons>
               {/* Maybe a button for saving as draft */}
             </StyledForm>
           </StyledWrapper>

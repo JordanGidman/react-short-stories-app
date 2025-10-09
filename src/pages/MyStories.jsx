@@ -64,7 +64,8 @@ const StyledStoryList = styled.ul`
 
 const StyledListItem = styled.li`
   display: grid;
-  grid-template-columns: repeat(${(props) => props.$span}, 1fr);
+  /* grid-template-columns: repeat(${(props) => props.$span}, 1fr); */
+  grid-template-columns: repeat(6, 1fr);
   align-items: center;
   justify-content: space-between;
   text-align: center;
@@ -249,8 +250,10 @@ function MyStories() {
     if (location.state?.storyCreated && !toastShown.current) {
       toastShown.current = true;
       toast.success("Story submitted!");
+      // clears state otherwise we get a toast on every mount and not only when navigating from the correct page
+      navigate(location.pathname, { replace: true });
     }
-  }, [location]);
+  }, [location, navigate]);
 
   useEffect(() => {
     if (!currentUser?.uid) return;
@@ -360,7 +363,7 @@ function MyStories() {
               <StyledListItem key={story.id} $span={story.editedAt ? 6 : 5}>
                 <StyledImg $backgroundImage={story.img} alt={story.title} />
                 <StyledTitle
-                  to={`/library/${story.genre.split("-").join(" ")}/book/${
+                  to={`/library/${story.genre.split("-").join(" ")}/story/${
                     story.id
                   }`}
                 >
@@ -373,14 +376,15 @@ function MyStories() {
                     "en-US"
                   )}
                 </StyledItemText>
-                {story.editedAt && (
-                  <StyledItemText>
-                    Edited:{" "}
-                    {new Date(
-                      story.editedAt?.seconds * 1000
-                    ).toLocaleDateString("en-US")}
-                  </StyledItemText>
-                )}
+
+                <StyledItemText>
+                  Edited:{" "}
+                  {story.editedAt
+                    ? new Date(
+                        story.editedAt?.seconds * 1000
+                      ).toLocaleDateString("en-US")
+                    : "N/A"}
+                </StyledItemText>
 
                 <StyledButtons>
                   <StyledButton>

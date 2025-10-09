@@ -104,6 +104,7 @@ function SignUp() {
         displayName: displayName,
         fullName,
         stories: [],
+        drafts: [],
       });
       navigate("/", {
         state: { justSignedUp: true },

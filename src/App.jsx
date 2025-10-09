@@ -22,6 +22,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Error from "./pages/Error";
 import Spinner from "./components/Spinner";
+import Drafts from "./components/Drafts";
 
 const StyledApp = styled.div`
   .Toastify__toast-theme--colored.Toastify__toast--success {
@@ -111,21 +112,23 @@ function App() {
   //27 - Refactor Book/WriteBook to be Story/WriteStory for consistency - Done
   //28 - Change styling of the navbar link we are currently on
   //29 - Finish home page - Done
+  //30 - Maybe look into replacing none loaded images with a loading spinner instead of a temp image. This may be tricky as im using the images as a backgroundImage url. - Not done
+  //31 - About page - Not done
 
   //WIP
   //1 - Responsive design - Not done
   //2 - Animations and transitions - Not done
   //3 - Night reader mode(Maybe) - Not done
-  //4 - About page - Not done
-  //5 - Maybe look into replacing none loaded images with a loading spinner instead of a temp image. This may be tricky as im using the images as a backgroundImage url. - Not done
-  //6 - Edit comments (maybe)
-  //7 - Save drafts (maybe) - Not done
-  //8 - Favicon - Not done
-  //9 - Sorting bug where the 1st in the list is the newest the last should be the oldest. Yet if i change the sorting to be the oldest the one that was last is not now first for some reason and vice versa.
-  //10 - Implement delete account functionality - Not done
-  //11 - Clean console logs and comments - Not done
-  //12 - Ability to see likes on storyCards - Not done
-  //12 - Optimizations(Img compression, lazy loading, code splitting, memoization, etc)
+  //4 - Edit comments (maybe)
+  //5 - Save drafts, when posting a story we need to check if its a draft and if so remove it from drafts after posting - Not done
+  //6 - Favicon - Not done
+  //7 - Sorting bug where the 1st in the list is the newest the last should be the oldest. Yet if i change the sorting to be the oldest the one that was last is not now first for some reason and vice versa.
+  //8 - Implement delete account functionality - Not done
+  //9 - Clean console logs and comments - Not done
+  //10 - Ability to see likes on storyCards - Not done
+  //11 - Optimizations(Img compression, lazy loading, code splitting, memoization, etc) - Need to take into account the scale of the app, there are 200+ stories already but that number can increase greatly and i should plan for that, with story pull limits/pagination - Not done
+  //12 - Potentially use session storage to keep write book and other input fields filled - in the case that a user accidentally refreshes before saving we dont want to delete their entire story. - Not done
+  //13 - Notify users when navigating away from pages if their changes/inputs will be saved i.e If they made edits to a story but did not post the changes and are trying to leave the page we should advise them that they havent saved the changes etc - Not done
   //13 - Deployment - Not done
 
   return (
@@ -161,6 +164,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <MyStories />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="drafts"
+                element={
+                  <ProtectedRoute>
+                    <Drafts />
                   </ProtectedRoute>
                 }
               />

@@ -44,7 +44,7 @@ const StyledImageBox = styled.div`
 `;
 
 const StyledTitle = styled.h2`
-  font-size: 3.2rem;
+  font-size: 2.6rem;
   font-family: "Playfair Display", serif;
   text-transform: capitalize;
 `;

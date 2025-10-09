@@ -97,7 +97,6 @@ function Navbar() {
   const [userInfo, setUserInfo] = useState();
 
   // console.log("Current User:", currentUser?.displayName);
-  console.log(currentUser);
 
   useEffect(() => {
     if (!currentUser?.uid) return;
