@@ -118,6 +118,7 @@ function App() {
   //32 - Save, edit, post drafts - Done
   //33 - Sorting bug where the 1st in the list is the newest the last should be the oldest. Yet if i change the sorting to be the oldest the one that was last is not now first for some reason and vice versa. - Done
   //34 - Show likes on storyCards - Done
+  //35 - Mobile nav (responsive) - Done
 
   //WIP
   //1 - Responsive design - Not done
@@ -128,7 +129,10 @@ function App() {
   //6 - Optimizations(Img compression, lazy loading, code splitting, memoization, refactors, etc) - Need to take into account the scale of the app, there are 200+ stories already but that number can increase greatly and i should plan for that, with story pull limits/pagination - Not done
   //7 - Potentially use session storage to keep write book and other input fields filled - in the case that a user accidentally refreshes before saving we dont want to delete their entire story. - Not done
   //8 - Notify users when navigating away from pages if their changes/inputs will be saved i.e If they made edits to a story but did not post the changes and are trying to leave the page we should advise them that they havent saved the changes etc - Not done
-  //9 - Deployment - Not done
+  //9 - SEO Improvements - Not done
+  //10 - Accessibility Improvements - Not done
+  //11 - Featured section link to staff picks
+  //12 - Deployment - Not done
 
   return (
     <AuthContextProvider>
