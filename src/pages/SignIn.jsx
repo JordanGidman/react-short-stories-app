@@ -135,7 +135,6 @@ function SignIn() {
 
   return (
     <StyledContainer>
-      <Navbar />
       <SecondWrapper>
         <StyledImg></StyledImg>
       </SecondWrapper>

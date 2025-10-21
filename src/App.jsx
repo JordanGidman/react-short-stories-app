@@ -23,6 +23,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Error from "./pages/Error";
 import Spinner from "./components/Spinner";
 import Drafts from "./components/Drafts";
+import MainLayout from "./layouts/MainLayout";
 
 const StyledApp = styled.div`
   .Toastify__toast-theme--colored.Toastify__toast--success {
@@ -114,22 +115,20 @@ function App() {
   //29 - Finish home page - Done
   //30 - Maybe look into replacing none loaded images with a loading spinner instead of a temp image. This may be tricky as im using the images as a backgroundImage url. - Not done
   //31 - About page - Not done
+  //32 - Save, edit, post drafts - Done
+  //33 - Sorting bug where the 1st in the list is the newest the last should be the oldest. Yet if i change the sorting to be the oldest the one that was last is not now first for some reason and vice versa. - Done
+  //34 - Show likes on storyCards - Done
 
   //WIP
   //1 - Responsive design - Not done
   //2 - Animations and transitions - Not done
-  //3 - Night reader mode(Maybe) - Not done
-  //4 - Edit comments (maybe)
-  //5 - Save drafts, when posting a story we need to check if its a draft and if so remove it from drafts after posting - Not done
-  //6 - Favicon - Not done
-  //7 - Sorting bug where the 1st in the list is the newest the last should be the oldest. Yet if i change the sorting to be the oldest the one that was last is not now first for some reason and vice versa.
-  //8 - Implement delete account functionality - Not done
-  //9 - Clean console logs and comments - Not done
-  //10 - Ability to see likes on storyCards - Not done
-  //11 - Optimizations(Img compression, lazy loading, code splitting, memoization, etc) - Need to take into account the scale of the app, there are 200+ stories already but that number can increase greatly and i should plan for that, with story pull limits/pagination - Not done
-  //12 - Potentially use session storage to keep write book and other input fields filled - in the case that a user accidentally refreshes before saving we dont want to delete their entire story. - Not done
-  //13 - Notify users when navigating away from pages if their changes/inputs will be saved i.e If they made edits to a story but did not post the changes and are trying to leave the page we should advise them that they havent saved the changes etc - Not done
-  //13 - Deployment - Not done
+  //3 - Edit comments (maybe)
+  //4 - Favicon - Not done
+  //5 - Implement delete account functionality - Not done
+  //6 - Optimizations(Img compression, lazy loading, code splitting, memoization, refactors, etc) - Need to take into account the scale of the app, there are 200+ stories already but that number can increase greatly and i should plan for that, with story pull limits/pagination - Not done
+  //7 - Potentially use session storage to keep write book and other input fields filled - in the case that a user accidentally refreshes before saving we dont want to delete their entire story. - Not done
+  //8 - Notify users when navigating away from pages if their changes/inputs will be saved i.e If they made edits to a story but did not post the changes and are trying to leave the page we should advise them that they havent saved the changes etc - Not done
+  //9 - Deployment - Not done
 
   return (
     <AuthContextProvider>
@@ -138,87 +137,62 @@ function App() {
         <BrowserRouter>
           <ScrollToTop />
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="signin" element={<SignIn />} />
-            <Route path="signup" element={<SignUp />} />
-            <Route path="about" element={<About />} />
+            {/* Layout routes */}
+            <Route element={<MainLayout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="about" element={<About />} />
+              <Route path="library" element={<Library />} />
+              <Route path="library/:genre" element={<StoryList />} />
+              <Route path="library/:genre/story/:id" element={<Book />} />
 
-            <Route
-              path="account/:id"
-              element={
-                <ProtectedRoute>
-                  <Account />
-                </ProtectedRoute>
-              }
-            >
+              {/* Protected nested routes */}
               <Route
-                path="favorites"
+                path="account/:id"
                 element={
                   <ProtectedRoute>
-                    <Favorites />
+                    <Account />
+                  </ProtectedRoute>
+                }
+              >
+                <Route path="favorites" element={<Favorites />} />
+                <Route path="mystories" element={<MyStories />} />
+                <Route path="drafts" element={<Drafts />} />
+                <Route path="edit" element={<EditAccount />} />
+              </Route>
+
+              <Route
+                path="write"
+                element={
+                  <ProtectedRoute>
+                    <WriteStory />
                   </ProtectedRoute>
                 }
               />
               <Route
-                path="mystories"
+                path="edit/:id"
                 element={
                   <ProtectedRoute>
-                    <MyStories />
+                    <EditStory />
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path="drafts"
-                element={
-                  <ProtectedRoute>
-                    <Drafts />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="edit"
-                element={
-                  <ProtectedRoute>
-                    <EditAccount />
-                  </ProtectedRoute>
-                }
-              />
+
+              {/* fallback */}
+              <Route path="*" element={<PageNotFound />} />
             </Route>
 
-            <Route
-              path="write"
-              element={
-                <ProtectedRoute>
-                  <WriteStory />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="edit/:id"
-              element={
-                <ProtectedRoute>
-                  <EditStory />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route path="library" element={<Library />} />
-            <Route path="about" element={<About />} />
-            <Route path="library/:genre" element={<StoryList />} />
-            <Route path="library/:genre/story/:id" element={<Book />} />
-            <Route path="*" element={<PageNotFound />} />
+            {/* Routes WITHOUT navbar (auth, spinner, etc.) */}
+            <Route path="signin" element={<SignIn />} />
+            <Route path="signup" element={<SignUp />} />
             <Route path="error" element={<Error />} />
             <Route path="spinner" element={<Spinner />} />
           </Routes>
         </BrowserRouter>
+
         <StyledContainer
           position="bottom-center"
           autoClose={5000}
           hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick={false}
-          rtl={false}
           pauseOnFocusLoss
           draggable
           pauseOnHover

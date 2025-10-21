@@ -176,6 +176,10 @@ function EditStory() {
   );
   const navigate = useNavigate();
   const [error, setError] = useState(null);
+  const isDraft = !!story.draftId;
+  const isStory = !!story.id;
+
+  console.log(story);
 
   async function handleSubmit(e, saveDraft) {
     e.preventDefault();
@@ -185,8 +189,6 @@ function EditStory() {
       const userRef = doc(db, "users", currentUser.uid);
       const userSnap = await getDoc(userRef);
       const userData = userSnap.data() || {};
-      const isDraft = !!story.draftId;
-      const isStory = !!story.id;
 
       //Editing a draft
       if (isDraft && saveDraft) {
@@ -228,17 +230,54 @@ function EditStory() {
 
       //Posting a story or draft
       else {
-        let storyIdToUpdate = story.id;
-        if (isDraft) storyIdToUpdate = story.storyId; // use reference to original story
+        let storyIdToUpdate = isDraft ? story.storyId : story.id;
+        // let storyIdToUpdate = story.id;
+        // if (isDraft) storyIdToUpdate = story.storyId; // use reference to original story
 
-        await updateDoc(doc(db, "stories", storyIdToUpdate), {
-          title,
-          genre,
-          synopsis,
-          img,
-          storyText,
-          editedAt: new Date(),
-        });
+        //If posting a story - bugged currently
+        if (!isDraft) {
+          // Editing an existing published story
+          await updateDoc(doc(db, "stories", storyIdToUpdate), {
+            title,
+            genre,
+            synopsis,
+            img,
+            storyText,
+            editedAt: new Date(),
+          });
+        } else {
+          // Posting a draft as a new or updated story
+          if (story.storyId) {
+            // This draft is linked to an existing story → update that story
+            await updateDoc(doc(db, "stories", story.storyId), {
+              title,
+              genre,
+              synopsis,
+              img,
+              storyText,
+              editedAt: new Date(),
+            });
+          } else {
+            // This is a brand new story (draft that’s never been posted)
+            const newStoryRef = await addDoc(collection(db, "stories"), {
+              title,
+              genre,
+              synopsis,
+              img,
+              storyText,
+              creatorID: currentUser.uid,
+              author: currentUser.displayName,
+              createdAt: new Date(),
+              editedAt: new Date(),
+              isSeedData: false,
+              hidden: false,
+              randomNumber: Math.random(),
+            });
+
+            // Store that story ID in your variable so your redirect works correctly
+            storyIdToUpdate = newStoryRef.id;
+          }
+        }
 
         // If it was a draft remove it from drafts
         if (isDraft) {
@@ -263,7 +302,7 @@ function EditStory() {
 
   return (
     <StyledEditStory>
-      <Navbar />
+      {/* <Navbar /> */}
       {!error ? (
         <StyledWrapper>
           <StyledForm onSubmit={(e) => handleSubmit(e)}>
@@ -351,7 +390,7 @@ function EditStory() {
                 type="button"
                 onClick={(e) => handleSubmit(e, false)}
               >
-                {loading ? "Posting..." : "Post"}
+                {loading ? "Posting..." : story.id ? "Replace Story" : "Post"}
               </StyledButton>
             </StyledButtons>
           </StyledForm>

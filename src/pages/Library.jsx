@@ -161,7 +161,6 @@ function Library() {
 
   return (
     <StyledLibrary>
-      <Navbar />
       <StyledContainer>
         <StyledHeader>
           <StyledWrapper />
@@ -209,7 +208,7 @@ function Library() {
           })}
         </StyledGenreList>
       </StyledContainer>
-      <Footer />
+
       {/* <Outlet /> */}
     </StyledLibrary>
   );

@@ -211,7 +211,7 @@ function Account() {
 
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <StyledAccount>
         <StyledNav>
           <StyledName>{user?.displayName}</StyledName>

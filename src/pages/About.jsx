@@ -150,7 +150,7 @@ const StyledBannerH1 = styled.h1`
 function About() {
   return (
     <StyledAbout>
-      <Navbar />
+      {/* <Navbar /> */}
       <StyledWrapper>
         <StyledHeader $flipped={false}>
           <StyledH1>
@@ -286,7 +286,7 @@ function About() {
           </StyledBodyText>
         </StyledBody>
       </StyledWrapper>
-      <Footer />
+      {/* <Footer /> */}
     </StyledAbout>
   );
 }

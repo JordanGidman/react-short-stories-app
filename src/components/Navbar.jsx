@@ -23,8 +23,8 @@ const Ul = styled.ul`
   list-style: none;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 15rem;
+  justify-content: space-between;
+  /* gap: 15rem; */
   width: 100%;
 `;
 

@@ -1,14 +1,21 @@
 import { faker } from "@faker-js/faker";
 import styled from "styled-components";
 import placeholder from "../img/placeholder.jpg";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Button from "./Button";
 import { Link } from "react-router-dom";
-import { doc, onSnapshot } from "firebase/firestore";
+import {
+  arrayRemove,
+  arrayUnion,
+  doc,
+  onSnapshot,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import Spinner from "./Spinner";
 import { toast } from "react-toastify";
 import Error from "../pages/Error";
+import { AuthContext } from "../context/AuthContext";
 
 const StyledStoryCard = styled.div`
   display: grid;
@@ -80,6 +87,78 @@ const StyledButton = styled(Button)`
   }
 `;
 
+const StyledButtons = styled.div`
+  /* align-self: flex-end; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* gap: 2rem; */
+  margin: 2rem 0rem;
+  width: 100%;
+
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    font-size: 1.6rem;
+
+    ion-icon {
+      color: #c92a2a;
+      font-size: 2.4rem;
+    }
+  }
+`;
+
+// const StyledLikesButton = styled.button`
+//   position: relative;
+//   border: none;
+//   background-color: transparent;
+//   transition: all 0.3s ease-in-out;
+
+//   .icon-star {
+//     color: #ffbe0b;
+//   }
+
+//   &:hover {
+//     cursor: pointer;
+//     color: #ffbe0b;
+//   }
+// `;
+
+// const Tooltip = styled.span`
+//   visibility: hidden;
+//   opacity: 0;
+//   transition: opacity 0.2s ease;
+//   position: absolute;
+//   bottom: 125%;
+//   left: 50%;
+//   transform: translateX(-50%);
+//   background-color: #1c1f2e;
+//   color: #fff;
+//   padding: 0.4rem 0.8rem;
+//   border-radius: 0.4rem;
+//   font-size: 1.2rem;
+//   white-space: nowrap;
+//   z-index: 1;
+
+//   &::after {
+//     content: "";
+//     position: absolute;
+//     top: 100%;
+//     left: 50%;
+//     margin-left: -5px;
+//     border-width: 5px;
+//     border-style: solid;
+//     border-color: #333 transparent transparent transparent;
+//   }
+
+//   ${StyledButton}:hover & {
+//     visibility: visible;
+//     opacity: 1;
+//   }
+// `;
+
 const StyledLink = styled(Link)``;
 
 function StoryCard({ story }) {
@@ -87,6 +166,7 @@ function StoryCard({ story }) {
   const [author, setAuthor] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const { currentUser } = useContext(AuthContext);
 
   const isCriticalError =
     !story.title &&
@@ -140,6 +220,17 @@ function StoryCard({ story }) {
     img.src = story.img;
   }, [story.img]);
 
+  async function handleLike(userId, isLiked) {
+    try {
+      await updateDoc(doc(db, "stories", story.id), {
+        likes: isLiked ? arrayRemove(userId) : arrayUnion(userId),
+      });
+      toast.success(isLiked ? "Like removed." : "Story liked!");
+    } catch (err) {
+      toast.error("Could not update like status.");
+    }
+  }
+
   if (isCriticalError)
     return (
       <Error error={{ message: "Error pulling stories from database." }} />
@@ -168,9 +259,14 @@ function StoryCard({ story }) {
           {story.synopsis || "Synopsis not found"}
         </StyledSynopsis>
         <StyledGenre>{story.genre || "Misc"}</StyledGenre>
-        <StyledLink to={`/library/${story.genre}/story/${story.id}`}>
-          <StyledButton>Read</StyledButton>
-        </StyledLink>
+        <StyledButtons>
+          <StyledLink to={`/library/${story.genre}/story/${story.id}`}>
+            <StyledButton>Read</StyledButton>
+          </StyledLink>
+          <span>
+            {currentUser?.uid && <>{story.likes?.length || 0} likes</>}
+          </span>
+        </StyledButtons>
       </StyledTextBox>
     </StyledStoryCard>
   );

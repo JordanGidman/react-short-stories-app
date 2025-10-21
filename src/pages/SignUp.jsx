@@ -120,7 +120,6 @@ function SignUp() {
 
   return (
     <StyledContainer>
-      <Navbar />
       <StyledH1>
         Sign up <span>for free</span>
       </StyledH1>

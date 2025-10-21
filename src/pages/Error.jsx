@@ -79,7 +79,7 @@ function Error({ error }) {
 
   return (
     <StyledError>
-      <Navbar />
+      {/* <Navbar /> */}
       <StyledInfoBox>
         <ion-icon name="warning-outline" className="large-icon"></ion-icon>
 

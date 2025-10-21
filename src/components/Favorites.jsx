@@ -283,7 +283,7 @@ function Favorites() {
               <StyledListItem key={story.id}>
                 <StyledImg $backgroundImage={story.img} alt={story.title} />
                 <StyledTitle
-                  to={`/library/${story.genre.split("-").join(" ")}/book/${
+                  to={`/library/${story.genre.split("-").join(" ")}/story/${
                     story.id
                   }`}
                 >

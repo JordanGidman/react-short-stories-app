@@ -171,7 +171,7 @@ function WriteBook() {
   const { currentUser } = useContext(AuthContext);
   const [storyText, setStoryText] = useState("");
   const [title, setTitle] = useState("");
-  const [genre, setGenre] = useState("placeholder");
+  const [genre, setGenre] = useState("Misc");
   const [synopsis, setSynopsis] = useState("");
   const [img, setImg] = useState(`https://picsum.photos/seed/hireme/600/400`);
   const [loading, setLoading] = useState(false);
@@ -293,8 +293,6 @@ function WriteBook() {
     <>
       {!error ? (
         <StyledWriteBook>
-          <Navbar />
-
           <StyledWrapper>
             <StyledForm onSubmit={(e) => handleSubmit(e)}>
               <StyledH1>Write your story</StyledH1>
@@ -312,12 +310,7 @@ function WriteBook() {
                 value={genre}
                 onChange={(e) => setGenre(e.target.value)}
               >
-                <StyledOption
-                  name="placeholder"
-                  value="placeholder"
-                  disabled
-                  hidden
-                >
+                <StyledOption name="placeholder" value="Misc" disabled hidden>
                   Select Genre *
                 </StyledOption>
                 <StyledOption value="Fantasy">Fantasy</StyledOption>
@@ -393,8 +386,6 @@ function WriteBook() {
               {/* Maybe a button for saving as draft */}
             </StyledForm>
           </StyledWrapper>
-
-          <Footer />
         </StyledWriteBook>
       ) : (
         <Error />

@@ -79,7 +79,6 @@ function PageNotFound() {
 
   return (
     <StyledNotFound>
-      <Navbar />
       <StyledInfoBox>
         <ion-icon name="help-circle-outline" className="large-icon"></ion-icon>
         <StyledH1>404 - Page Not Found</StyledH1>
@@ -97,7 +96,6 @@ function PageNotFound() {
           </StyledButton>
         </StyledButtons>
       </StyledInfoBox>
-      {/* <Footer /> */}
     </StyledNotFound>
   );
 }

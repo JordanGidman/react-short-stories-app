@@ -156,7 +156,6 @@ function StoryList() {
   if (loading) {
     return (
       <StyledStoryList>
-        <Navbar />
         <Spinner $fullscreen={true} />
       </StyledStoryList>
     );

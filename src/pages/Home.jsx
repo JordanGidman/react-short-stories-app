@@ -439,7 +439,7 @@ function Home() {
             <p className="genre">{story?.genre || "Unknown Genre"}</p>
             <Button
               onClick={() =>
-                navigate(`/library/${story?.genre}/book/${story?.id}`)
+                navigate(`/library/${story?.genre}/story/${story?.id}`)
               }
             >
               read now
@@ -512,9 +512,6 @@ function Home() {
           )}
         </StyledCardsBox>
       </StyledPicks>
-
-      <Footer />
-      <Navbar />
     </div>
   );
 }

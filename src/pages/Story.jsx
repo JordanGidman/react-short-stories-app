@@ -271,7 +271,6 @@ function Book() {
 
   return (
     <StyledBook>
-      <Navbar />
       <StyledHeader>
         <StyledTextWrapper>
           <StyledH1>{story.title}</StyledH1>
