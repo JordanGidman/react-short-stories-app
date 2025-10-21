@@ -29,7 +29,8 @@ const StyledHero = styled.div`
   background-size: cover;
   background-position: center;
   z-index: 2;
-  /* filter: brightness(0.7); */
+
+  //Dim image brightness overlay
   &:before {
     content: "";
     position: absolute;
@@ -109,6 +110,32 @@ const StyledHeroText = styled.div`
       cursor: pointer;
     }
   } */
+
+  @media (max-width: 31.25em) {
+    gap: 1rem;
+
+    h1 {
+      font-size: 2.6rem;
+    }
+
+    .author {
+      font-size: 2.4rem;
+    }
+
+    .title {
+      font-size: 4.8rem;
+    }
+
+    .genre {
+      font-size: 2.4rem;
+    }
+  }
+
+  @media (max-width: 21.9em) {
+    .title {
+      font-size: 4.2rem;
+    }
+  }
 `;
 
 const StyledHeroFooter = styled.div`
@@ -129,6 +156,17 @@ const StyledHeroFooter = styled.div`
     opacity: 0.6;
     font-size: 4rem;
     letter-spacing: 1rem;
+
+    /* 1140px */
+    @media (max-width: 71.25em) {
+      font-size: 3rem;
+      text-align: center;
+    }
+
+    @media (max-width: 44em) {
+      font-size: 2rem;
+      letter-spacing: 0.5rem;
+    }
   }
 `;
 

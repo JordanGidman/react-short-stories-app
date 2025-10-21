@@ -3,11 +3,15 @@ import Button from "./Button";
 
 const FeaturedButton = styled(Button)`
   font-weight: 900;
+
+  @media (max-width: 60em) {
+    font-size: 1.2rem;
+  }
 `;
 
 const StyledBanner = styled.div`
   width: 100%;
-  height: 30vh;
+  min-height: 30vh;
   background-color: #85e9e1;
   display: flex;
   flex-direction: column;
@@ -39,24 +43,20 @@ const StyledBanner = styled.div`
     margin-bottom: 2rem;
   }
 
-  /* button {
-      background-color: #ffbe0b;
-      border: none;
-      color: #000;
-      font-size: 2rem;
+  @media (max-width: 60em) {
+    h1 {
+      font-size: 3.5rem;
+    }
 
-      padding: 1rem 3rem;
-      transition: all 0.3s ease-in-out;
-      margin-top: 2rem;
-      font-weight: 500;
-      border-radius: 2rem;
+    p {
+      max-width: 90%;
+    }
+  }
 
-      &:hover {
-        background-color: #fff;
-        color: #000;
-        cursor: pointer;
-      }
-    } */
+  @media (max-width: 42.5em) {
+    text-align: center;
+    padding: 1rem 1rem;
+  }
 `;
 
 function Featured() {
