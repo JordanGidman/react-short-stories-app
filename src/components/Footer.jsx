@@ -7,12 +7,27 @@ const StyledFooter = styled.footer`
   align-items: flex-start;
   color: #c0c0c0;
   grid-template-columns: 2fr 1fr 1fr 2fr 2fr;
-  height: 30vh;
+  min-height: 30vh;
   width: 100vw;
   background-color: #1c1f2e;
   padding: 8rem 25%;
   color: #fff;
   font-size: 1.2rem;
+
+  @media (max-width: 100em) {
+    padding: 8rem 10%;
+  }
+
+  @media (max-width: 68.2em) {
+    padding: 4rem 6%;
+  }
+
+  /* 900px */
+  @media (max-width: 56.25em) {
+    grid-template-columns: 1fr;
+    align-items: center;
+    justify-items: center;
+  }
 `;
 
 const StyledSocials = styled.ul`
@@ -55,6 +70,10 @@ const StyledNavLinks = styled.ul`
   font-weight: 600;
   letter-spacing: 0.1rem;
   text-transform: uppercase;
+
+  @media (max-width: 56.25em) {
+    display: none;
+  }
 `;
 
 const StyledNavItem = styled.li`

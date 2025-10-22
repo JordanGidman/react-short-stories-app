@@ -118,7 +118,9 @@ function App() {
   //32 - Save, edit, post drafts - Done
   //33 - Sorting bug where the 1st in the list is the newest the last should be the oldest. Yet if i change the sorting to be the oldest the one that was last is not now first for some reason and vice versa. - Done
   //34 - Show likes on storyCards - Done
-  //35 - Mobile nav (responsive) - Done
+  //35 - Responsive design -
+  //     - Mobile nav - Done
+  //     - Home page - Done
 
   //WIP
   //1 - Responsive design - Not done
@@ -132,6 +134,7 @@ function App() {
   //9 - SEO Improvements - Not done
   //10 - Accessibility Improvements - Not done
   //11 - Featured section link to staff picks
+  //12 - Ability to add multiple genres
   //12 - Deployment - Not done
 
   return (

@@ -175,6 +175,12 @@ const StyledFresh = styled.div`
   grid-template-columns: 1fr 1fr;
   width: 100vw;
   height: calc(100vh - 7.8rem);
+
+  @media (max-width: 58.2em) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    height: 100vh;
+  }
 `;
 
 const StyledTextBox = styled.div`
@@ -221,7 +227,7 @@ const StyledTextBox = styled.div`
     font-size: 4.8rem;
     text-transform: uppercase;
     font-family: "Playfair Display", serif;
-    font-weight: 600;
+    font-weight: 900;
   }
 
   .underline {
@@ -233,6 +239,30 @@ const StyledTextBox = styled.div`
   .genre {
     font-size: 1.8rem;
   }
+
+  @media (max-width: 58.2em) {
+    padding-bottom: 1rem;
+    h1 {
+      font-size: 1.6rem;
+    }
+
+    div {
+      gap: 0.8rem;
+    }
+
+    .author {
+      font-size: 1.8rem;
+      letter-spacing: 0.5rem;
+    }
+
+    .title {
+      font-size: 3.6rem;
+    }
+
+    .genre {
+      font-size: 1.6rem;
+    }
+  }
 `;
 const StyledImg = styled.div`
   background-image: url(${(props) => props.$backgroundImage});
@@ -242,6 +272,14 @@ const StyledImg = styled.div`
   width: 100%;
   height: 100%;
   background-color: #000;
+`;
+
+const StyledFreshButton = styled(Button)`
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1c1f2e;
+  padding: 0.6rem 4rem;
+  margin-bottom: 2rem;
 `;
 
 const StyledAltButton = styled.button`
@@ -262,8 +300,9 @@ const StyledPicks = styled.div`
   display: grid;
   grid-template-rows: 1fr 1fr;
   width: 100vw;
-  height: calc(100vh - 7.8rem);
+  min-height: calc(100vh - 7.8rem);
   background-color: #f7f7f7;
+
   h1 {
     background-color: #1c1f2e;
     padding: 1rem 2rem;
@@ -278,6 +317,15 @@ const StyledPicks = styled.div`
       font-style: italic;
     }
   }
+  /* 1155px */
+  @media (max-width: 72.2em) {
+    grid-template-rows: 1fr 2fr !important;
+  }
+  @media (max-width: 34.4em) {
+    h1 {
+      font-size: 2.4rem;
+    }
+  }
 `;
 
 const StyledPicksSubheading = styled.div`
@@ -285,6 +333,10 @@ const StyledPicksSubheading = styled.div`
   text-transform: uppercase;
   font-weight: 600;
   font-family: "Playfair Display", serif;
+
+  @media (max-width: 34.4em) {
+    font-size: 3.6rem;
+  }
 `;
 
 const StyledPicksText = styled.div`
@@ -310,6 +362,12 @@ const StyledPicksText = styled.div`
     height: 0.1rem;
     width: 30%;
   }
+
+  @media (max-width: 34.4em) {
+    p {
+      font-size: 1.6rem;
+    }
+  }
 `;
 
 const StyledCardsBox = styled.div`
@@ -318,6 +376,13 @@ const StyledCardsBox = styled.div`
   width: 100vw;
   gap: 2rem;
   padding: 4rem;
+
+  /* 1155px */
+  @media (max-width: 72.2em) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    height: auto !important;
+  }
 `;
 
 function Home() {
@@ -504,13 +569,13 @@ function Home() {
             <div className="underline"></div>
             <p className="genre">{freshStory?.genre || "Genre not found"}</p>
           </div>
-          <Button
+          <StyledFreshButton
             onClick={() =>
               navigate(`/library/${freshStory?.genre}/book/${freshStory?.id}`)
             }
           >
             Read
-          </Button>
+          </StyledFreshButton>
           <StyledAltButton
             onClick={() => navigate(`/library/${freshStory?.genre}`)}
           >

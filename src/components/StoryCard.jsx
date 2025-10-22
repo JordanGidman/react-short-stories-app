@@ -38,8 +38,8 @@ const StyledTextBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 2rem;
-  gap: 2rem;
+  padding-right: 2rem;
+  gap: 4rem;
   background-color: #fff;
 `;
 const StyledImageBox = styled.div`
@@ -63,6 +63,7 @@ const StyledSynopsis = styled.p`
 
 const StyledGenre = styled.p`
   text-transform: capitalize;
+  font-size: 1.4rem;
 `;
 
 const StyledAuthor = styled.p`
@@ -73,10 +74,22 @@ const StyledAuthor = styled.p`
   color: #1c1f2e;
 `;
 
+const StyledLikes = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  ion-icon {
+    font-size: 2rem;
+    color: #c92a2a;
+  }
+`;
+
 const StyledButton = styled(Button)`
   width: fit-content;
   font-size: 1.4rem;
   font-weight: 600;
+  padding: 1rem 2rem;
 
   background-color: ${(props) =>
     props.$backgroundColor === "#ffee34" ? "#fff" : "#ffee34"};
@@ -93,21 +106,8 @@ const StyledButtons = styled.div`
   align-items: center;
   justify-content: space-between;
   /* gap: 2rem; */
-  margin: 2rem 0rem;
+  margin-top: 1rem;
   width: 100%;
-
-  span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    font-size: 1.6rem;
-
-    ion-icon {
-      color: #c92a2a;
-      font-size: 2.4rem;
-    }
-  }
 `;
 
 // const StyledLikesButton = styled.button`
@@ -254,19 +254,22 @@ function StoryCard({ story }) {
           </StyledAuthor>
           <StyledTitle>{story.title || "Title not found"}</StyledTitle>
         </div>
-        {/* <p>{story.storyText}</p> */}
+
         <StyledSynopsis>
-          {story.synopsis || "Synopsis not found"}
+          {/* {story.synopsis || "Synopsis not found"} */}
         </StyledSynopsis>
-        <StyledGenre>{story.genre || "Misc"}</StyledGenre>
-        <StyledButtons>
-          <StyledLink to={`/library/${story.genre}/story/${story.id}`}>
-            <StyledButton>Read</StyledButton>
-          </StyledLink>
-          <span>
-            {currentUser?.uid && <>{story.likes?.length || 0} likes</>}
-          </span>
-        </StyledButtons>
+        <div>
+          <StyledGenre>{story.genre || "Misc"}</StyledGenre>
+          <StyledButtons>
+            <StyledLink to={`/library/${story.genre}/story/${story.id}`}>
+              <StyledButton>Read</StyledButton>
+            </StyledLink>
+            <StyledLikes>
+              <ion-icon name="heart"></ion-icon>{" "}
+              <span>{story.likes?.length || 0}</span>
+            </StyledLikes>
+          </StyledButtons>
+        </div>
       </StyledTextBox>
     </StyledStoryCard>
   );
