@@ -25,6 +25,12 @@ const StyledLibrary = styled.div`
   background-color: #f9f9f9;
 
   min-height: 100vh;
+
+  /* 930px */
+  @media (max-width: 58.75em) {
+    padding: 0% 2%;
+    padding-top: 0rem;
+  }
 `;
 
 const StyledContainer = styled.div`
@@ -35,10 +41,36 @@ const StyledH1 = styled.h1`
   text-align: left;
   padding: 2rem 0rem;
   font-family: "Playfair Display", serif;
+
+  /* 1100px */
+  @media (max-width: 68.75em) {
+    font-size: 4.8rem;
+  }
+
+  /* 710px */
+  @media (max-width: 44.375em) {
+    font-size: 3.6rem;
+  }
+
+  /* 373px */
+  @media (max-width: 23.125em) {
+    font-size: 3rem;
+    text-align: center;
+  }
 `;
 const StyledSubheading = styled.p`
   font-size: 1.8rem;
   padding-bottom: 4rem;
+
+  /* 1100px */
+  @media (max-width: 68.75em) {
+    font-size: 1.6rem;
+  }
+
+  /* 710px */
+  @media (max-width: 44.375em) {
+    font-size: 1.4rem;
+  }
 `;
 const StyledGenreList = styled.ul`
   display: grid;
@@ -54,6 +86,16 @@ const StyledGenreList = styled.ul`
   width: 95vw;
   row-gap: 4rem;
   column-gap: 2rem;
+
+  /* 1045px */
+  @media (max-width: 65.3em) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* 620px */
+  @media (max-width: 38.7em) {
+    grid-template-columns: 1fr;
+  }
 `;
 const StyledHeader = styled.header`
   padding: 0rem 4rem;
@@ -71,6 +113,28 @@ const StyledHeader = styled.header`
   justify-content: space-between;
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
   margin-bottom: 3rem;
+
+  /* 930px */
+  @media (max-width: 58.75em) {
+    width: 100vw;
+  }
+
+  /* 620px */
+  @media (max-width: 38.7em) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-items: center; */
+    text-align: center;
+    background-position: center bottom;
+    padding-top: 3rem;
+  }
+
+  /* 373px */
+  @media (max-width: 23.125em) {
+    background-image: none;
+    justify-content: center;
+  }
 `;
 const StyledWrapper = styled.div`
   display: flex;
@@ -79,6 +143,35 @@ const StyledWrapper = styled.div`
   align-items: flex-start;
   justify-content: flex-start;
   padding: 1.2rem 4rem;
+
+  /* 1100px */
+  @media (max-width: 68.75em) {
+    padding: 1.2rem 0rem;
+  }
+
+  /* 620px */
+  @media (max-width: 38.7em) {
+    align-items: center;
+  }
+`;
+
+const StyledImg = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 1.2rem 4rem;
+
+  /* 1100px */
+  @media (max-width: 68.75em) {
+    padding: 1.2rem 0rem;
+  }
+
+  /* 620px */
+  @media (max-width: 38.7em) {
+    display: none;
+  }
 `;
 
 function Library() {
@@ -163,7 +256,7 @@ function Library() {
     <StyledLibrary>
       <StyledContainer>
         <StyledHeader>
-          <StyledWrapper />
+          <StyledImg />
           <StyledWrapper>
             <StyledH1>Browse by Genre</StyledH1>
             <StyledSubheading>

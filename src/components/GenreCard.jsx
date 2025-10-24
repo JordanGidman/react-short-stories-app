@@ -51,6 +51,36 @@ const StyledCard = styled.li`
     box-shadow: 0rem 0.3rem 4rem 0.2rem rgba(0, 0, 0, 0.2);
     scale: 1.02;
   }
+  /* 1465px */
+  @media (max-width: 91.5em) {
+    font-size: 4rem;
+  }
+
+  /* 1045px */
+  @media (max-width: 65.3em) {
+    grid-column: span
+      ${(props) => {
+        if (props.$genre === "Political" || props.$genre === "Mystery") {
+          return 2;
+        }
+        if (props.$span >= 3) {
+          return 2;
+        } else {
+          return 1;
+        }
+      }};
+  }
+
+  /* 620px */
+  @media (max-width: 38.7em) {
+    grid-column: span 1;
+    height: 25rem;
+  }
+
+  /* 390px */
+  @media (max-width: 24.3em) {
+    font-size: 3rem;
+  }
 `;
 
 const StyledLink = styled(Link)`

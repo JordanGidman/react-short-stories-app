@@ -129,6 +129,11 @@ const StyledFormH2 = styled.h2`
   font-family: "Playfair Display", serif;
   text-align: right;
   color: #c0c0c0;
+
+  /* 900px */
+  @media (max-width: 56.25em) {
+    text-align: center;
+  }
 `;
 
 const StyledInput = styled.input`

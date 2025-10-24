@@ -64,6 +64,7 @@ const StyledForm = styled.form`
     padding-bottom: 4rem;
     font-family: "Montserrat", sans-serif;
     background-color: #fff;
+
     .ql-toolbar {
       border: none !important;
       box-shadow: 0rem 0.8rem 0.6rem -1rem rgba(0, 0, 0, 0.3);
@@ -84,6 +85,10 @@ const StyledForm = styled.form`
         &::before {
           text-transform: capitalize;
         }
+
+        @media (max-width: 28em) {
+          font-size: 1.4rem;
+        }
       }
     }
   }
@@ -93,10 +98,9 @@ const StyledWrapper = styled.div`
   width: 100%;
 `;
 
-const TitleInput = styled(InputBox)`
+const TitleInput = styled.textarea`
   font-size: 4rem;
   background-color: transparent;
-  padding-left: 0rem;
   width: 100%;
   border: none;
   display: flex;
@@ -104,6 +108,25 @@ const TitleInput = styled(InputBox)`
   justify-content: space-between;
   box-shadow: none;
   padding-top: 0rem;
+  padding: 1rem 2rem;
+  padding-left: 0rem;
+
+  border: none;
+  /* border-bottom: 1px solid rgb(0, 0, 0, 0.2); */
+  /* box-shadow: 0rem 0.8rem 0.6rem -1rem rgba(0, 0, 0, 0.8); */
+  color: #1c1f2e;
+  border-radius: 1.6rem;
+  font-family: "Montserrat", sans-serif;
+
+  &::placeholder {
+    color: rgb(0, 0, 0, 0.5);
+    font-style: italic;
+    text-transform: capitalize;
+  }
+
+  @media (max-width: 28em) {
+    font-size: 3rem;
+  }
 `;
 
 const StyledSelect = styled.select`
@@ -120,6 +143,11 @@ const StyledSelect = styled.select`
   &[data-chosen-placeholder] {
     color: rgb(0, 0, 0, 0.5);
   }
+
+  /* 480px */
+  @media (max-width: 28em) {
+    font-size: 1.4rem;
+  }
 `;
 
 const StyledOption = styled.option`
@@ -129,6 +157,11 @@ const StyledOption = styled.option`
 
 const StyledInputBox = styled(InputBox)`
   width: 100%;
+
+  /* 480px */
+  @media (max-width: 28em) {
+    font-size: 1.4rem;
+  }
 `;
 
 const StyledTextarea = styled.textarea`
@@ -146,6 +179,10 @@ const StyledTextarea = styled.textarea`
     font-style: italic;
     text-transform: capitalize;
   }
+
+  @media (max-width: 28em) {
+    font-size: 1.4rem;
+  }
 `;
 
 const StyledButtons = styled.div`
@@ -154,12 +191,22 @@ const StyledButtons = styled.div`
   justify-content: center;
   gap: 2rem;
   width: 100%;
+
+  /* 480px */
+  @media (max-width: 30em) {
+    flex-direction: column;
+  }
 `;
 
 const StyledButton = styled(Button)`
   width: 30vw;
   align-self: center;
   font-weight: 600;
+
+  /* 670px */
+  @media (max-width: 41.2em) {
+    width: 50%;
+  }
 `;
 
 function WriteBook() {
