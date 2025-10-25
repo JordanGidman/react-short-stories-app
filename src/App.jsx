@@ -124,6 +124,7 @@ function App() {
   //     - Library page - Done
   //     - WriteStory page - Done
   //     - GenreCard - Done
+  //     - About page - Done
 
   //WIP
   //1 - Responsive design - Not done

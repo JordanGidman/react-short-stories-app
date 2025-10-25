@@ -132,6 +132,11 @@ const StyledBody = styled.section`
   width: 94vw;
   padding: 0rem 4rem;
   flex: 1;
+
+  /* 650px */
+  @media (max-width: 40.7em) {
+    padding: 0rem 2rem;
+  }
 `;
 const StyledBodyText = styled.div`
   display: flex;
@@ -176,6 +181,7 @@ const StyledBodyText = styled.div`
     margin-bottom: 2rem;
     align-self: center;
     padding: 2rem;
+    gap: 1rem;
   }
 `;
 
