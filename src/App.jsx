@@ -121,6 +121,9 @@ function App() {
   //35 - Responsive design -
   //     - Mobile nav - Done
   //     - Home page - Done
+  //     - Library page - Done
+  //     - WriteStory page - Done
+  //     - GenreCard - Done
 
   //WIP
   //1 - Responsive design - Not done
@@ -133,9 +136,9 @@ function App() {
   //8 - Notify users when navigating away from pages if their changes/inputs will be saved i.e If they made edits to a story but did not post the changes and are trying to leave the page we should advise them that they havent saved the changes etc - Not done
   //9 - SEO Improvements - Not done
   //10 - Accessibility Improvements - Not done
-  //11 - Featured section link to staff picks
-  //12 - Ability to add multiple genres
-  //12 - Deployment - Not done
+  //11 - Featured section link to staff picks - Not done
+  //12 - Ability to add multiple genres - Not done
+  //13 - Deployment - Not done
 
   return (
     <AuthContextProvider>

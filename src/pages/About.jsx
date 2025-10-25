@@ -6,21 +6,38 @@ const StyledAbout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 4rem;
 `;
 
 const StyledHeader = styled.header`
   display: grid;
   grid-template-columns: ${(props) => (props.$flipped ? "60% 40%" : "40% 60%")};
   gap: 6rem;
-  width: 94vw;
   padding: 6rem 4rem;
-  padding-bottom: 0rem;
+  padding-bottom: 4rem;
   font-family: "Playfair Display", serif;
+  width: 94%;
 
+  padding-right: ${(props) => (props.$flipped ? "8rem" : "4rem")};
   p {
     font-size: 3rem;
     width: 70%;
     font-weight: 700;
+  }
+
+  /* 1145px */
+  @media (max-width: 71.56em) {
+    width: 100%;
+  }
+
+  /* 650px */
+  @media (max-width: 40.7em) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-right: ${(props) => (props.$flipped ? "4rem" : "4rem")};
+    /* padding-right: 0rem; */
   }
 `;
 
@@ -28,10 +45,20 @@ const StyledWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
+  width: 94%;
   /* justify-content: center; */
-  height: calc(100vh - 8rem);
+  min-height: calc(100vh - 8rem);
   margin-top: 8rem;
+
+  /* 1145px */
+  @media (max-width: 71.56em) {
+    width: 100%;
+  }
+
+  /* 650px */
+  @media (max-width: 40.7em) {
+    margin-top: 0rem;
+  }
 `;
 
 const StyledHeaderText = styled.div`
@@ -47,6 +74,26 @@ const StyledHeaderText = styled.div`
     background-color: #000;
     height: 0.1rem;
     width: 10%;
+
+    /* 650px */
+    @media (max-width: 40.7em) {
+      width: 40%;
+      margin-bottom: 2rem;
+      align-self: center;
+    }
+  }
+
+  /* 1145px */
+  @media (max-width: 71.56em) {
+    p {
+      font-size: 2.4rem;
+    }
+  }
+
+  /* 650px */
+  @media (max-width: 40.7em) {
+    text-align: center;
+    order: ${(props) => (props.$flipped ? "2" : "1")};
   }
 `;
 
@@ -64,6 +111,17 @@ const StyledH1 = styled.h1`
   span {
     font-style: italic;
     font-weight: 400;
+  }
+
+  /* 1406px */
+  @media (max-width: 88em) {
+    font-size: 6rem;
+  }
+
+  /* 1145px */
+  @media (max-width: 71.56em) {
+    text-align: center;
+    flex-direction: column;
   }
 `;
 
@@ -106,6 +164,19 @@ const StyledBodyText = styled.div`
       }
     }
   }
+
+  /* 1145px */
+  @media (max-width: 71.56em) {
+    width: 80%;
+  }
+
+  /* 650px */
+  @media (max-width: 40.7em) {
+    width: 100%;
+    margin-bottom: 2rem;
+    align-self: center;
+    padding: 2rem;
+  }
 `;
 
 const StyledBanner = styled.div`
@@ -118,16 +189,29 @@ const StyledBanner = styled.div`
   width: 94vw;
   padding: 6rem 4rem;
   font-family: "Playfair Display", serif;
+  margin-top: 4rem;
+  text-align: center;
 
   p {
     font-size: 1.6rem;
-    font-weight: 500;
+    font-weight: 600;
   }
 
   em {
     font-style: italic;
     font-size: 2.8rem;
-    font-weight: bolder;
+    font-weight: 800;
+  }
+
+  /* 710px */
+  @media (max-width: 44.375em) {
+    p {
+      font-size: 1.4rem;
+    }
+
+    em {
+      font-size: 2.6rem;
+    }
   }
 `;
 
@@ -144,6 +228,13 @@ const StyledBannerH1 = styled.h1`
   span {
     font-style: italic;
     font-weight: 400;
+  }
+
+  /* 710px */
+  @media (max-width: 44.375em) {
+    font-size: 6rem;
+    flex-direction: column;
+    gap: 0rem;
   }
 `;
 
@@ -203,7 +294,7 @@ function About() {
       {/* Page 2 */}
       <StyledWrapper>
         <StyledHeader $flipped={true}>
-          <StyledHeaderText>
+          <StyledHeaderText $flipped={true}>
             <div className="underline"></div>
             <p>
               Because we respect your time. The user feedback in the form of
