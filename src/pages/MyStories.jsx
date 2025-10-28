@@ -72,9 +72,38 @@ const StyledListItem = styled.li`
   border-bottom: 1px solid #eee;
   width: 100%;
   padding: 2rem 0rem;
-`;
+  transition: all 0.3s ease-in-out;
 
-const StyledItemText = styled.p``;
+  /* 930px */
+  @media (max-width: 58.125em) {
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 2rem;
+    justify-items: center;
+
+    /* animation: appear 0.3s ease-in-out;
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    } */
+  }
+`;
+//undo to before this change if it doesnt work
+const StyledItemText = styled.p`
+  transition: all 0.3s ease-in;
+
+  /* 930px */
+  @media (max-width: 58.125em) {
+    /* visibility: ${(props) => (props.$expanded ? "visible" : "hidden")};
+    opacity: ${(props) => (props.$expanded ? 1 : 0)};
+    height: ${(props) => (props.$expanded ? "auto" : "0rem")}; */
+    display: ${(props) => (props.$expanded ? "block" : "none")};
+  }
+`;
 
 const StyledTitle = styled(Link)`
   transition: all 0.3s ease-in-out;
@@ -91,6 +120,15 @@ const StyledButtons = styled.div`
   justify-content: center;
   gap: 2rem;
   /* grid-column: 6 / -1; */
+  /* transition: all 0.3s ease-in; */
+
+  /* 930px */
+  @media (max-width: 58.125em) {
+    display: ${(props) => (props.$expanded ? "flex" : "none")};
+    grid-column: span 3;
+    justify-content: space-between;
+    width: 100%;
+  }
 `;
 
 const StyledButton = styled.button`
@@ -118,6 +156,27 @@ const StyledButton = styled.button`
       color: #ff0000;
       cursor: pointer;
     }
+  }
+
+  /* 930px */
+  @media (max-width: 58.125em) {
+    width: 100%;
+  }
+`;
+
+const StyledExpandButton = styled.button`
+  display: none;
+  border: none;
+  background: none;
+  font-size: 2rem;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  /* 930px */
+  @media (max-width: 58.125em) {
+    display: inline-block;
   }
 `;
 
@@ -237,6 +296,7 @@ function MyStories() {
   });
   const [search, setSearch] = useState("");
   const [error, setError] = useState(null);
+  const [expandedStories, setExpandedStories] = useState(new Set());
   // const notify = () => toast("Story deleted.");
   //Did not know this was even an option. I have been using a context for this so i will continue to do so for consistency but will use the below in future projects.
   // const currentUser = auth.currentUser;
@@ -337,6 +397,15 @@ function MyStories() {
     }
   }
 
+  function toggleExpandStory(storyId) {
+    setExpandedStories((prevExpandedStories) => {
+      const newExpandedStories = new Set(prevExpandedStories);
+      if (newExpandedStories.has(storyId)) newExpandedStories.delete(storyId);
+      else newExpandedStories.add(storyId);
+      return newExpandedStories;
+    });
+  }
+
   return (
     <StyledMyStories>
       <StyledHead>
@@ -369,15 +438,20 @@ function MyStories() {
                 >
                   {story.title}
                 </StyledTitle>
-                <StyledItemText>{story.genre}</StyledItemText>
-                <StyledItemText>
+                <StyledExpandButton onClick={() => toggleExpandStory(story.id)}>
+                  {expandedStories.has(story.id) ? "−" : "+"}
+                </StyledExpandButton>
+                <StyledItemText $expanded={expandedStories.has(story.id)}>
+                  {story.genre}
+                </StyledItemText>
+                <StyledItemText $expanded={expandedStories.has(story.id)}>
                   Created:{" "}
                   {new Date(story.createdAt?.seconds * 1000).toLocaleDateString(
                     "en-US"
                   )}
                 </StyledItemText>
 
-                <StyledItemText>
+                <StyledItemText $expanded={expandedStories.has(story.id)}>
                   Edited:{" "}
                   {story.editedAt
                     ? new Date(
@@ -386,7 +460,7 @@ function MyStories() {
                     : "N/A"}
                 </StyledItemText>
 
-                <StyledButtons>
+                <StyledButtons $expanded={expandedStories.has(story.id)}>
                   <StyledButton>
                     <ion-icon
                       name="create-outline"

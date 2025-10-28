@@ -15,6 +15,22 @@ const StyledAccount = styled.div`
   padding: 8% 2% 2% 2%;
   display: grid;
   grid-template-columns: 25% 75%;
+
+  /* 1485px */
+  @media (max-width: 92.8em) {
+    grid-template-columns: 20% 90%;
+    padding: 8% 3% 2% 2%;
+  }
+
+  /* 1200px */
+  @media (max-width: 75em) {
+    grid-template-columns: 1fr;
+  }
+
+  /* 930px */
+  @media (max-width: 58.1em) {
+    padding: 1% 3% 2% 2%;
+  }
 `;
 
 const StyledName = styled.h1`
@@ -24,6 +40,18 @@ const StyledName = styled.h1`
   text-transform: uppercase;
   font-family: "Playfair Display", serif;
   /* padding: 2rem; */
+
+  /* 1200px */
+  @media (max-width: 75em) {
+    border-bottom: none;
+    padding-bottom: 0rem;
+    grid-row: 1 / 2;
+    grid-column: 1 / 2;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 const StyledWrapper = styled.div`
@@ -48,6 +76,20 @@ const StyledNav = styled.nav`
   /* gap: 2rem; */
   height: 100%;
   padding: 2rem;
+
+  /* 1200px */
+  @media (max-width: 75em) {
+    /* flex-direction: row;
+    align-items: center;
+    padding: 1rem;
+    height: auto; */
+    height: 30vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 2rem;
+    padding: 1rem;
+  }
 `;
 
 const StyledNavList = styled.ul`
@@ -58,6 +100,17 @@ const StyledNavList = styled.ul`
   height: 100%;
   width: 100%;
   /* gap: 2rem; */
+
+  /* 1200px */
+  @media (max-width: 75em) {
+    flex-direction: row;
+    align-items: center;
+
+    grid-row: 2 / 3;
+    grid-column: span 2;
+
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
 `;
 
 const StyledNavItem = styled.li`
@@ -65,6 +118,14 @@ const StyledNavItem = styled.li`
   width: 100%;
   padding: 2rem 0rem;
   color: #999;
+
+  /* 1200px */
+  @media (max-width: 75em) {
+    border-bottom: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 const StyledNavLink = styled(NavLink)`
@@ -98,6 +159,17 @@ const StyledButton = styled.button`
     background-color: #ff0000;
     color: #fff;
     cursor: pointer;
+  }
+
+  /* 1200px */
+  @media (max-width: 75em) {
+    font-size: 1.4rem;
+    padding: 1rem 2rem;
+    font-weight: 600;
+    width: 50%;
+    height: 50%;
+    justify-self: center;
+    align-self: center;
   }
 `;
 
@@ -242,7 +314,6 @@ function Account() {
             Delete account
           </StyledButton>
         </StyledNav>
-
         <StyledWrapper>
           <Outlet />
         </StyledWrapper>

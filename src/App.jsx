@@ -138,8 +138,9 @@ function App() {
   //9 - SEO Improvements - Not done
   //10 - Accessibility Improvements - Not done
   //11 - Featured section link to staff picks - Not done
-  //12 - Ability to add multiple genres - Not done
-  //13 - Deployment - Not done
+  //12 - Ability to add multiple genres (maybe)- Not done
+  //13 - Either add a dashboard or make a different page on the account the default outlet. - Not done
+  //14 - Deployment - Not done
 
   return (
     <AuthContextProvider>
