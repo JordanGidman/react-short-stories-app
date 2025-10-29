@@ -23,7 +23,7 @@ import Spinner from "../components/Spinner";
 // import Footer from "../components/Footer";
 
 const StyledMyStories = styled.div`
-  height: 100%;
+  min-height: 100%;
 `;
 
 const StyledHead = styled.div`
@@ -33,6 +33,11 @@ const StyledHead = styled.div`
   padding-bottom: 2rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   flex-wrap: nowrap;
+
+  /* 800px */
+  @media (max-width: 50em) {
+    flex-direction: column;
+  }
 `;
 
 const StyledH1 = styled.h1`
@@ -42,6 +47,11 @@ const StyledH1 = styled.h1`
   font-weight: 600;
   font-style: italic;
   white-space: nowrap;
+
+  /* 800px */
+  @media (max-width: 50em) {
+    font-size: 2.4rem;
+  }
 `;
 
 const StyledStoryList = styled.ul`
@@ -55,17 +65,19 @@ const StyledStoryList = styled.ul`
   width: 100%;
   height: calc(100% - 8rem);
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
-  overflow-y: scroll;
+  /* overflow-y: scroll;
   overflow-x: hidden;
   &::-webkit-scrollbar {
     display: none;
-  }
+  } */
 `;
 
 const StyledListItem = styled.li`
   display: grid;
+  position: relative;
   /* grid-template-columns: repeat(${(props) => props.$span}, 1fr); */
   grid-template-columns: repeat(6, 1fr);
+
   align-items: center;
   justify-content: space-between;
   text-align: center;
@@ -77,8 +89,9 @@ const StyledListItem = styled.li`
   /* 930px */
   @media (max-width: 58.125em) {
     grid-template-columns: repeat(3, 1fr);
-    row-gap: 2rem;
+    row-gap: ${(props) => (props.$expanded ? "1rem" : "0rem")};
     justify-items: center;
+    padding-right: 4rem;
 
     /* animation: appear 0.3s ease-in-out;
 
@@ -91,17 +104,30 @@ const StyledListItem = styled.li`
       }
     } */
   }
-`;
-//undo to before this change if it doesnt work
-const StyledItemText = styled.p`
-  transition: all 0.3s ease-in;
 
-  /* 930px */
+  /* 525px */
+  @media (max-width: 32.81em) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-right: 0rem;
+  }
+`;
+
+const StyledItemText = styled.p`
+  transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out;
+  overflow: hidden;
+
   @media (max-width: 58.125em) {
-    /* visibility: ${(props) => (props.$expanded ? "visible" : "hidden")};
+    max-height: ${(props) => (props.$expanded ? "200px" : "0px")};
     opacity: ${(props) => (props.$expanded ? 1 : 0)};
-    height: ${(props) => (props.$expanded ? "auto" : "0rem")}; */
-    display: ${(props) => (props.$expanded ? "block" : "none")};
+    visibility: ${(props) => (props.$expanded ? "visible" : "hidden")};
+  }
+
+  /* 525px */
+  @media (max-width: 32.81em) {
+    font-size: 1.4rem;
   }
 `;
 
@@ -112,6 +138,16 @@ const StyledTitle = styled(Link)`
     text-decoration: underline;
     color: #ffbe0b;
   }
+
+  /* 930px */
+  @media (max-width: 58.125em) {
+    grid-column: span 2;
+  }
+
+  /* 525px */
+  @media (max-width: 32.81em) {
+    /* font-size: 1.4rem; */
+  }
 `;
 
 const StyledButtons = styled.div`
@@ -119,15 +155,17 @@ const StyledButtons = styled.div`
   align-items: center;
   justify-content: center;
   gap: 2rem;
-  /* grid-column: 6 / -1; */
-  /* transition: all 0.3s ease-in; */
 
-  /* 930px */
   @media (max-width: 58.125em) {
-    display: ${(props) => (props.$expanded ? "flex" : "none")};
+    /* display: grid;
+    grid-template-columns: repeat(3, 1fr); */
     grid-column: span 3;
-    justify-content: space-between;
     width: 100%;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out;
+    max-height: ${(props) => (props.$expanded ? "100px" : "0px")};
+    opacity: ${(props) => (props.$expanded ? 1 : 0)};
+    visibility: ${(props) => (props.$expanded ? "visible" : "hidden")};
   }
 `;
 
@@ -169,6 +207,9 @@ const StyledExpandButton = styled.button`
   border: none;
   background: none;
   font-size: 2rem;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
 
   &:hover {
     cursor: pointer;
@@ -177,6 +218,11 @@ const StyledExpandButton = styled.button`
   /* 930px */
   @media (max-width: 58.125em) {
     display: inline-block;
+  }
+
+  /* 400px */
+  @media (max-width: 25em) {
+    right: 2rem;
   }
 `;
 
@@ -429,7 +475,11 @@ function MyStories() {
                 story.title.toLowerCase().includes(search)
             )
             .map((story) => (
-              <StyledListItem key={story.id} $span={story.editedAt ? 6 : 5}>
+              <StyledListItem
+                key={story.id}
+                $span={story.editedAt ? 6 : 5}
+                $expanded={expandedStories.has(story.id)}
+              >
                 <StyledImg $backgroundImage={story.img} alt={story.title} />
                 <StyledTitle
                   to={`/library/${story.genre.split("-").join(" ")}/story/${

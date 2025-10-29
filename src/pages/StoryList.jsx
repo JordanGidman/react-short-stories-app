@@ -20,6 +20,11 @@ const StyledStoryList = styled.div`
   padding-top: 8rem;
   background-color: #f9f9f9;
   min-height: 100vh;
+
+  /* 930px */
+  @media (max-width: 58.125em) {
+    padding: 0% 2%;
+  }
 `;
 
 const StyledContainer = styled.div`
@@ -165,7 +170,7 @@ function StoryList() {
   if (error) {
     return (
       <StyledStoryList>
-        <Navbar />
+        {/* <Navbar /> */}
         <StyledMessage>{error}</StyledMessage>
       </StyledStoryList>
     );
@@ -173,7 +178,7 @@ function StoryList() {
 
   return (
     <StyledStoryList>
-      <Navbar />
+      {/* <Navbar /> */}
       <StyledContainer>
         <StyledHeader>
           <StyledWrapper />

@@ -22,7 +22,7 @@ import Error from "../pages/Error"; // assuming this exists
 import Navbar from "./Navbar";
 
 const StyledDrafts = styled.div`
-  height: 100%;
+  min-height: 100%;
   min-height: 0;
 `;
 
@@ -52,11 +52,11 @@ const StyledStoryList = styled.ul`
   width: 100%;
   height: 92%;
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
-  overflow-y: scroll;
+  /* overflow-y: scroll;
 
   &::-webkit-scrollbar {
     display: none;
-  }
+  } */
 `;
 
 const StyledListItem = styled.li`

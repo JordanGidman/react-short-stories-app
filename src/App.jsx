@@ -118,13 +118,17 @@ function App() {
   //32 - Save, edit, post drafts - Done
   //33 - Sorting bug where the 1st in the list is the newest the last should be the oldest. Yet if i change the sorting to be the oldest the one that was last is not now first for some reason and vice versa. - Done
   //34 - Show likes on storyCards - Done
-  //35 - Responsive design -
+  //36 - Make it so that the mystories and favorites dont get a seperate scroll but just increase the page size - Done
+  //36 - Responsive design -
   //     - Mobile nav - Done
   //     - Home page - Done
   //     - Library page - Done
   //     - WriteStory page - Done
   //     - GenreCard - Done
   //     - About page - Done
+  //     - Account page - Done
+  //     - MyStories page - Done
+  //     - StoryList page - Partially done
 
   //WIP
   //1 - Responsive design - Not done
@@ -140,7 +144,11 @@ function App() {
   //11 - Featured section link to staff picks - Not done
   //12 - Ability to add multiple genres (maybe)- Not done
   //13 - Either add a dashboard or make a different page on the account the default outlet. - Not done
-  //14 - Deployment - Not done
+  //15 - Deployment - Not done
+
+  //UNFIXED BUGS
+  // buttons on the mystories page dont get the tooltip when hovered on mobile layout
+  //
 
   return (
     <AuthContextProvider>

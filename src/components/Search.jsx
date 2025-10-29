@@ -7,6 +7,12 @@ const StyledSorting = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
+
+  /* 600px */
+  @media (max-width: 37.5em) {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 `;
 
 const StyledSearch = styled.div`
@@ -19,6 +25,10 @@ const StyledSearch = styled.div`
   .icon {
     font-size: 2.4rem;
     color: #1c1f2e;
+    /* 800px */
+    @media (max-width: 50em) {
+      display: none;
+    }
   }
 `;
 
@@ -36,6 +46,12 @@ const StyledSearchBar = styled.input`
   &:placeholder-shown {
     font-style: italic;
   }
+
+  /* 800px */
+  @media (max-width: 50em) {
+    font-size: 1.4rem;
+    text-align: center;
+  }
 `;
 
 const StyledSelect = styled.select`
@@ -51,6 +67,12 @@ const StyledSelect = styled.select`
 
   &[data-chosen-placeholder] {
     color: rgb(0, 0, 0, 0.5);
+  }
+
+  /* 800px */
+  @media (max-width: 50em) {
+    font-size: 1.4rem;
+    width: auto;
   }
 `;
 
@@ -69,7 +91,7 @@ function Search({ sortBy, setSortBy, search, setSearch }) {
         <StyledSearchBar
           onChange={(e) => setSearch(e.target.value)}
           value={search}
-          placeholder="Type a title or author here... (To test it just type test story or anti in the fantasy genre.)"
+          placeholder="Type a title or author here... "
         />
       </StyledSearch>
       <StyledSelect

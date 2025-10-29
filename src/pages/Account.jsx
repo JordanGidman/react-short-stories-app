@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
-import { NavLink, Outlet, useParams } from "react-router-dom";
+import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { db } from "../firebase";
 import { doc, onSnapshot } from "firebase/firestore";
@@ -11,14 +11,14 @@ import Error from "../pages/Error";
 
 const StyledAccount = styled.div`
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   padding: 8% 2% 2% 2%;
   display: grid;
   grid-template-columns: 25% 75%;
 
   /* 1485px */
   @media (max-width: 92.8em) {
-    grid-template-columns: 20% 90%;
+    /* grid-template-columns: 20% 90%; */
     padding: 8% 3% 2% 2%;
   }
 
@@ -29,7 +29,12 @@ const StyledAccount = styled.div`
 
   /* 930px */
   @media (max-width: 58.1em) {
-    padding: 1% 3% 2% 2%;
+    padding: 1% 4% 2% 2%;
+  }
+
+  /* 525px */
+  @media (max-width: 32.81em) {
+    padding: 0rem;
   }
 `;
 
@@ -45,12 +50,30 @@ const StyledName = styled.h1`
   @media (max-width: 75em) {
     border-bottom: none;
     padding-bottom: 0rem;
+    padding: 0rem;
     grid-row: 1 / 2;
-    grid-column: 1 / 2;
-    margin-bottom: 2rem;
+    grid-column: 2/3;
+    /* margin-bottom: 4rem; */
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
+    justify-content: flex-end;
+  }
+
+  /* 930px */
+  @media (max-width: 58.1em) {
+    padding-top: 0.6rem;
+  }
+
+  /* 525px */
+  @media (max-width: 32.81em) {
+    grid-column: span 2;
+  }
+
+  /* 335px */
+  @media (max-width: 21em) {
+    font-size: 2.8rem;
+    /* margin-right: 1rem; */
+    /* padding-right: 0.4rem; */
   }
 `;
 
@@ -59,11 +82,17 @@ const StyledWrapper = styled.div`
   display: flex;
   flex-direction: column;
   /* overflow-y: scroll; */
-  height: 100%;
+  min-height: 100%;
   width: auto;
   /* flex: 1; */
   min-height: 0;
-  overflow-y: visible;
+  /* overflow-y: visible;  */
+
+  /* 800px */
+  @media (max-width: 50em) {
+    padding: 1rem;
+    padding-right: 2.2rem;
+  }
 `;
 
 const StyledNav = styled.nav`
@@ -86,9 +115,17 @@ const StyledNav = styled.nav`
     height: 30vh;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-    gap: 2rem;
+    grid-template-rows: 1fr 1fr 1fr;
+
     padding: 1rem;
+    /* padding-top: 3rem; */
+  }
+
+  /* 525px */
+  @media (max-width: 32.81em) {
+    grid-template-rows: 2fr 1fr;
+    height: auto;
+    margin-right: 2rem;
   }
 `;
 
@@ -125,6 +162,7 @@ const StyledNavItem = styled.li`
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0rem;
   }
 `;
 
@@ -141,6 +179,26 @@ const StyledNavLink = styled(NavLink)`
   &.active {
     color: #1c1f2e;
     font-weight: 500;
+  }
+`;
+
+const StyledDropdown = styled.select`
+  display: none;
+  text-align: center;
+
+  /* 525px */
+  @media (max-width: 58.1em) {
+    display: flex;
+    width: 90vw;
+    padding: 1rem;
+    font-size: 1.6rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0.8rem;
+    background-color: #fff;
+    color: #1c1f2e;
+    font-weight: 500;
+    outline: none;
+    cursor: pointer;
   }
 `;
 
@@ -170,6 +228,8 @@ const StyledButton = styled.button`
     height: 50%;
     justify-self: center;
     align-self: center;
+    grid-row: 3 / 4;
+    grid-column: span 2;
   }
 `;
 
@@ -235,6 +295,9 @@ function Account() {
   const { currentUser } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [activeRoute, setActiveRoute] = useState("favorites");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!id) return;
@@ -265,6 +328,18 @@ function Account() {
     return () => unsub();
   }, [id]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   async function handleDelete() {
     //1 Sign User out.
     //2 Delete user from users array
@@ -272,6 +347,11 @@ function Account() {
     //4 Give user Notification
     console.log("Deleting Account...");
   }
+
+  const handleDropdownChange = (route) => {
+    setActiveRoute(route);
+    navigate(route);
+  };
 
   if (loading) {
     return <Spinner $height={"calc(100vh - 8rem)"} />;
@@ -285,35 +365,50 @@ function Account() {
     <>
       {/* <Navbar /> */}
       <StyledAccount>
-        <StyledNav>
-          <StyledName>{user?.displayName}</StyledName>
-          <StyledNavList>
-            <StyledNavItem>Dashboard</StyledNavItem>
-            <StyledNavItem>
-              <StyledNavLink className="nav-link" to={`favorites`}>
-                Favorites
-              </StyledNavLink>
-            </StyledNavItem>
-            <StyledNavItem>
-              <StyledNavLink className="nav-link" to={`mystories`}>
-                My Stories
-              </StyledNavLink>
-            </StyledNavItem>
-            <StyledNavItem>
-              <StyledNavLink className="nav-link" to={`drafts`}>
-                Drafts
-              </StyledNavLink>
-            </StyledNavItem>
-            <StyledNavItem>
-              <StyledNavLink className="nav-link" to={`edit`}>
-                Edit Account
-              </StyledNavLink>
-            </StyledNavItem>
-          </StyledNavList>
-          <StyledButton onClick={() => setModalOpen(true)}>
-            Delete account
-          </StyledButton>
-        </StyledNav>
+        {windowWidth >= 525 ? (
+          <StyledNav>
+            <StyledName>{user?.displayName}</StyledName>
+            <StyledNavList>
+              {/* <StyledNavItem>Dashboard</StyledNavItem> */}
+              <StyledNavItem>
+                <StyledNavLink className="nav-link" to={`favorites`}>
+                  Favorites
+                </StyledNavLink>
+              </StyledNavItem>
+              <StyledNavItem>
+                <StyledNavLink className="nav-link" to={`mystories`}>
+                  My Stories
+                </StyledNavLink>
+              </StyledNavItem>
+              <StyledNavItem>
+                <StyledNavLink className="nav-link" to={`drafts`}>
+                  Drafts
+                </StyledNavLink>
+              </StyledNavItem>
+              <StyledNavItem>
+                <StyledNavLink className="nav-link" to={`edit`}>
+                  Edit Account
+                </StyledNavLink>
+              </StyledNavItem>
+            </StyledNavList>
+            <StyledButton onClick={() => setModalOpen(true)}>
+              Delete account
+            </StyledButton>
+          </StyledNav>
+        ) : (
+          <StyledNav>
+            <StyledName>{user?.displayName}</StyledName>
+            <StyledDropdown
+              value={activeRoute}
+              onChange={(e) => handleDropdownChange(e.target.value)}
+            >
+              <option value="favorites">Favorites</option>
+              <option value="mystories">My Stories</option>
+              <option value="drafts">Drafts</option>
+              <option value="edit">Edit Account</option>
+            </StyledDropdown>
+          </StyledNav>
+        )}
         <StyledWrapper>
           <Outlet />
         </StyledWrapper>
