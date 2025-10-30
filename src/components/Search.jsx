@@ -103,9 +103,15 @@ function Search({ sortBy, setSortBy, search, setSearch }) {
         <StyledOption disabled hidden name="placeholder" value="placeholder">
           Sort By
         </StyledOption>
-        <StyledOption value="oldest">Oldest</StyledOption>
-        <StyledOption value="newest">Newest</StyledOption>
-        <StyledOption value="mostlikes">Most likes</StyledOption>
+        <StyledOption name="oldest" value="oldest">
+          Oldest
+        </StyledOption>
+        <StyledOption name="newest" value="newest">
+          Newest
+        </StyledOption>
+        <StyledOption name="mostlieks" value="mostlikes">
+          Most likes
+        </StyledOption>
       </StyledSelect>
     </StyledSorting>
   );

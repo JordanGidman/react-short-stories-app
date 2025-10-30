@@ -92,17 +92,6 @@ const StyledListItem = styled.li`
     row-gap: ${(props) => (props.$expanded ? "1rem" : "0rem")};
     justify-items: center;
     padding-right: 4rem;
-
-    /* animation: appear 0.3s ease-in-out;
-
-    @keyframes appear {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    } */
   }
 
   /* 525px */

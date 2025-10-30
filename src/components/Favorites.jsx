@@ -22,7 +22,7 @@ import Navbar from "./Navbar";
 
 const StyledFavorites = styled.div`
   min-height: 100%;
-  min-height: 0;
+  /* min-height: 0; */
 `;
 
 const StyledHead = styled.div`
@@ -31,6 +31,11 @@ const StyledHead = styled.div`
   gap: 2rem;
   padding-bottom: 2rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+  /* 800px */
+  @media (max-width: 50em) {
+    flex-direction: column;
+  }
 `;
 
 const StyledH1 = styled.h1`
@@ -39,6 +44,11 @@ const StyledH1 = styled.h1`
   font-family: "Playfair Display", serif;
   font-weight: 600;
   font-style: italic;
+
+  /* 800px */
+  @media (max-width: 50em) {
+    font-size: 2.4rem;
+  }
 `;
 
 const StyledStoryList = styled.ul`
@@ -60,6 +70,7 @@ const StyledStoryList = styled.ul`
 
 const StyledListItem = styled.li`
   display: grid;
+  position: relative;
   grid-template-columns: repeat(4, 1fr);
   align-items: center;
   justify-content: space-between;
@@ -67,9 +78,41 @@ const StyledListItem = styled.li`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   width: 100%;
   padding: 2rem 0rem;
+  transition: all 0.3s ease-in-out;
+
+  /* 930px */
+  @media (max-width: 58.125em) {
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: ${(props) => (props.$expanded ? "1rem" : "0rem")};
+    justify-items: center;
+    padding-right: 4rem;
+  }
+
+  /* 525px */
+  @media (max-width: 32.81em) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-right: 0rem;
+  }
 `;
 
-const StyledItemText = styled.p``;
+const StyledItemText = styled.p`
+  transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out;
+  overflow: hidden;
+
+  @media (max-width: 58.125em) {
+    max-height: ${(props) => (props.$expanded ? "200px" : "0px")};
+    opacity: ${(props) => (props.$expanded ? 1 : 0)};
+    visibility: ${(props) => (props.$expanded ? "visible" : "hidden")};
+  }
+
+  /* 525px */
+  @media (max-width: 32.81em) {
+    font-size: 1.4rem;
+  }
+`;
 
 const StyledTitle = styled(Link)`
   transition: all 0.3s ease-in-out;
@@ -78,6 +121,16 @@ const StyledTitle = styled(Link)`
   &:hover {
     text-decoration: underline;
     color: #ffbe0b;
+  }
+
+  /* 930px */
+  @media (max-width: 58.125em) {
+    grid-column: span 2;
+  }
+
+  /* 525px */
+  @media (max-width: 32.81em) {
+    /* font-size: 1.4rem; */
   }
 `;
 
@@ -99,6 +152,35 @@ const StyledButton = styled.button`
   &:hover {
     cursor: pointer;
     color: #ffbe0b;
+  }
+
+  /* 930px */
+  @media (max-width: 58.125em) {
+    width: 100%;
+  }
+`;
+
+const StyledExpandButton = styled.button`
+  display: none;
+  border: none;
+  background: none;
+  font-size: 2rem;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  /* 930px */
+  @media (max-width: 58.125em) {
+    display: inline-block;
+  }
+
+  /* 400px */
+  @media (max-width: 25em) {
+    right: 2rem;
   }
 `;
 
@@ -148,6 +230,18 @@ const StyledButtons = styled.div`
   align-items: center;
   justify-content: center;
   gap: 2rem;
+
+  @media (max-width: 58.125em) {
+    /* display: grid;
+    grid-template-columns: repeat(3, 1fr); */
+    grid-column: span 3;
+    width: 100%;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out;
+    max-height: ${(props) => (props.$expanded ? "100px" : "0px")};
+    opacity: ${(props) => (props.$expanded ? 1 : 0)};
+    visibility: ${(props) => (props.$expanded ? "visible" : "hidden")};
+  }
 `;
 
 function Favorites() {
@@ -160,6 +254,7 @@ function Favorites() {
   const [sortBy, setSortBy] = useState("placeholder");
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
+  const [expandedStories, setExpandedStories] = useState(new Set());
 
   // Derived sorted stories
   const sortedStories = [...stories].sort((a, b) => {
@@ -247,6 +342,15 @@ function Favorites() {
     }
   }
 
+  function toggleExpandStory(storyId) {
+    setExpandedStories((prevExpandedStories) => {
+      const newExpandedStories = new Set(prevExpandedStories);
+      if (newExpandedStories.has(storyId)) newExpandedStories.delete(storyId);
+      else newExpandedStories.add(storyId);
+      return newExpandedStories;
+    });
+  }
+
   if (loading)
     return (
       <>
@@ -280,7 +384,10 @@ function Favorites() {
                 story.title.toLowerCase().includes(search)
             )
             .map((story) => (
-              <StyledListItem key={story.id}>
+              <StyledListItem
+                key={story.id}
+                $expanded={expandedStories.has(story.id)}
+              >
                 <StyledImg $backgroundImage={story.img} alt={story.title} />
                 <StyledTitle
                   to={`/library/${story.genre.split("-").join(" ")}/story/${
@@ -289,8 +396,13 @@ function Favorites() {
                 >
                   {story.title}
                 </StyledTitle>
-                <StyledItemText>{story.genre}</StyledItemText>
-                <StyledButtons>
+                <StyledExpandButton onClick={() => toggleExpandStory(story.id)}>
+                  {expandedStories.has(story.id) ? "−" : "+"}
+                </StyledExpandButton>
+                <StyledItemText $expanded={expandedStories.has(story.id)}>
+                  {story.genre}
+                </StyledItemText>
+                <StyledButtons $expanded={expandedStories.has(story.id)}>
                   <StyledButton
                     onClick={() =>
                       navigate(`/library/${story.genre}/book/${story.id}`)

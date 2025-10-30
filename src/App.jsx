@@ -147,8 +147,8 @@ function App() {
   //15 - Deployment - Not done
 
   //UNFIXED BUGS
-  // buttons on the mystories page dont get the tooltip when hovered on mobile layout
-  //
+  // Buttons on the mystories page dont get the tooltip when hovered on mobile layout
+  // Account page navbar, if the user clicks a link on a large viewport to open favorites for example and then shrinks the layout the dropdown will show the previous option when the mobile layout was rendered.
 
   return (
     <AuthContextProvider>

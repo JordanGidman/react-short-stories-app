@@ -401,10 +401,18 @@ function Account() {
               value={activeRoute}
               onChange={(e) => handleDropdownChange(e.target.value)}
             >
-              <option value="favorites">Favorites</option>
-              <option value="mystories">My Stories</option>
-              <option value="drafts">Drafts</option>
-              <option value="edit">Edit Account</option>
+              <option name="favorites" value="favorites">
+                Favorites
+              </option>
+              <option name="mystories" value="mystories">
+                My Stories
+              </option>
+              <option name="drafts" value="drafts">
+                Drafts
+              </option>
+              <option name="edit" value="edit">
+                Edit Account
+              </option>
             </StyledDropdown>
           </StyledNav>
         )}
