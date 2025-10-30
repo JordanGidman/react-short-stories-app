@@ -18,13 +18,14 @@ const StyledAccount = styled.div`
 
   /* 1485px */
   @media (max-width: 92.8em) {
-    /* grid-template-columns: 20% 90%; */
     padding: 8% 3% 2% 2%;
   }
 
   /* 1200px */
   @media (max-width: 75em) {
     grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    align-items: start;
   }
 
   /* 930px */
@@ -35,9 +36,9 @@ const StyledAccount = styled.div`
   /* 525px */
   @media (max-width: 32.81em) {
     padding: 0rem;
+    grid-template-rows: auto 1fr;
   }
 `;
-
 const StyledName = styled.h1`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   color: rgb(28, 31, 46, 0.8);
@@ -99,33 +100,31 @@ const StyledNav = styled.nav`
   background-color: #fff;
   display: flex;
   flex-direction: column;
-  align-items: left;
-  /* justify-content: space-between; */
-  /* padding: 4rem 0rem; */
-  /* gap: 2rem; */
-  height: 100%;
+  align-items: flex-start;
   padding: 2rem;
-
+  height: 100%; /* for large screens */
   /* 1200px */
   @media (max-width: 75em) {
-    /* flex-direction: row;
-    align-items: center;
-    padding: 1rem;
-    height: auto; */
-    height: 30vh;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-
+    grid-template-rows: auto auto auto;
+    height: auto;
     padding: 1rem;
-    /* padding-top: 3rem; */
+    row-gap: 2rem;
   }
-
+  /* 930px */
+  @media (max-width: 58.1em) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
   /* 525px */
   @media (max-width: 32.81em) {
-    grid-template-rows: 2fr 1fr;
     height: auto;
-    margin-right: 2rem;
+    margin-right: 0;
   }
 `;
 
@@ -145,7 +144,7 @@ const StyledNavList = styled.ul`
 
     grid-row: 2 / 3;
     grid-column: span 2;
-
+    padding: 2rem;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
   }
 `;
@@ -225,7 +224,7 @@ const StyledButton = styled.button`
     padding: 1rem 2rem;
     font-weight: 600;
     width: 50%;
-    height: 50%;
+    /* height: 50%; */
     justify-self: center;
     align-self: center;
     grid-row: 3 / 4;

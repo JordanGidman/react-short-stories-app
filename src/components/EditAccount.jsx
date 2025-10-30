@@ -17,7 +17,7 @@ import { toast } from "react-toastify";
 import Error from "../pages/Error";
 
 const StyledEditAccount = styled.div`
-  /* height: 100%; */
+  min-height: 100%;
 `;
 
 const StyledH1 = styled.h1`
@@ -28,6 +28,12 @@ const StyledH1 = styled.h1`
   font-family: "Playfair Display", serif;
   font-weight: 600;
   font-style: italic;
+  white-space: nowrap;
+
+  /* 800px */
+  @media (max-width: 50em) {
+    font-size: 2.4rem;
+  }
 `;
 
 const StyledForm = styled.form`
