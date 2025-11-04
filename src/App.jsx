@@ -131,7 +131,7 @@ function App() {
   //     - Favorites page - Done
   //     - Edit Account page - Done
   //     - Drafts page - Done
-  //     - StoryList page - Partially done
+  //     - StoryList page - Done
   //
 
   //WIP

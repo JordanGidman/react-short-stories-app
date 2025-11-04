@@ -37,12 +37,38 @@ const StyledH1 = styled.h1`
   padding: 2rem 0rem;
   font-family: "Playfair Display", serif;
   text-transform: capitalize;
+
+  /* 1100px */
+  @media (max-width: 68.75em) {
+    font-size: 4.8rem;
+  }
+
+  /* 710px */
+  @media (max-width: 44.375em) {
+    font-size: 3.6rem;
+  }
+
+  /* 373px */
+  @media (max-width: 23.125em) {
+    font-size: 3rem;
+    text-align: center;
+  }
 `;
 
 const StyledSubheading = styled.p`
   font-size: 1.6rem;
   padding-bottom: 4rem;
   max-width: 70rem;
+
+  /* 1100px */
+  @media (max-width: 68.75em) {
+    font-size: 1.6rem;
+  }
+
+  /* 710px */
+  @media (max-width: 44.375em) {
+    font-size: 1.4rem;
+  }
 `;
 
 const StyledHeader = styled.header`
@@ -61,6 +87,28 @@ const StyledHeader = styled.header`
   justify-content: space-between;
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
   margin-bottom: 2rem;
+
+  /* 930px */
+  @media (max-width: 58.75em) {
+    width: 100vw;
+  }
+
+  /* 620px */
+  @media (max-width: 38.7em) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-items: center; */
+    text-align: center;
+    background-position: center bottom;
+    padding-top: 3rem;
+  }
+
+  /* 373px */
+  @media (max-width: 23.125em) {
+    background-image: none;
+    justify-content: center;
+  }
 `;
 
 const StyledWrapper = styled.div`
@@ -70,6 +118,28 @@ const StyledWrapper = styled.div`
   align-items: flex-start;
   justify-content: flex-start;
   padding: 1.2rem 4rem;
+
+  /* 1100px */
+  @media (max-width: 68.75em) {
+    padding: 1.2rem 0rem;
+  }
+
+  /* 620px */
+  @media (max-width: 38.7em) {
+    align-items: center;
+  }
+`;
+
+const SearchContainer = styled.div`
+  /* 930px */
+  @media (max-width: 58.75em) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    padding: 0rem 2rem;
+    padding-right: 3rem;
+  }
 `;
 
 const StyledList = styled.ul`
@@ -77,6 +147,22 @@ const StyledList = styled.ul`
   grid-template-columns: 1fr 1fr 1fr;
   gap: 4rem;
   margin-top: 2rem;
+
+  /* 1200px */
+  @media (max-width: 75em) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* 930px */
+  @media (max-width: 58.75em) {
+    margin-right: 2rem;
+  }
+
+  /* 750px */
+  @media (max-width: 47em) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 `;
 
 const StyledMessage = styled.p`
@@ -84,6 +170,25 @@ const StyledMessage = styled.p`
   text-align: center;
   margin-top: 4rem;
   color: #555;
+`;
+
+const StyledImg = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 1.2rem 4rem;
+
+  /* 1100px */
+  @media (max-width: 68.75em) {
+    padding: 1.2rem 0rem;
+  }
+
+  /* 620px */
+  @media (max-width: 38.7em) {
+    display: none;
+  }
 `;
 
 function StoryList() {
@@ -181,7 +286,7 @@ function StoryList() {
       {/* <Navbar /> */}
       <StyledContainer>
         <StyledHeader>
-          <StyledWrapper />
+          <StyledImg />
           <StyledWrapper>
             <StyledH1>{genre}</StyledH1>
             <StyledSubheading>
@@ -192,12 +297,14 @@ function StoryList() {
           </StyledWrapper>
         </StyledHeader>
 
-        <Search
-          sortBy={sortBy}
-          setSortBy={setSortBy}
-          search={search}
-          setSearch={setSearch}
-        />
+        <SearchContainer>
+          <Search
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+            search={search}
+            setSearch={setSearch}
+          />
+        </SearchContainer>
 
         <StyledList>
           {filteredStories.map((story) => (

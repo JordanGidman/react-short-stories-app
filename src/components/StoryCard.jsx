@@ -32,6 +32,13 @@ const StyledStoryCard = styled.div`
     box-shadow: 0rem 0.3rem 4rem 0.2rem rgba(0, 0, 0, 0.2);
     scale: 1.02;
   }
+
+  /* 400px */
+  @media (max-width: 25em) {
+    min-height: 35rem;
+    grid-template-columns: 1fr;
+    grid-template-rows: 40% auto;
+  }
 `;
 
 const StyledTextBox = styled.div`
@@ -41,6 +48,10 @@ const StyledTextBox = styled.div`
   padding-right: 2rem;
   gap: 4rem;
   background-color: #fff;
+  /* 400px */
+  @media (max-width: 25em) {
+    gap: 0rem;
+  }
 `;
 const StyledImageBox = styled.div`
   background-image: url(${(props) => props.$img || props.$placeholder});
@@ -54,6 +65,11 @@ const StyledTitle = styled.h2`
   font-size: 2.6rem;
   font-family: "Playfair Display", serif;
   text-transform: capitalize;
+
+  /* 400px */
+  @media (max-width: 25em) {
+    font-size: 2.4rem;
+  }
 `;
 
 const StyledSynopsis = styled.p`
@@ -72,6 +88,11 @@ const StyledAuthor = styled.p`
   letter-spacing: 0.1rem;
   text-transform: uppercase;
   color: #1c1f2e;
+
+  /* 400px */
+  @media (max-width: 25em) {
+    letter-spacing: 0;
+  }
 `;
 
 const StyledLikes = styled.div`
@@ -97,6 +118,12 @@ const StyledButton = styled(Button)`
   &:hover {
     background-color: ${(props) =>
       props.$backgroundColor === "#85e9e1" ? "#fff" : "#85e9e1"};
+  }
+
+  /* 400px */
+  @media (max-width: 25em) {
+    padding: 0.5rem 1rem;
+    font-weight: 500;
   }
 `;
 
