@@ -32,6 +32,10 @@ const StyledHead = styled.div`
   gap: 2rem;
   padding-bottom: 2rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  /* 800px */
+  @media (max-width: 50em) {
+    flex-direction: column;
+  }
 `;
 
 const StyledH1 = styled.h1`
@@ -40,6 +44,11 @@ const StyledH1 = styled.h1`
   font-family: "Playfair Display", serif;
   font-weight: 600;
   font-style: italic;
+
+  /* 800px */
+  @media (max-width: 50em) {
+    font-size: 2.4rem;
+  }
 `;
 
 const StyledStoryList = styled.ul`
@@ -60,6 +69,7 @@ const StyledStoryList = styled.ul`
 `;
 
 const StyledListItem = styled.li`
+  position: relative;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   align-items: center;
@@ -68,13 +78,74 @@ const StyledListItem = styled.li`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   width: 100%;
   padding: 2rem 0rem;
+
+  /* 930px */
+  @media (max-width: 58.125em) {
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: ${(props) => (props.$expanded ? "3rem" : "0rem")};
+    justify-items: center;
+    padding-right: 4rem;
+  }
+
+  /* 525px */
+  @media (max-width: 32.81em) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-right: 0rem;
+  }
 `;
 
-const StyledItemText = styled.p``;
+const StyledItemText = styled.p`
+  transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out;
+  overflow: hidden;
+
+  @media (max-width: 58.125em) {
+    max-height: ${(props) => (props.$expanded ? "200px" : "0px")};
+    opacity: ${(props) => (props.$expanded ? 1 : 0)};
+    visibility: ${(props) => (props.$expanded ? "visible" : "hidden")};
+  }
+
+  /* 525px */
+  @media (max-width: 32.81em) {
+    font-size: 1.4rem;
+  }
+`;
 
 const StyledTitle = styled.p`
   transition: all 0.3s ease-in-out;
   text-transform: capitalize;
+
+  /* 930px */
+  @media (max-width: 58.125em) {
+    grid-column: span 2;
+  }
+
+  /* 525px */
+  @media (max-width: 32.81em) {
+    /* font-size: 1.4rem; */
+  }
+`;
+
+const StyledButtons = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+
+  /* 930px */
+  @media (max-width: 58.125em) {
+    /* display: grid;
+    grid-template-columns: repeat(3, 1fr); */
+    grid-column: 3/4;
+    width: 100%;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out;
+    max-height: ${(props) => (props.$expanded ? "100px" : "0px")};
+    opacity: ${(props) => (props.$expanded ? 1 : 0)};
+    visibility: ${(props) => (props.$expanded ? "visible" : "hidden")};
+  }
 `;
 
 const StyledButton = styled.button`
@@ -97,6 +168,11 @@ const StyledButton = styled.button`
   &:hover {
     cursor: pointer;
     color: #ffbe0b;
+  }
+
+  /* 930px */
+  @media (max-width: 58.125em) {
+    width: 100%;
   }
 `;
 
@@ -133,19 +209,36 @@ const Tooltip = styled.span`
   }
 `;
 
+const StyledExpandButton = styled.button`
+  display: none;
+  border: none;
+  background: none;
+  font-size: 2rem;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  /* 930px */
+  @media (max-width: 58.125em) {
+    display: inline-block;
+  }
+
+  /* 400px */
+  @media (max-width: 25em) {
+    right: 2rem;
+  }
+`;
+
 const StyledImg = styled.div`
   width: 15rem;
   height: 8rem;
   background-image: url(${(props) => props.$backgroundImage});
   background-size: cover;
   background-position: center;
-`;
-
-const StyledButtons = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
 `;
 
 function Drafts() {
@@ -157,6 +250,7 @@ function Drafts() {
   const [error, setError] = useState(null);
   const [sortBy, setSortBy] = useState("placeholder");
   const [search, setSearch] = useState("");
+  const [expandedStories, setExpandedStories] = useState(new Set());
   const navigate = useNavigate();
 
   // Derived sorted stories
@@ -220,6 +314,15 @@ function Drafts() {
     }
   }
 
+  function toggleExpandStory(storyId) {
+    setExpandedStories((prevExpandedStories) => {
+      const newExpandedStories = new Set(prevExpandedStories);
+      if (newExpandedStories.has(storyId)) newExpandedStories.delete(storyId);
+      else newExpandedStories.add(storyId);
+      return newExpandedStories;
+    });
+  }
+
   if (loading)
     return (
       <>
@@ -253,16 +356,26 @@ function Drafts() {
                 story.title?.toLowerCase().includes(search)
             )
             .map((story, i) => (
-              <StyledListItem key={story.id || i}>
+              <StyledListItem
+                key={story.id || i}
+                $expanded={expandedStories.has(story.id)}
+              >
                 <StyledImg $backgroundImage={story.img} alt={story.title} />
                 <StyledTitle>{story.title || "Untitled"}</StyledTitle>
-                <StyledItemText>{story.genre || "No Genre"}</StyledItemText>
-                <StyledItemText>
+                <StyledExpandButton onClick={() => toggleExpandStory(story.id)}>
+                  {expandedStories.has(story.id) ? "−" : "+"}
+                </StyledExpandButton>
+                <StyledItemText $expanded={expandedStories.has(story.id)}>
+                  {story.genre || "No Genre"}
+                </StyledItemText>
+                <StyledItemText $expanded={expandedStories.has(story.id)}>
+                  Created:{" "}
                   {new Date(story.createdAt?.seconds * 1000).toLocaleDateString(
                     "en-US"
                   )}
                 </StyledItemText>
-                <StyledButtons>
+
+                <StyledButtons $expanded={expandedStories.has(story.id)}>
                   <StyledButton
                     onClick={() =>
                       navigate(`/edit/${story.draftId}`, { state: { story } })

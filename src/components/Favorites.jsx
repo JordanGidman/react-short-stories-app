@@ -86,11 +86,6 @@ const StyledListItem = styled.li`
     row-gap: ${(props) => (props.$expanded ? "3rem" : "0rem")};
     justify-items: center;
     padding-right: 4rem;
-
-    .genre {
-      /* grid-column: span 3; */
-      /* grid-row: 3/4; */
-    }
   }
 
   /* 525px */
