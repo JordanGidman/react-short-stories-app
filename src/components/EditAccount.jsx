@@ -34,6 +34,11 @@ const StyledH1 = styled.h1`
   @media (max-width: 50em) {
     font-size: 2.4rem;
   }
+
+  /* 525px */
+  @media (max-width: 32.81em) {
+    text-align: center;
+  }
 `;
 
 const StyledForm = styled.form`
@@ -57,10 +62,26 @@ const StyledField = styled.div`
   padding: 2rem 0rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   position: relative;
+
+  /* 525px */
+  @media (max-width: 32.81em) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    border: none;
+  }
 `;
 
 const StyledInput = styled.input`
   padding: 1rem;
+
+  /* 525px */
+  @media (max-width: 32.81em) {
+    text-align: center;
+    width: 100%;
+  }
 `;
 
 const StyledButton = styled(Button)`

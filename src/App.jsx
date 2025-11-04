@@ -128,8 +128,9 @@ function App() {
   //     - About page - Done
   //     - Account page - Done
   //     - MyStories page - Done
-  //     - StoryList page - Partially done
   //     - Favorites page - Done
+  //     - Edit Account page - Done
+  //     - StoryList page - Partially done
   //
 
   //WIP
