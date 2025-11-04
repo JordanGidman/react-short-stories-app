@@ -130,6 +130,7 @@ function App() {
   //     - MyStories page - Done
   //     - Favorites page - Done
   //     - Edit Account page - Done
+  //     - Drafts page - Done
   //     - StoryList page - Partially done
   //
 
