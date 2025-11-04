@@ -119,7 +119,7 @@ function App() {
   //33 - Sorting bug where the 1st in the list is the newest the last should be the oldest. Yet if i change the sorting to be the oldest the one that was last is not now first for some reason and vice versa. - Done
   //34 - Show likes on storyCards - Done
   //36 - Make it so that the mystories and favorites dont get a seperate scroll but just increase the page size - Done
-  //36 - Responsive design -
+  //37 - Responsive design -
   //     - Mobile nav - Done
   //     - Home page - Done
   //     - Library page - Done
@@ -129,6 +129,8 @@ function App() {
   //     - Account page - Done
   //     - MyStories page - Done
   //     - StoryList page - Partially done
+  //     - Favorites page - Done
+  //
 
   //WIP
   //1 - Responsive design - Not done

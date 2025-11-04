@@ -13,6 +13,12 @@ const StyledButton = styled(motion.button)`
   border: none;
   cursor: pointer;
   z-index: 9999;
+
+  /* 425px */
+  @media (max-width: 26.5em) {
+    top: 1rem;
+    left: 1rem;
+  }
 `;
 
 const StyledBurgerMenu = styled.div`
@@ -23,6 +29,12 @@ const StyledBurgerMenu = styled.div`
   justify-content: center;
   flex-direction: column;
   gap: 0.4rem;
+
+  /* 425px */
+  /* @media (max-width: 26.5em) {
+    width: 4rem;
+    height: 4rem;
+  } */
 `;
 
 const StyledBurgerLine = styled(motion.div)`

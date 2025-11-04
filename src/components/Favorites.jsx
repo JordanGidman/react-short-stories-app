@@ -83,9 +83,14 @@ const StyledListItem = styled.li`
   /* 930px */
   @media (max-width: 58.125em) {
     grid-template-columns: repeat(3, 1fr);
-    row-gap: ${(props) => (props.$expanded ? "1rem" : "0rem")};
+    row-gap: ${(props) => (props.$expanded ? "3rem" : "0rem")};
     justify-items: center;
     padding-right: 4rem;
+
+    .genre {
+      /* grid-column: span 3; */
+      /* grid-row: 3/4; */
+    }
   }
 
   /* 525px */
@@ -234,7 +239,7 @@ const StyledButtons = styled.div`
   @media (max-width: 58.125em) {
     /* display: grid;
     grid-template-columns: repeat(3, 1fr); */
-    grid-column: span 3;
+    grid-column: span 2;
     width: 100%;
     overflow: hidden;
     transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out;
@@ -399,7 +404,10 @@ function Favorites() {
                 <StyledExpandButton onClick={() => toggleExpandStory(story.id)}>
                   {expandedStories.has(story.id) ? "−" : "+"}
                 </StyledExpandButton>
-                <StyledItemText $expanded={expandedStories.has(story.id)}>
+                <StyledItemText
+                  className="genre"
+                  $expanded={expandedStories.has(story.id)}
+                >
                   {story.genre}
                 </StyledItemText>
                 <StyledButtons $expanded={expandedStories.has(story.id)}>
@@ -407,6 +415,7 @@ function Favorites() {
                     onClick={() =>
                       navigate(`/library/${story.genre}/book/${story.id}`)
                     }
+                    className="open"
                   >
                     <ion-icon
                       class="icon icon-open"
@@ -415,7 +424,10 @@ function Favorites() {
                     <Tooltip>Read</Tooltip>
                   </StyledButton>
 
-                  <StyledButton onClick={() => handleUnfavorite(story.id)}>
+                  <StyledButton
+                    onClick={() => handleUnfavorite(story.id)}
+                    className="star"
+                  >
                     <ion-icon class="icon icon-star" name="star"></ion-icon>
                     <Tooltip>Remove from favorites</Tooltip>
                   </StyledButton>

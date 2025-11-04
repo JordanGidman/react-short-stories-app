@@ -62,7 +62,7 @@ const StyledName = styled.h1`
 
   /* 930px */
   @media (max-width: 58.1em) {
-    padding-top: 0.6rem;
+    padding-top: 0.4rem;
   }
 
   /* 525px */
@@ -70,11 +70,22 @@ const StyledName = styled.h1`
     grid-column: span 2;
   }
 
+  /* 400px */
+  @media (max-width: 25em) {
+    font-size: 2.6rem;
+    /* margin-right: 1rem; */
+    padding-right: 0.4rem;
+  }
+
+  /* 425px */
+  @media (max-width: 26.5em) {
+    padding-top: 0rem;
+    padding-bottom: 1rem;
+  }
+
   /* 335px */
   @media (max-width: 21em) {
-    font-size: 2.8rem;
-    /* margin-right: 1rem; */
-    /* padding-right: 0.4rem; */
+    align-self: flex-end;
   }
 `;
 
