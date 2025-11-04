@@ -122,16 +122,17 @@ function App() {
   //37 - Responsive design -
   //     - Mobile nav - Done
   //     - Home page - Done
-  //     - Library page - Done
-  //     - WriteStory page - Done
+  //     - Library - Done
+  //     - WriteStory - Done
   //     - GenreCard - Done
-  //     - About page - Done
-  //     - Account page - Done
-  //     - MyStories page - Done
-  //     - Favorites page - Done
-  //     - Edit Account page - Done
-  //     - Drafts page - Done
-  //     - StoryList page - Done
+  //     - About - Done
+  //     - Account - Done
+  //     - MyStories - Done
+  //     - Favorites - Done
+  //     - Edit Account - Done
+  //     - Drafts - Done
+  //     - StoryList - Done
+  //     - StoryCard - Done
   //
 
   //WIP

@@ -59,8 +59,8 @@ const StyledStoryList = styled.ul`
   justify-content: flex-start;
   gap: 2rem;
   width: 100%;
-  height: 92%;
-  box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
+  min-height: 92%;
+  /* box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8); */
   /* overflow-y: scroll;
 
   &::-webkit-scrollbar {
