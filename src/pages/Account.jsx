@@ -1,6 +1,12 @@
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
-import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
+import {
+  NavLink,
+  Outlet,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { db } from "../firebase";
 import { doc, onSnapshot } from "firebase/firestore";
@@ -308,6 +314,12 @@ function Account() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [activeRoute, setActiveRoute] = useState("favorites");
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const currentPath = location.pathname.split("/").pop();
+    setActiveRoute(currentPath);
+  }, [location]);
 
   useEffect(() => {
     if (!id) return;

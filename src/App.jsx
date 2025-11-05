@@ -119,6 +119,7 @@ function App() {
   //33 - Sorting bug where the 1st in the list is the newest the last should be the oldest. Yet if i change the sorting to be the oldest the one that was last is not now first for some reason and vice versa. - Done
   //34 - Show likes on storyCards - Done
   //36 - Make it so that the mystories and favorites dont get a seperate scroll but just increase the page size - Done
+  //37 - Fixed Account page navbar, if the user clicks a link on a large viewport to open favorites for example and then shrinks the layout the dropdown will show the previous option when the mobile layout was rendered. - Done
   //37 - Responsive design -
   //     - Mobile nav - Done
   //     - Home page - Done
@@ -136,7 +137,6 @@ function App() {
   //     - Story page - Done
   //     - Comments - Done
   //     - CommentCard - Done
-  //
 
   //WIP
   //1 - Responsive design - Not done
@@ -156,7 +156,6 @@ function App() {
 
   //UNFIXED BUGS
   // Buttons on the mystories page dont get the tooltip when hovered on mobile layout
-  // Account page navbar, if the user clicks a link on a large viewport to open favorites for example and then shrinks the layout the dropdown will show the previous option when the mobile layout was rendered.
 
   return (
     <AuthContextProvider>
