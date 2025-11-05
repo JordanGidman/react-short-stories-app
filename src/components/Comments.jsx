@@ -26,6 +26,20 @@ const StyledComments = styled.div`
   min-width: 100%;
   min-height: 30vh;
   /* margin-top: 4rem; */
+
+  /* 930px */
+  @media (max-width: 58.1em) {
+    padding: 2rem;
+    width: 100vw;
+  }
+`;
+
+const StyledH3 = styled.h3`
+  /* 930px */
+  @media (max-width: 58.1em) {
+    font-size: 1.8rem;
+    padding: 1rem;
+  }
 `;
 
 const StyledQuill = styled(ReactQuill)`
@@ -35,6 +49,11 @@ const StyledQuill = styled(ReactQuill)`
     min-height: 10rem;
     font-size: 1.6rem;
     font-family: "Montserrat", sans-serif;
+  }
+
+  /* 930px */
+  @media (max-width: 58.1em) {
+    width: 100%;
   }
 `;
 
@@ -55,6 +74,17 @@ const StyledForm = styled.form`
 const StyledButton = styled(Button)`
   width: 20%;
   align-self: flex-end;
+
+  /* 930px */
+  @media (max-width: 58.1em) {
+    width: auto;
+  }
+
+  /* 440px */
+  @media (max-width: 27.5em) {
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
 `;
 
 function Comments({ storyId }) {
@@ -120,11 +150,11 @@ function Comments({ storyId }) {
 
   return (
     <StyledComments>
-      <h3>
+      <StyledH3>
         {story?.comments?.length > 0
           ? `${story.comments.length} Comments`
           : "No Comments Yet"}
-      </h3>
+      </StyledH3>
       <StyledList>
         {story?.comments?.length > 0 &&
           story.comments.map((comment, index) => (

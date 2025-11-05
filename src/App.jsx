@@ -133,6 +133,9 @@ function App() {
   //     - Drafts - Done
   //     - StoryList - Done
   //     - StoryCard - Done
+  //     - Story page - Done
+  //     - Comments - Done
+  //     - CommentCard - Done
   //
 
   //WIP
