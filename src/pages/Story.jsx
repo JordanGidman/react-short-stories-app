@@ -24,6 +24,13 @@ const StyledBook = styled.div`
   align-items: center;
   justify-content: center;
   padding: 8rem;
+
+  /* 930px */
+  @media (max-width: 58.1em) {
+    padding: 1rem;
+    padding-top: 0rem;
+    gap: 2rem;
+  }
 `;
 
 const StyledHeader = styled.header`
@@ -38,6 +45,14 @@ const StyledHeader = styled.header`
   gap: 1.2rem;
   background-color: #fff;
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
+
+  /* 930px */
+  @media (max-width: 58.1em) {
+    grid-template-columns: 1fr;
+    margin: 0;
+    gap: 2rem;
+    width: 100vw;
+  }
 `;
 
 const StyledTextWrapper = styled.div`
@@ -54,6 +69,16 @@ const StyledH1 = styled.h1`
   font-family: "Playfair Display", serif;
   text-transform: capitalize;
   letter-spacing: 0.1rem;
+
+  /* 930px */
+  @media (max-width: 58.1em) {
+    font-size: 6rem;
+  }
+
+  /* 440px */
+  @media (max-width: 27.5em) {
+    font-size: 5rem;
+  }
 `;
 
 const StyledSubheading = styled.p`
@@ -62,12 +87,22 @@ const StyledSubheading = styled.p`
     font-weight: 600;
     color: #333;
   }
+
+  /* 440px */
+  @media (max-width: 27.5em) {
+    font-size: 1.6rem;
+  }
 `;
 
 const StyledSynopsis = styled.p`
   font-size: 1.8rem;
   line-height: 1.6;
   color: #555;
+
+  /* 440px */
+  @media (max-width: 27.5em) {
+    font-size: 1.6rem;
+  }
 `;
 
 const StyledImgWrapper = styled.div`
@@ -76,6 +111,11 @@ const StyledImgWrapper = styled.div`
   background-position: center;
   height: 100%;
   background-repeat: no-repeat;
+
+  /* 930px */
+  @media (max-width: 58.1em) {
+    height: 20vh;
+  }
 `;
 
 const StyledBody = styled.div`
@@ -88,6 +128,11 @@ const StyledBody = styled.div`
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
   min-width: 100%;
   min-height: 30vh;
+
+  /* 440px */
+  @media (max-width: 27.5em) {
+    font-size: 1.6rem;
+  }
 `;
 
 const StyledLikes = styled.div`
@@ -104,6 +149,13 @@ const StyledLikes = styled.div`
     ion-icon {
       color: #c92a2a;
       font-size: 3rem;
+    }
+  }
+
+  /* 440px */
+  @media (max-width: 27.5em) {
+    span {
+      font-size: 1.6rem;
     }
   }
 `;
