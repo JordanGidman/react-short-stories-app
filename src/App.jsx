@@ -120,7 +120,8 @@ function App() {
   //34 - Show likes on storyCards - Done
   //36 - Make it so that the mystories and favorites dont get a seperate scroll but just increase the page size - Done
   //37 - Fixed Account page navbar, if the user clicks a link on a large viewport to open favorites for example and then shrinks the layout the dropdown will show the previous option when the mobile layout was rendered. - Done
-  //37 - Responsive design -
+  //38 - Featured section link to staff picks - Done
+  //39 - Responsive design -
   //     - Mobile nav - Done
   //     - Home page - Done
   //     - Library - Done
@@ -149,10 +150,9 @@ function App() {
   //8 - Notify users when navigating away from pages if their changes/inputs will be saved i.e If they made edits to a story but did not post the changes and are trying to leave the page we should advise them that they havent saved the changes etc - Not done
   //9 - SEO Improvements - Not done
   //10 - Accessibility Improvements - Not done
-  //11 - Featured section link to staff picks - Not done
-  //12 - Ability to add multiple genres (maybe)- Not done
-  //13 - Either add a dashboard or make a different page on the account the default outlet. - Not done
-  //15 - Deployment - Not done
+  //11 - Ability to add multiple genres (maybe)- Not done
+  //12 - Either add a dashboard or make a different page on the account the default outlet. - Not done
+  //13 - Deployment - Not done
 
   //UNFIXED BUGS
   // Buttons on the mystories page dont get the tooltip when hovered on mobile layout

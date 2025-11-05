@@ -60,6 +60,21 @@ const StyledBanner = styled.div`
 `;
 
 function Featured() {
+  function handleScrollTo() {
+    console.log(window.innerWidth);
+
+    const section = document.getElementById("staff-picks");
+    if (section) {
+      const yOffset = -80;
+      const y =
+        section.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+      window.innerWidth > 930
+        ? window.scrollTo({ top: y, behavior: "smooth" })
+        : section.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
   return (
     <div className="featured">
       <StyledBanner>
@@ -72,7 +87,9 @@ function Featured() {
           for every mood and situation. Make your commute or workout riveting.
           Find something you never thought you needed.
         </p>
-        <FeaturedButton>Explore Featured</FeaturedButton>
+        <FeaturedButton onClick={handleScrollTo}>
+          Explore Featured
+        </FeaturedButton>
       </StyledBanner>
     </div>
   );

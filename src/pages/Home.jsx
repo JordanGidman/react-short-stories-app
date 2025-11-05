@@ -591,7 +591,7 @@ function Home() {
         ></StyledImg>
       </StyledFresh>
 
-      <StyledPicks>
+      <StyledPicks id="staff-picks">
         <StyledPicksText>
           <h1>
             <span>Staff</span> Picks
