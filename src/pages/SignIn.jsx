@@ -8,6 +8,7 @@ import Navbar from "../components/Navbar";
 import InputBox from "../components/InputBox";
 import Error from "../pages/Error";
 import { toast } from "react-toastify";
+import loginhero from "../img/login-hero.jpg";
 
 const SigninButton = styled(Button)`
   margin-top: 6rem;
@@ -15,6 +16,11 @@ const SigninButton = styled(Button)`
   width: 60%;
   align-self: center;
   font-weight: 700;
+
+  /* 440px */
+  @media (max-width: 27.5em) {
+    margin-top: 3rem;
+  }
 `;
 
 const StyledContainer = styled.div`
@@ -34,20 +40,46 @@ const StyledWrapper = styled.div`
   gap: 1rem;
   padding: 2rem;
   background-color: #fff;
+
+  /* 1200px */
+  @media (max-width: 75em) {
+    height: 100vh;
+    width: 100vw;
+  }
 `;
 const SecondWrapper = styled(StyledWrapper)`
   background-color: #85e9e1;
+
+  /* 1200px */
+  @media (max-width: 75em) {
+    display: none;
+  }
 `;
 const StyledSubheading = styled.span`
   font-size: 2.4rem;
   text-transform: uppercase;
   margin-bottom: 6rem;
+
+  /* 440px */
+  @media (max-width: 27.5em) {
+    margin-bottom: 2rem;
+  }
 `;
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: 3rem;
   width: 60%;
+
+  /* 1200px */
+  @media (max-width: 75em) {
+    width: 90%;
+  }
+
+  /* 440px */
+  @media (max-width: 27.5em) {
+    width: 100%;
+  }
 `;
 // const StyledInput = styled.input`
 //   padding: 1rem 2rem;
@@ -74,10 +106,15 @@ const StyledH1 = styled.h1`
     font-weight: 500;
     font-style: italic;
   }
+
+  /* 440px */
+  @media (max-width: 27.5em) {
+    font-size: 3.6rem;
+  }
 `;
 
 const StyledImg = styled.div`
-  background-image: url(https://shortstoryproject.com/wp-content/uploads/2021/10/login-hero-3.jpg);
+  background-image: url(${loginhero});
   background-size: cover;
   background-position: center;
 

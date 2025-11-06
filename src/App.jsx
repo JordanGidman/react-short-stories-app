@@ -138,6 +138,7 @@ function App() {
   //     - Story page - Done
   //     - Comments - Done
   //     - CommentCard - Done
+  //     - PageNotFound - Done
 
   //WIP
   //1 - Responsive design - Not done
