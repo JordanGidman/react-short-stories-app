@@ -13,7 +13,7 @@ const StyledFooter = styled.footer`
   padding: 8rem 25%;
   color: #fff;
   font-size: 1.2rem;
-  margin-top: 4rem;
+  /* margin-top: 4rem; */
   z-index: 999;
 
   @media (max-width: 100em) {

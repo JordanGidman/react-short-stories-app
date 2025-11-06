@@ -8,8 +8,8 @@ const StyledButton = styled.button`
   letter-spacing: 0.1rem;
   padding: 1rem 3rem;
   transition: all 0.4s ease-in-out;
+  font-weight: 600;
 
-  font-weight: 500;
   border-radius: 2rem;
   text-transform: uppercase;
   box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.2);

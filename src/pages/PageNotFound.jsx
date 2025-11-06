@@ -13,10 +13,13 @@ const StyledNotFound = styled.div`
   width: 100vw;
   gap: 2rem;
   padding: 0% 5%;
-
+  text-align: center;
   background-color: #f9f9f9;
 
   /* min-height: 100vh; */
+  /* 700px */
+  @media (max-width: 43.75em) {
+  }
 `;
 
 const StyledInfoBox = styled.div`
@@ -28,11 +31,23 @@ const StyledInfoBox = styled.div`
   background-color: #fff;
   padding: 6rem 6rem;
   box-shadow: 0rem 0.8rem 0.6rem -1rem rgba(0, 0, 0, 0.3);
+  margin-right: 1rem;
 
   .large-icon {
     font-size: 10rem;
     margin-bottom: 2rem;
     color: rgb(28, 31, 46, 0.8);
+  }
+
+  /* 700px */
+  @media (max-width: 43.75em) {
+    height: 100vh;
+    width: 100vw;
+    padding: 1.6rem;
+
+    .large-icon {
+      font-size: 7rem;
+    }
   }
 `;
 
@@ -44,6 +59,11 @@ const StyledH1 = styled.h1`
   font-weight: 600;
   /* font-style: italic; */
   /* white-space: nowrap; */
+
+  /* 700px */
+  @media (max-width: 43.75em) {
+    font-size: 3rem;
+  }
 `;
 
 const StyledSubheading = styled.p`
@@ -59,6 +79,11 @@ const StyledButtons = styled.div`
   gap: 4rem;
   margin-top: 4rem;
   width: 100%;
+
+  /* 700px */
+  @media (max-width: 43.75em) {
+    flex-direction: column;
+  }
 `;
 
 const StyledButton = styled(Button)`
@@ -71,6 +96,11 @@ const StyledButton = styled(Button)`
 
   .icon {
     font-size: 2.4rem;
+  }
+
+  /* 700px */
+  @media (max-width: 43.75em) {
+    width: 20rem;
   }
 `;
 
