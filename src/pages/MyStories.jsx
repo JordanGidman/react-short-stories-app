@@ -394,7 +394,7 @@ function MyStories() {
         hidden: !story.hidden,
       });
       toast.success(
-        `Made ${story.title} ${story.hidden ? "Private" : "Public"}`
+        `Made ${story.title} ${story.hidden ? "Public" : "Private"}`
       );
     } catch (error) {
       console.log(error.message);
@@ -509,7 +509,7 @@ function MyStories() {
                     <Tooltip>Edit Story</Tooltip>
                   </StyledButton>
                   <StyledButton onClick={() => handleTogglePrivacy(story.id)}>
-                    {!story.hidden ? (
+                    {story.hidden ? (
                       <ion-icon
                         name="lock-closed-outline"
                         className="icon icon-lock"
@@ -522,8 +522,8 @@ function MyStories() {
                     )}
                     <Tooltip>
                       {story.hidden
-                        ? "Make Story Private"
-                        : "Make Story Public"}
+                        ? "Make Story Public"
+                        : "Make Story Private"}
                     </Tooltip>
                   </StyledButton>
                   <StyledButton

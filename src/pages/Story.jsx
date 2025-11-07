@@ -4,6 +4,7 @@ import {
   arrayRemove,
   arrayUnion,
   doc,
+  increment,
   onSnapshot,
   updateDoc,
 } from "firebase/firestore";
@@ -213,7 +214,7 @@ function Book() {
   const { id } = useParams();
   const { currentUser } = useContext(AuthContext);
 
-  // --- State ---
+  // State
   const [story, setStory] = useState(null);
   const [user, setUser] = useState(null);
   const [author, setAuthor] = useState(null);
@@ -221,7 +222,7 @@ function Book() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // --- Story fetch ---
+  // fetch story
   useEffect(() => {
     if (!id) return;
 
@@ -248,7 +249,7 @@ function Book() {
     return () => unsub();
   }, [id]);
 
-  // --- Current user fetch (non-critical) ---
+  // fetch current user
   useEffect(() => {
     if (!currentUser?.uid) return;
 
@@ -268,7 +269,7 @@ function Book() {
     return () => unsub();
   }, [currentUser]);
 
-  // --- Author fetch (non-critical) ---
+  //fetch author
   useEffect(() => {
     if (!story?.creatorID) return;
 
@@ -293,6 +294,7 @@ function Book() {
     try {
       await updateDoc(doc(db, "stories", story.id), {
         likes: isLiked ? arrayRemove(userId) : arrayUnion(userId),
+        likesCount: isLiked ? increment(-1) : increment(1),
       });
       toast.success(isLiked ? "Like removed." : "Story liked!");
     } catch (err) {

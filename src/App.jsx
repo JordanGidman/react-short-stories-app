@@ -121,7 +121,7 @@ function App() {
   //36 - Make it so that the mystories and favorites dont get a seperate scroll but just increase the page size - Done
   //37 - Fixed Account page navbar, if the user clicks a link on a large viewport to open favorites for example and then shrinks the layout the dropdown will show the previous option when the mobile layout was rendered. - Done
   //38 - Featured section link to staff picks - Done
-  //39 - Responsive design -
+  //39 - Responsive design - Done
   //     - Mobile nav - Done
   //     - Home page - Done
   //     - Library - Done
@@ -139,21 +139,23 @@ function App() {
   //     - Comments - Done
   //     - CommentCard - Done
   //     - PageNotFound - Done
+  //     - Sign In - Done
+  //     - Sign Up - Done
+  //40 -  Need to take into account the scale of the app, there are 200+ stories already but that number can increase greatly and i should plan for that, with story pull limits/pagination - Done
 
   //WIP
-  //1 - Responsive design - Not done
-  //2 - Animations and transitions - Not done
-  //3 - Edit comments (maybe)
-  //4 - Favicon - Not done
-  //5 - Implement delete account functionality - Not done
-  //6 - Optimizations(Img compression, lazy loading, code splitting, memoization, refactors, etc) - Need to take into account the scale of the app, there are 200+ stories already but that number can increase greatly and i should plan for that, with story pull limits/pagination - Not done
-  //7 - Potentially use session storage to keep write book and other input fields filled - in the case that a user accidentally refreshes before saving we dont want to delete their entire story. - Not done
-  //8 - Notify users when navigating away from pages if their changes/inputs will be saved i.e If they made edits to a story but did not post the changes and are trying to leave the page we should advise them that they havent saved the changes etc - Not done
-  //9 - SEO Improvements - Not done
-  //10 - Accessibility Improvements - Not done
-  //11 - Ability to add multiple genres (maybe)- Not done
-  //12 - Either add a dashboard or make a different page on the account the default outlet. - Not done
-  //13 - Deployment - Not done
+  //1 - Animations and transitions - Not done
+  //2 - Edit comments (maybe)
+  //3 - Favicon - Not done
+  //4 - Implement delete account functionality - Not done
+  //5 - Optimizations(Img compression, lazy loading, code splitting, memoization, refactors, etc) - Not done
+  //6 - Potentially use session storage to keep write book and other input fields filled - in the case that a user accidentally refreshes before saving we dont want to delete their entire story. - Not done
+  //7 - Notify users when navigating away from pages if their changes/inputs will be saved i.e If they made edits to a story but did not post the changes and are trying to leave the page we should advise them that they havent saved the changes etc - Not done
+  //8 - SEO Improvements - Not done
+  //9 - Accessibility Improvements - Not done
+  //10 - Ability to add multiple genres (maybe)- Not done
+  //11 - Either add a dashboard or make a different page on the account the default outlet. - Not done
+  //12 - Deployment - Not done
 
   //UNFIXED BUGS
   // Buttons on the mystories page dont get the tooltip when hovered on mobile layout
