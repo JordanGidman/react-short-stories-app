@@ -154,9 +154,58 @@ const StyledButton = styled.button`
     color: #ffbe0b;
   }
 
+  .mobile-btn-text {
+    display: none;
+    visibility: hidden;
+  }
+
   /* 930px */
   @media (max-width: 58.125em) {
     width: 100%;
+
+    .mobile-btn-text {
+      display: inline-block;
+      visibility: visible;
+      font-family: "Montserrat", sans-serif;
+      background-color: #ffee34;
+      border: none;
+      color: rgb(28, 31, 46, 0.8);
+      font-size: 1.4rem;
+      letter-spacing: 0.1rem;
+      padding: 1rem 2rem;
+      transition: all 0.4s ease-in-out;
+      font-weight: 600;
+      border-radius: 2rem;
+      text-transform: uppercase;
+      box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.2);
+      width: 90%;
+
+      &:hover {
+        background-color: #85e9e1;
+        cursor: pointer;
+      }
+
+      &:visited {
+        box-shadow: none;
+      }
+
+      &:active {
+        box-shadow: none;
+      }
+    }
+
+    .icon {
+      display: none;
+      visibility: hidden;
+    }
+  }
+
+  /* 370px */
+  @media (max-width: 23.125em) {
+    .mobile-btn-text {
+      font-size: 1.2rem;
+      padding: 0.8rem 1.5rem;
+    }
   }
 `;
 
@@ -241,6 +290,7 @@ const StyledButtons = styled.div`
     max-height: ${(props) => (props.$expanded ? "100px" : "0px")};
     opacity: ${(props) => (props.$expanded ? 1 : 0)};
     visibility: ${(props) => (props.$expanded ? "visible" : "hidden")};
+    padding-bottom: ${(props) => (props.$expanded ? "1rem" : "0rem")};
   }
 `;
 
@@ -412,6 +462,7 @@ function Favorites() {
                     }
                     className="open"
                   >
+                    <span className="mobile-btn-text">Read</span>
                     <ion-icon
                       class="icon icon-open"
                       name="open-outline"
@@ -423,6 +474,7 @@ function Favorites() {
                     onClick={() => handleUnfavorite(story.id)}
                     className="star"
                   >
+                    <span className="mobile-btn-text">Remove</span>
                     <ion-icon class="icon icon-star" name="star"></ion-icon>
                     <Tooltip>Remove from favorites</Tooltip>
                   </StyledButton>

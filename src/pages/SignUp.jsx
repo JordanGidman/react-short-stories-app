@@ -83,18 +83,6 @@ const StyledForm = styled.form`
     width: 100%;
   }
 `;
-// const StyledInput = styled.input`
-//   padding: 1rem 2rem;
-//   text-transform: capitalize;
-//   font-size: 1.6rem;
-//   border: none;
-//   border-bottom: 1px solid rgb(0, 0, 0, 0.2);
-
-//   &::placeholder {
-//     color: rgb(0, 0, 0, 0.5);
-//     font-style: italic;
-//   }
-// `;
 
 const StyledInputBox = styled(InputBox)`
   width: 100%;

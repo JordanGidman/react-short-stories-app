@@ -87,8 +87,8 @@ const StyledListItem = styled.li`
     padding-right: 4rem;
   }
 
-  /* 525px */
-  @media (max-width: 32.81em) {
+  /* 830px */
+  @media (max-width: 51.875em) {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -141,10 +141,19 @@ const StyledButtons = styled.div`
     grid-column: 3/4;
     width: 100%;
     overflow: hidden;
-    transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out;
+    gap: 1rem;
+    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
     max-height: ${(props) => (props.$expanded ? "100px" : "0px")};
     opacity: ${(props) => (props.$expanded ? 1 : 0)};
     visibility: ${(props) => (props.$expanded ? "visible" : "hidden")};
+    padding-bottom: ${(props) => (props.$expanded ? "1rem" : "0rem")};
+  }
+
+  /* 830px */
+  @media (max-width: 51.875em) {
+    .mobile-btn-text {
+      gap: 0rem;
+    }
   }
 `;
 
@@ -165,6 +174,11 @@ const StyledButton = styled.button`
     }
   }
 
+  .mobile-btn-text {
+    display: none;
+    visibility: hidden;
+  }
+
   &:hover {
     cursor: pointer;
     color: #ffbe0b;
@@ -173,6 +187,51 @@ const StyledButton = styled.button`
   /* 930px */
   @media (max-width: 58.125em) {
     width: 100%;
+
+    .mobile-btn-text {
+      display: inline-block;
+      visibility: visible;
+      font-family: "Montserrat", sans-serif;
+      background-color: #ffee34;
+      border: none;
+      color: rgb(28, 31, 46, 0.8);
+      font-size: 1.4rem;
+      letter-spacing: 0.1rem;
+      padding: 1rem 2rem;
+      transition: all 0.4s ease-in-out;
+      font-weight: 600;
+      border-radius: 2rem;
+      text-transform: uppercase;
+      box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.2);
+      width: 90%;
+      padding: 0.8rem 1.5rem;
+
+      &:hover {
+        background-color: #85e9e1;
+        cursor: pointer;
+      }
+
+      &:visited {
+        box-shadow: none;
+      }
+
+      &:active {
+        box-shadow: none;
+      }
+    }
+
+    .icon {
+      display: none;
+      visibility: hidden;
+    }
+  }
+
+  /* 830px */
+  @media (max-width: 51.875em) {
+    .mobile-btn-text {
+      font-size: 1.2rem;
+      gap: 0rem;
+    }
   }
 `;
 
@@ -381,6 +440,7 @@ function Drafts() {
                       navigate(`/edit/${story.draftId}`, { state: { story } })
                     }
                   >
+                    <span className="mobile-btn-text">Edit</span>
                     <ion-icon
                       className="icon icon-edit"
                       name="create-outline"
@@ -389,6 +449,7 @@ function Drafts() {
                   </StyledButton>
 
                   <StyledButton onClick={() => handleDelete(story.draftId)}>
+                    <span className="mobile-btn-text">Delete</span>
                     <ion-icon
                       name="trash-outline"
                       className="icon icon-delete"

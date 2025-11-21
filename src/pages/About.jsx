@@ -249,6 +249,7 @@ function About() {
     <StyledAbout>
       {/* <Navbar /> */}
       <StyledWrapper>
+        {/* flipped prop for small viewport as we need different styling depending on the layout */}
         <StyledHeader $flipped={false}>
           <StyledH1>
             <span>Our</span> Story

@@ -207,7 +207,7 @@ function StoryList() {
   const lastDocRef = useRef(null);
   const [hasMore, setHasMore] = useState(true);
 
-  //Capitalize genre to match storied format
+  //Capitalize genre to match stored format
   const genreName = genre
     .split(" ")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))

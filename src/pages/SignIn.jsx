@@ -81,18 +81,6 @@ const StyledForm = styled.form`
     width: 100%;
   }
 `;
-// const StyledInput = styled.input`
-//   padding: 1rem 2rem;
-//   text-transform: capitalize;
-//   font-size: 1.6rem;
-//   border: none;
-//   border-bottom: 1px solid rgb(0, 0, 0, 0.2);
-
-//   &::placeholder {
-//     color: rgb(0, 0, 0, 0.5);
-//     font-style: italic;
-//   }
-// `;
 
 const StyledInputBox = styled(InputBox)`
   width: 100%;
@@ -120,6 +108,12 @@ const StyledImg = styled.div`
 
   height: 70%;
   width: 65%;
+`;
+
+const StyledError = styled.span`
+  width: 100%;
+  color: red;
+  text-align: center;
 `;
 
 const StyledFooter = styled.p`
@@ -184,7 +178,7 @@ function SignIn() {
           <StyledInputBox type="email" placeholder="* Email" />
           <StyledInputBox type="password" placeholder="* Password" />
           <SigninButton disabled={isLoading}>Sign in</SigninButton>
-          {error && <span>Something went wrong..</span>}
+          {error && <StyledError>Something went wrong..</StyledError>}
         </StyledForm>
         <StyledFooter>
           Don't have an account?{" "}
