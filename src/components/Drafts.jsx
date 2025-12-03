@@ -79,12 +79,18 @@ const StyledListItem = styled.li`
   width: 100%;
   padding: 2rem 0rem;
 
+  transition: all 0.3s ease-in-out;
+
   /* 930px */
   @media (max-width: 58.125em) {
     grid-template-columns: repeat(3, 1fr);
     row-gap: ${(props) => (props.$expanded ? "3rem" : "0rem")};
     justify-items: center;
     padding-right: 4rem;
+
+    .created-at {
+      grid-column: 3/4;
+    }
   }
 
   /* 830px */
@@ -98,13 +104,13 @@ const StyledListItem = styled.li`
 `;
 
 const StyledItemText = styled.p`
-  transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
   overflow: hidden;
 
+  /* 930px */
   @media (max-width: 58.125em) {
-    max-height: ${(props) => (props.$expanded ? "200px" : "0px")};
+    max-height: ${(props) => (props.$expanded ? "400px" : "0px")};
     opacity: ${(props) => (props.$expanded ? 1 : 0)};
-    visibility: ${(props) => (props.$expanded ? "visible" : "hidden")};
   }
 
   /* 525px */
@@ -120,8 +126,13 @@ const StyledTitle = styled.p`
   /* 930px */
   @media (max-width: 58.125em) {
     grid-column: span 2;
+    font-weight: 500;
   }
 
+  /* 830px */
+  @media (max-width: 51.875em) {
+    margin-top: ${(props) => (props.$expanded ? "0rem" : "1rem")};
+  }
   /* 525px */
   @media (max-width: 32.81em) {
     /* font-size: 1.4rem; */
@@ -136,21 +147,25 @@ const StyledButtons = styled.div`
 
   /* 930px */
   @media (max-width: 58.125em) {
-    /* display: grid;
-    grid-template-columns: repeat(3, 1fr); */
-    grid-column: 3/4;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column: span 3;
     width: 100%;
     overflow: hidden;
     gap: 1rem;
     transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
     max-height: ${(props) => (props.$expanded ? "100px" : "0px")};
     opacity: ${(props) => (props.$expanded ? 1 : 0)};
-    visibility: ${(props) => (props.$expanded ? "visible" : "hidden")};
     padding-bottom: ${(props) => (props.$expanded ? "1rem" : "0rem")};
+
+    .delete {
+      grid-column: 3/4;
+    }
   }
 
   /* 830px */
   @media (max-width: 51.875em) {
+    display: flex;
     .mobile-btn-text {
       gap: 0rem;
     }
@@ -427,7 +442,10 @@ function Drafts() {
                 <StyledItemText $expanded={expandedStories.has(story.id)}>
                   {story.genre || "No Genre"}
                 </StyledItemText>
-                <StyledItemText $expanded={expandedStories.has(story.id)}>
+                <StyledItemText
+                  $expanded={expandedStories.has(story.id)}
+                  className="created-at"
+                >
                   Created:{" "}
                   {new Date(story.createdAt?.seconds * 1000).toLocaleDateString(
                     "en-US"
@@ -448,7 +466,10 @@ function Drafts() {
                     <Tooltip>Edit</Tooltip>
                   </StyledButton>
 
-                  <StyledButton onClick={() => handleDelete(story.draftId)}>
+                  <StyledButton
+                    onClick={() => handleDelete(story.draftId)}
+                    className="delete"
+                  >
                     <span className="mobile-btn-text">Delete</span>
                     <ion-icon
                       name="trash-outline"

@@ -143,6 +143,7 @@ function App() {
   //     - Sign Up - Done
   //40 -  Need to take into account the scale of the app, there are 200+ stories already but that number can increase greatly and i should plan for that, with story pull limits/pagination - Done
   //41 - Buttons on the mystories/favorites/drafts page dont get the tooltip when hovered on mobile layout (Fixed by replacing the icons on smaller layouts as hovering is not an option and i want it to be accessible) - Done
+  //42 - drafts and favorites expand button has a delay when closing and does not look smooth like mystories and favorites - Fixed - Done
 
   //WIP
   //1 - Animations and transitions - Not done
@@ -159,8 +160,7 @@ function App() {
   //12 - Deployment - Not done
 
   //UNFIXED BUGS
-  //drafts expand button has a delay when closing and does not look smooth like mystories and favorites
-  //on mobile layout the account page navbar is misakligned due to the scroll bar
+  //on mobile layout the account page navbar is misaligned due to the scroll bar
 
   return (
     <AuthContextProvider>

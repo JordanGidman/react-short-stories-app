@@ -71,7 +71,7 @@ const StyledStoryList = styled.ul`
 const StyledListItem = styled.li`
   display: grid;
   position: relative;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   align-items: center;
   justify-content: space-between;
   text-align: center;
@@ -86,6 +86,10 @@ const StyledListItem = styled.li`
     row-gap: ${(props) => (props.$expanded ? "3rem" : "0rem")};
     justify-items: center;
     padding-right: 4rem;
+
+    .author {
+      grid-column: 3/4;
+    }
   }
 
   /* 525px */
@@ -99,13 +103,13 @@ const StyledListItem = styled.li`
 `;
 
 const StyledItemText = styled.p`
-  transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
   overflow: hidden;
 
+  /* 930px */
   @media (max-width: 58.125em) {
-    max-height: ${(props) => (props.$expanded ? "200px" : "0px")};
+    max-height: ${(props) => (props.$expanded ? "400px" : "0px")};
     opacity: ${(props) => (props.$expanded ? 1 : 0)};
-    visibility: ${(props) => (props.$expanded ? "visible" : "hidden")};
   }
 
   /* 525px */
@@ -126,11 +130,42 @@ const StyledTitle = styled(Link)`
   /* 930px */
   @media (max-width: 58.125em) {
     grid-column: span 2;
+    font-weight: 500;
   }
 
   /* 525px */
   @media (max-width: 32.81em) {
     /* font-size: 1.4rem; */
+  }
+`;
+
+const StyledButtons = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+
+  /* 930px */
+  @media (max-width: 58.125em) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column: span 3;
+    width: 100%;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    max-height: ${(props) => (props.$expanded ? "100px" : "0px")};
+    opacity: ${(props) => (props.$expanded ? 1 : 0)};
+    visibility: ${(props) => (props.$expanded ? "visible" : "hidden")};
+    padding-bottom: ${(props) => (props.$expanded ? "1rem" : "0rem")};
+
+    .star {
+      grid-column: 3/4;
+    }
+  }
+
+  /* 525px */
+  @media (max-width: 32.81em) {
+    display: flex;
   }
 `;
 
@@ -272,26 +307,6 @@ const StyledImg = styled.div`
   background-image: url(${(props) => props.$backgroundImage});
   background-size: cover;
   background-position: center;
-`;
-
-const StyledButtons = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
-
-  @media (max-width: 58.125em) {
-    /* display: grid;
-    grid-template-columns: repeat(3, 1fr); */
-    grid-column: span 2;
-    width: 100%;
-    overflow: hidden;
-    transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out;
-    max-height: ${(props) => (props.$expanded ? "100px" : "0px")};
-    opacity: ${(props) => (props.$expanded ? 1 : 0)};
-    visibility: ${(props) => (props.$expanded ? "visible" : "hidden")};
-    padding-bottom: ${(props) => (props.$expanded ? "1rem" : "0rem")};
-  }
 `;
 
 function Favorites() {
@@ -454,6 +469,12 @@ function Favorites() {
                   $expanded={expandedStories.has(story.id)}
                 >
                   {story.genre}
+                </StyledItemText>
+                <StyledItemText
+                  className="author"
+                  $expanded={expandedStories.has(story.id)}
+                >
+                  {story.author}
                 </StyledItemText>
                 <StyledButtons $expanded={expandedStories.has(story.id)}>
                   <StyledButton
