@@ -1,29 +1,33 @@
 import styled from "styled-components";
-import Home from "./pages/Home";
+import { lazy, Suspense } from "react";
 import GlobalStyles from "./GlobalStyles";
-import SignIn from "./pages/SignIn";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import PageNotFound from "./pages/PageNotFound";
-import SignUp from "./pages/SignUp";
 import { AuthContextProvider } from "./context/AuthContext";
-import About from "./pages/About";
-import Account from "./pages/Account";
-import WriteStory from "./pages/WriteStory";
-import Library from "./pages/Library";
-import StoryList from "./pages/StoryList";
-import Book from "./pages/Story";
-import MyStories from "./pages/MyStories";
-import EditStory from "./pages/EditStory";
 import ScrollToTop from "./helpers/ScrollToTop";
-import Favorites from "./components/Favorites";
-import EditAccount from "./components/EditAccount";
 import ProtectedRoute from "./helpers/ProtectedRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Error from "./pages/Error";
+const Home = lazy(() => import("./pages/Home"));
+const SignIn = lazy(() => import("./pages/SignIn"));
+const PageNotFound = lazy(() => import("./pages/PageNotFound"));
+const SignUp = lazy(() => import("./pages/SignUp"));
+const About = lazy(() => import("./pages/About"));
+const Account = lazy(() => import("./pages/Account"));
+const WriteStory = lazy(() => import("./pages/WriteStory"));
+const Library = lazy(() => import("./pages/Library"));
+const StoryList = lazy(() => import("./pages/StoryList"));
+const Book = lazy(() => import("./pages/Story"));
+const MyStories = lazy(() => import("./pages/MyStories"));
+const EditStory = lazy(() => import("./pages/EditStory"));
+const Favorites = lazy(() => import("./components/Favorites"));
+const EditAccount = lazy(() => import("./components/EditAccount"));
+
+const Error = lazy(() => import("./pages/Error"));
 import Spinner from "./components/Spinner";
-import Drafts from "./components/Drafts";
-import MainLayout from "./layouts/MainLayout";
+
+const Drafts = lazy(() => import("./components/Drafts"));
+
+const MainLayout = lazy(() => import("./layouts/MainLayout"));
 
 const StyledApp = styled.div`
   .Toastify__toast-theme--colored.Toastify__toast--success {
@@ -168,57 +172,59 @@ function App() {
         <GlobalStyles />
         <BrowserRouter>
           <ScrollToTop />
-          <Routes>
-            {/* Layout routes */}
-            <Route element={<MainLayout />}>
-              <Route path="/" element={<Home />} />
-              <Route path="about" element={<About />} />
-              <Route path="library" element={<Library />} />
-              <Route path="library/:genre" element={<StoryList />} />
-              <Route path="library/:genre/story/:id" element={<Book />} />
+          <Suspense fallback={<Spinner />}>
+            <Routes>
+              {/* Layout routes */}
+              <Route element={<MainLayout />}>
+                <Route path="/" element={<Home />} />
+                <Route path="about" element={<About />} />
+                <Route path="library" element={<Library />} />
+                <Route path="library/:genre" element={<StoryList />} />
+                <Route path="library/:genre/story/:id" element={<Book />} />
 
-              {/* Protected nested routes */}
-              <Route
-                path="account/:id"
-                element={
-                  <ProtectedRoute>
-                    <Account />
-                  </ProtectedRoute>
-                }
-              >
-                <Route path="favorites" element={<Favorites />} />
-                <Route path="mystories" element={<MyStories />} />
-                <Route path="drafts" element={<Drafts />} />
-                <Route path="edit" element={<EditAccount />} />
+                {/* Protected nested routes */}
+                <Route
+                  path="account/:id"
+                  element={
+                    <ProtectedRoute>
+                      <Account />
+                    </ProtectedRoute>
+                  }
+                >
+                  <Route path="favorites" element={<Favorites />} />
+                  <Route path="mystories" element={<MyStories />} />
+                  <Route path="drafts" element={<Drafts />} />
+                  <Route path="edit" element={<EditAccount />} />
+                </Route>
+
+                <Route
+                  path="write"
+                  element={
+                    <ProtectedRoute>
+                      <WriteStory />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="edit/:id"
+                  element={
+                    <ProtectedRoute>
+                      <EditStory />
+                    </ProtectedRoute>
+                  }
+                />
+
+                {/* fallback */}
+                <Route path="*" element={<PageNotFound />} />
               </Route>
 
-              <Route
-                path="write"
-                element={
-                  <ProtectedRoute>
-                    <WriteStory />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="edit/:id"
-                element={
-                  <ProtectedRoute>
-                    <EditStory />
-                  </ProtectedRoute>
-                }
-              />
-
-              {/* fallback */}
-              <Route path="*" element={<PageNotFound />} />
-            </Route>
-
-            {/* Routes WITHOUT navbar (auth, spinner, etc.) */}
-            <Route path="signin" element={<SignIn />} />
-            <Route path="signup" element={<SignUp />} />
-            <Route path="error" element={<Error />} />
-            <Route path="spinner" element={<Spinner />} />
-          </Routes>
+              {/* Routes WITHOUT navbar (auth, spinner, etc.) */}
+              <Route path="signin" element={<SignIn />} />
+              <Route path="signup" element={<SignUp />} />
+              <Route path="error" element={<Error />} />
+              <Route path="spinner" element={<Spinner />} />
+            </Routes>
+          </Suspense>
         </BrowserRouter>
 
         <StyledContainer
