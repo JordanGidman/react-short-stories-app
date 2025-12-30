@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import heroImg from "../img/hero-img.jpg";
 import Button from "../components/Button";
 import Featured from "../components/Featured";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   collection,
   getDocs,
@@ -497,13 +497,25 @@ function Home() {
   }, []);
 
   //adjust Picsum sizes
-  function resizePicsum(url, width, height) {
+  const resizePicsum = useCallback((url, width, height) => {
     if (!url) return null;
     const parts = url.split("/");
     parts[parts.length - 2] = width;
     parts[parts.length - 1] = height;
     return parts.join("/");
-  }
+  }, []);
+
+  const heroImage = useMemo(() => {
+    return story?.img
+      ? resizePicsum(story.img, 1920, 1080)
+      : "https://picsum.photos/seed/fallback/1920/1080";
+  }, [story, resizePicsum]);
+
+  const freshImage = useMemo(() => {
+    return freshStory?.img
+      ? resizePicsum(freshStory.img, 1280, 720)
+      : "https://picsum.photos/seed/fallback2/1920/1080";
+  }, [freshStory, resizePicsum]);
 
   if (loading) {
     return (
@@ -526,13 +538,7 @@ function Home() {
   return (
     <div>
       {!loading ? (
-        <StyledHero
-          $img={
-            story?.img
-              ? resizePicsum(story.img, 1920, 1080)
-              : "https://picsum.photos/seed/fallback/1920/1080"
-          }
-        >
+        <StyledHero $img={heroImage}>
           <StyledHeroText>
             <h1>
               What<span>to Read</span>Today
@@ -582,13 +588,7 @@ function Home() {
             More stories like this <ion-icon name="arrow-forward"></ion-icon>
           </StyledAltButton>
         </StyledTextBox>
-        <StyledImg
-          $backgroundImage={
-            freshStory?.img
-              ? resizePicsum(freshStory.img, 1280, 720)
-              : "https://picsum.photos/seed/fallback2/1920/1080"
-          }
-        ></StyledImg>
+        <StyledImg $backgroundImage={freshImage}></StyledImg>
       </StyledFresh>
 
       <StyledPicks id="staff-picks">

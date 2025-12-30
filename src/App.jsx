@@ -21,13 +21,10 @@ const MyStories = lazy(() => import("./pages/MyStories"));
 const EditStory = lazy(() => import("./pages/EditStory"));
 const Favorites = lazy(() => import("./components/Favorites"));
 const EditAccount = lazy(() => import("./components/EditAccount"));
-
-const Error = lazy(() => import("./pages/Error"));
+import Error from "./pages/Error";
 import Spinner from "./components/Spinner";
-
 const Drafts = lazy(() => import("./components/Drafts"));
-
-const MainLayout = lazy(() => import("./layouts/MainLayout"));
+import MainLayout from "./layouts/MainLayout";
 
 const StyledApp = styled.div`
   .Toastify__toast-theme--colored.Toastify__toast--success {
@@ -165,6 +162,7 @@ function App() {
 
   //UNFIXED BUGS
   //on mobile layout the account page navbar is misaligned due to the scroll bar
+  //When on a story page and liking a story the styling of the button changes pushing the button to the right when liked. Need to fix this.
 
   return (
     <AuthContextProvider>

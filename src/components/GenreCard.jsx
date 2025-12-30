@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Button from "./Button";
 import { Link } from "react-router-dom";
+import { memo } from "react";
 
 const StyledCard = styled.li`
   display: flex;
@@ -112,7 +113,7 @@ const StyledWrapper = styled.div`
   width: 100%;
 `;
 
-function GenreCard({
+const GenreCard = memo(function GenreCard({
   genre,
   span,
   align,
@@ -146,6 +147,6 @@ function GenreCard({
       </StyledLink>
     </StyledCard>
   );
-}
+});
 
 export default GenreCard;

@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import styled from "styled-components";
 import placeholder from "../img/placeholder.jpg";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, memo, useMemo } from "react";
 import Button from "./Button";
 import { Link } from "react-router-dom";
 import {
@@ -188,18 +188,21 @@ const StyledButtons = styled.div`
 
 const StyledLink = styled(Link)``;
 
-function StoryCard({ story }) {
+const StoryCard = memo(function StoryCard({ story }) {
   const [loadedImg, setLoadedImg] = useState(null);
   const [author, setAuthor] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const { currentUser } = useContext(AuthContext);
 
-  const isCriticalError =
-    !story.title &&
-    !story.synopsis &&
-    (!loadedImg || loadedImg === placeholder) &&
-    (!author || author == "Unknown author");
+  const isCriticalError = useMemo(() => {
+    return (
+      !story.title &&
+      !story.synopsis &&
+      (!loadedImg || loadedImg === placeholder) &&
+      (!author || author === "Unknown author")
+    );
+  }, [story.title, story.synopsis, loadedImg, author]);
 
   useEffect(() => {
     if (!story.creatorID) return;
@@ -228,7 +231,7 @@ function StoryCard({ story }) {
       setError(error);
       toast.error(`Error: ${error.message}`);
     }
-  }, [story]);
+  }, [story.creatorID]);
 
   useEffect(() => {
     if (!story.img) return;
@@ -247,16 +250,16 @@ function StoryCard({ story }) {
     img.src = story.img;
   }, [story.img]);
 
-  async function handleLike(userId, isLiked) {
-    try {
-      await updateDoc(doc(db, "stories", story.id), {
-        likes: isLiked ? arrayRemove(userId) : arrayUnion(userId),
-      });
-      toast.success(isLiked ? "Like removed." : "Story liked!");
-    } catch (err) {
-      toast.error("Could not update like status.");
-    }
-  }
+  // async function handleLike(userId, isLiked) {
+  //   try {
+  //     await updateDoc(doc(db, "stories", story.id), {
+  //       likes: isLiked ? arrayRemove(userId) : arrayUnion(userId),
+  //     });
+  //     toast.success(isLiked ? "Like removed." : "Story liked!");
+  //   } catch (err) {
+  //     toast.error("Could not update like status.");
+  //   }
+  // }
 
   if (isCriticalError)
     return (
@@ -300,6 +303,6 @@ function StoryCard({ story }) {
       </StyledTextBox>
     </StyledStoryCard>
   );
-}
+});
 
 export default StoryCard;

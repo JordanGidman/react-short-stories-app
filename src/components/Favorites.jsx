@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { AuthContext } from "../context/AuthContext";
 import { db } from "../firebase";
@@ -19,6 +19,7 @@ import Search from "./Search";
 import Spinner from "./Spinner";
 import Error from "../pages/Error"; // assuming this exists
 import Navbar from "./Navbar";
+import FavoriteStoryItem from "./FavoriteStoryItem";
 
 const StyledFavorites = styled.div`
   min-height: 100%;
@@ -68,247 +69,6 @@ const StyledStoryList = styled.ul`
   } */
 `;
 
-const StyledListItem = styled.li`
-  display: grid;
-  position: relative;
-  grid-template-columns: repeat(5, 1fr);
-  align-items: center;
-  justify-content: space-between;
-  text-align: center;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  width: 100%;
-  padding: 2rem 0rem;
-  transition: all 0.3s ease-in-out;
-
-  /* 930px */
-  @media (max-width: 58.125em) {
-    grid-template-columns: repeat(3, 1fr);
-    row-gap: ${(props) => (props.$expanded ? "3rem" : "0rem")};
-    justify-items: center;
-    padding-right: 4rem;
-
-    .author {
-      grid-column: 3/4;
-    }
-  }
-
-  /* 525px */
-  @media (max-width: 32.81em) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding-right: 0rem;
-  }
-`;
-
-const StyledItemText = styled.p`
-  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  overflow: hidden;
-
-  /* 930px */
-  @media (max-width: 58.125em) {
-    max-height: ${(props) => (props.$expanded ? "400px" : "0px")};
-    opacity: ${(props) => (props.$expanded ? 1 : 0)};
-  }
-
-  /* 525px */
-  @media (max-width: 32.81em) {
-    font-size: 1.4rem;
-  }
-`;
-
-const StyledTitle = styled(Link)`
-  transition: all 0.3s ease-in-out;
-  text-transform: capitalize;
-
-  &:hover {
-    text-decoration: underline;
-    color: #ffbe0b;
-  }
-
-  /* 930px */
-  @media (max-width: 58.125em) {
-    grid-column: span 2;
-    font-weight: 500;
-  }
-
-  /* 525px */
-  @media (max-width: 32.81em) {
-    /* font-size: 1.4rem; */
-  }
-`;
-
-const StyledButtons = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
-
-  /* 930px */
-  @media (max-width: 58.125em) {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-column: span 3;
-    width: 100%;
-    overflow: hidden;
-    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
-    max-height: ${(props) => (props.$expanded ? "100px" : "0px")};
-    opacity: ${(props) => (props.$expanded ? 1 : 0)};
-    visibility: ${(props) => (props.$expanded ? "visible" : "hidden")};
-    padding-bottom: ${(props) => (props.$expanded ? "1rem" : "0rem")};
-
-    .star {
-      grid-column: 3/4;
-    }
-  }
-
-  /* 525px */
-  @media (max-width: 32.81em) {
-    display: flex;
-  }
-`;
-
-const StyledButton = styled.button`
-  position: relative;
-  border: none;
-  background-color: transparent;
-  transition: all 0.3s ease-in-out;
-
-  .icon {
-    font-size: 2.4rem;
-    color: #ffbe0b;
-  }
-
-  .icon-open {
-    color: #000;
-  }
-
-  &:hover {
-    cursor: pointer;
-    color: #ffbe0b;
-  }
-
-  .mobile-btn-text {
-    display: none;
-    visibility: hidden;
-  }
-
-  /* 930px */
-  @media (max-width: 58.125em) {
-    width: 100%;
-
-    .mobile-btn-text {
-      display: inline-block;
-      visibility: visible;
-      font-family: "Montserrat", sans-serif;
-      background-color: #ffee34;
-      border: none;
-      color: rgb(28, 31, 46, 0.8);
-      font-size: 1.4rem;
-      letter-spacing: 0.1rem;
-      padding: 1rem 2rem;
-      transition: all 0.4s ease-in-out;
-      font-weight: 600;
-      border-radius: 2rem;
-      text-transform: uppercase;
-      box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.2);
-      width: 90%;
-
-      &:hover {
-        background-color: #85e9e1;
-        cursor: pointer;
-      }
-
-      &:visited {
-        box-shadow: none;
-      }
-
-      &:active {
-        box-shadow: none;
-      }
-    }
-
-    .icon {
-      display: none;
-      visibility: hidden;
-    }
-  }
-
-  /* 370px */
-  @media (max-width: 23.125em) {
-    .mobile-btn-text {
-      font-size: 1.2rem;
-      padding: 0.8rem 1.5rem;
-    }
-  }
-`;
-
-const StyledExpandButton = styled.button`
-  display: none;
-  border: none;
-  background: none;
-  font-size: 2rem;
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-
-  &:hover {
-    cursor: pointer;
-  }
-
-  /* 930px */
-  @media (max-width: 58.125em) {
-    display: inline-block;
-  }
-
-  /* 400px */
-  @media (max-width: 25em) {
-    right: 2rem;
-  }
-`;
-
-const Tooltip = styled.span`
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  position: absolute;
-  bottom: 125%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #1c1f2e;
-  color: #fff;
-  padding: 0.4rem 0.8rem;
-  border-radius: 0.4rem;
-  font-size: 1.2rem;
-  white-space: nowrap;
-  z-index: 1;
-
-  &::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #333 transparent transparent transparent;
-  }
-
-  ${StyledButton}:hover & {
-    visibility: visible;
-    opacity: 1;
-  }
-`;
-
-const StyledImg = styled.div`
-  width: 15rem;
-  height: 8rem;
-  background-image: url(${(props) => props.$backgroundImage});
-  background-size: cover;
-  background-position: center;
-`;
-
 function Favorites() {
   const { currentUser } = useContext(AuthContext);
   const [favorites, setFavorites] = useState(null);
@@ -318,23 +78,37 @@ function Favorites() {
   const [error, setError] = useState(null);
   const [sortBy, setSortBy] = useState("placeholder");
   const [search, setSearch] = useState("");
-  const navigate = useNavigate();
+
   const [expandedStories, setExpandedStories] = useState(new Set());
 
+  function toggleExpand(storyId) {
+    setExpandedStories((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(storyId)) newSet.delete(storyId);
+      else newSet.add(storyId);
+      return newSet;
+    });
+  }
+
   // Derived sorted stories
-  const sortedStories = [...stories].sort((a, b) => {
-    if (sortBy === "newest")
-      return b.createdAt.seconds !== a.createdAt.seconds
-        ? b.createdAt.seconds - a.createdAt.seconds
-        : b.createdAt.nanoseconds - a.createdAt.nanoseconds;
-    if (sortBy === "oldest")
-      return b.createdAt.seconds !== a.createdAt.seconds
-        ? a.createdAt.seconds - b.createdAt.seconds
-        : a.createdAt.nanoseconds - b.createdAt.nanoseconds;
-    if (sortBy === "mostlikes")
-      return (b.likes?.length || 0) - (a.likes?.length || 0);
-    return 0;
-  });
+  const sortedStories = useMemo(() => {
+    return [...stories].sort((a, b) => {
+      if (sortBy === "newest")
+        return b.createdAt.seconds !== a.createdAt.seconds
+          ? b.createdAt.seconds - a.createdAt.seconds
+          : b.createdAt.nanoseconds - a.createdAt.nanoseconds;
+
+      if (sortBy === "oldest")
+        return b.createdAt.seconds !== a.createdAt.seconds
+          ? a.createdAt.seconds - b.createdAt.seconds
+          : a.createdAt.nanoseconds - b.createdAt.nanoseconds;
+
+      if (sortBy === "mostlikes")
+        return (b.likes?.length || 0) - (a.likes?.length || 0);
+
+      return 0;
+    });
+  }, [stories, sortBy]);
 
   // Load user's favorites
   useEffect(() => {
@@ -364,7 +138,7 @@ function Favorites() {
     );
 
     return () => unsub();
-  }, [currentUser]);
+  }, [currentUser.uid]);
 
   // Load stories by favorite IDs
   useEffect(() => {
@@ -394,27 +168,6 @@ function Favorites() {
 
     return () => unsub();
   }, [favorites]);
-
-  async function handleUnfavorite(id) {
-    try {
-      await updateDoc(doc(db, "users", currentUser?.uid), {
-        favorites: arrayRemove(id),
-      });
-      toast.success("Removed story from favorites");
-    } catch (error) {
-      console.error(error);
-      toast.error("Unfavorite failed. Please try again later");
-    }
-  }
-
-  function toggleExpandStory(storyId) {
-    setExpandedStories((prevExpandedStories) => {
-      const newExpandedStories = new Set(prevExpandedStories);
-      if (newExpandedStories.has(storyId)) newExpandedStories.delete(storyId);
-      else newExpandedStories.add(storyId);
-      return newExpandedStories;
-    });
-  }
 
   if (loading)
     return (
@@ -449,58 +202,12 @@ function Favorites() {
                 story.title.toLowerCase().includes(search)
             )
             .map((story) => (
-              <StyledListItem
+              <FavoriteStoryItem
                 key={story.id}
-                $expanded={expandedStories.has(story.id)}
-              >
-                <StyledImg $backgroundImage={story.img} alt={story.title} />
-                <StyledTitle
-                  to={`/library/${story.genre.split("-").join(" ")}/story/${
-                    story.id
-                  }`}
-                >
-                  {story.title}
-                </StyledTitle>
-                <StyledExpandButton onClick={() => toggleExpandStory(story.id)}>
-                  {expandedStories.has(story.id) ? "−" : "+"}
-                </StyledExpandButton>
-                <StyledItemText
-                  className="genre"
-                  $expanded={expandedStories.has(story.id)}
-                >
-                  {story.genre}
-                </StyledItemText>
-                <StyledItemText
-                  className="author"
-                  $expanded={expandedStories.has(story.id)}
-                >
-                  {story.author}
-                </StyledItemText>
-                <StyledButtons $expanded={expandedStories.has(story.id)}>
-                  <StyledButton
-                    onClick={() =>
-                      navigate(`/library/${story.genre}/book/${story.id}`)
-                    }
-                    className="open"
-                  >
-                    <span className="mobile-btn-text">Read</span>
-                    <ion-icon
-                      class="icon icon-open"
-                      name="open-outline"
-                    ></ion-icon>
-                    <Tooltip>Read</Tooltip>
-                  </StyledButton>
-
-                  <StyledButton
-                    onClick={() => handleUnfavorite(story.id)}
-                    className="star"
-                  >
-                    <span className="mobile-btn-text">Remove</span>
-                    <ion-icon class="icon icon-star" name="star"></ion-icon>
-                    <Tooltip>Remove from favorites</Tooltip>
-                  </StyledButton>
-                </StyledButtons>
-              </StyledListItem>
+                story={story}
+                isExpanded={expandedStories.has(story.id)}
+                toggleExpand={() => toggleExpand(story.id)}
+              />
             ))}
         </StyledStoryList>
       )}
