@@ -158,11 +158,11 @@ function App() {
   //9 - Accessibility Improvements - Not done
   //10 - Ability to add multiple genres (maybe)- Not done
   //11 - Either add a dashboard or make a different page on the account the default outlet. - Not done
+  //12 - Add validation to comments to make sure they are not empty and do not exceed a certain length - Not done
   //12 - Deployment - Not done
 
   //UNFIXED BUGS
   //on mobile layout the account page navbar is misaligned due to the scroll bar
-  //When on a story page and liking a story the styling of the button changes pushing the button to the right when liked. Need to fix this.
 
   return (
     <AuthContextProvider>

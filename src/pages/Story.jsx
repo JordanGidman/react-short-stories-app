@@ -143,7 +143,8 @@ const StyledLikes = styled.div`
   span {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    min-width: 15rem;
     gap: 1rem;
     font-size: 2rem;
 
