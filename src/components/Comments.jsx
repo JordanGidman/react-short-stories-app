@@ -5,7 +5,7 @@ import {
   onSnapshot,
   updateDoc,
 } from "firebase/firestore";
-import { useContext, useEffect, useState } from "react";
+import { use, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { db } from "../firebase";
 import CommentCard from "./CommentCard";
@@ -14,6 +14,7 @@ import Button from "./Button";
 import { AuthContext } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import Error from "../pages/Error";
+import "react-quill-new/dist/quill.snow.css";
 
 const StyledComments = styled.div`
   display: flex;
@@ -49,6 +50,7 @@ const StyledQuill = styled(ReactQuill)`
     min-height: 10rem;
     font-size: 1.6rem;
     font-family: "Montserrat", sans-serif;
+    /* border: 0.1rem solid #000; */
   }
 
   /* 930px */
@@ -98,6 +100,7 @@ function Comments({ storyId }) {
   const [loading, setLoading] = useState(true);
   const { currentUser } = useContext(AuthContext);
   const [error, setError] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
   console.log(story?.comments);
 
@@ -118,6 +121,7 @@ function Comments({ storyId }) {
 
   async function handleCommentSubmit(e) {
     e.preventDefault();
+    setSubmitting(true);
     //Submit comment to backend
 
     if (!currentUser) return alert("You must be logged in to post a comment.");
@@ -139,6 +143,7 @@ function Comments({ storyId }) {
       toast.error(`Comment failed: ${error.message}`);
     } finally {
       toast.success("Comment posted");
+      setSubmitting(false);
     }
 
     //Clear form
@@ -168,7 +173,7 @@ function Comments({ storyId }) {
           className="text-editor"
           value={comment}
           onChange={(value) => setComment(value)}
-          readOnly={loading}
+          readOnly={submitting}
           modules={{ toolbar: false }}
         />
         <StyledButton disabled={loading} onClick={handleCommentSubmit}>
