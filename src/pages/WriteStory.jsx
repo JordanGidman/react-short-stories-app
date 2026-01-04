@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import Navbar from "../components/Navbar";
 import Button from "../components/Button";
 import InputBox from "../components/InputBox";
 import "react-quill-new/dist/quill.snow.css";
@@ -16,9 +15,10 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Footer from "../components/Footer";
 import Error from "./Error";
+
 import Spinner from "../components/Spinner";
+import { s } from "motion/react-client";
 
 const StyledWriteBook = styled.div`
   display: flex;
@@ -223,9 +223,23 @@ function WriteBook() {
   const [img, setImg] = useState(`https://picsum.photos/seed/hireme/600/400`);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isDirty, setIsDirty] = useState(false);
   // const { state } = useLocation();
   // const story = state ? state.story : null;
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isDirty) return;
+
+    const handler = (e) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }),
+    [isDirty];
 
   async function handleSubmit(e, isDraft) {
     console.log(e);
@@ -348,14 +362,20 @@ function WriteBook() {
                 placeholder="Title of your story *"
                 disabled={loading}
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                  setIsDirty(true);
+                }}
               />
 
               <StyledSelect
                 name="genre"
                 disabled={loading}
                 value={genre}
-                onChange={(e) => setGenre(e.target.value)}
+                onChange={(e) => {
+                  setGenre(e.target.value);
+                  setIsDirty(true);
+                }}
               >
                 <StyledOption name="placeholder" value="Misc" disabled hidden>
                   Select Genre *
@@ -388,7 +408,10 @@ function WriteBook() {
                 placeholder="A short synopsis of your story *"
                 disabled={loading}
                 value={synopsis}
-                onChange={(e) => setSynopsis(e.target.value)}
+                onChange={(e) => {
+                  setSynopsis(e.target.value);
+                  setIsDirty(true);
+                }}
               />
               <StyledInputBox
                 type="text"
@@ -408,7 +431,10 @@ function WriteBook() {
                 placeholder="Write your story here... *"
                 className="text-editor"
                 value={storyText}
-                onChange={(value) => setStoryText(value)}
+                onChange={(value) => {
+                  setStoryText(value);
+                  setIsDirty(true);
+                }}
                 readOnly={loading}
               />
               <StyledButtons>
