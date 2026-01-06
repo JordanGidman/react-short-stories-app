@@ -22,6 +22,8 @@ import Error from "../pages/Error";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
 
+const StyledMain = styled.main``;
+
 const StyledHero = styled.div`
   background-image: url(${(props) => props.$img});
   width: 100vw;
@@ -536,7 +538,7 @@ function Home() {
 
   //Normal UI render
   return (
-    <div>
+    <StyledMain>
       {!loading ? (
         <StyledHero $img={heroImage}>
           <StyledHeroText>
@@ -615,7 +617,7 @@ function Home() {
           )}
         </StyledCardsBox>
       </StyledPicks>
-    </div>
+    </StyledMain>
   );
 }
 

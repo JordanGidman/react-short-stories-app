@@ -19,7 +19,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Error from "../pages/Error";
 import { toast } from "react-toastify";
 
-const StyledEditStory = styled.div`
+const StyledEditStory = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;

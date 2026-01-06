@@ -23,7 +23,7 @@ const SigninButton = styled(Button)`
   }
 `;
 
-const StyledContainer = styled.div`
+const StyledContainer = styled.main`
   width: 100%;
   height: 100vh;
   display: flex;

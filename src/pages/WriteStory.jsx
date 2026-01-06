@@ -20,7 +20,7 @@ import Error from "./Error";
 import Spinner from "../components/Spinner";
 import { s } from "motion/react-client";
 
-const StyledWriteBook = styled.div`
+const StyledWriteBook = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;

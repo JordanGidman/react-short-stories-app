@@ -13,7 +13,7 @@ import { Outlet } from "react-router-dom";
 import Footer from "../components/Footer";
 
 // Styled components
-const StyledLibrary = styled.div`
+const StyledLibrary = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;

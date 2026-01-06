@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-const StyledAbout = styled.div`
+const StyledAbout = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;

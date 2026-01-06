@@ -19,7 +19,7 @@ import Spinner from "../components/Spinner";
 import Error from "./Error";
 
 // Styled components (unchanged for brevity)
-const StyledBook = styled.div`
+const StyledBook = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -80,6 +80,18 @@ const StyledOption = styled.option`
   color: #1c1f2e;
 `;
 
+const StyledLabel = styled.label`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+`;
+
 function Search({ sortBy, setSortBy, search, setSearch }) {
   // const [search, setSearch] = useState("");
   const [loading, setLoading] = useState("");
@@ -94,6 +106,7 @@ function Search({ sortBy, setSortBy, search, setSearch }) {
           placeholder="Type a title or author here... "
         />
       </StyledSearch>
+      <StyledLabel htmlFor="sortby-select">Sort stories</StyledLabel>
       <StyledSelect
         onChange={(e) => setSortBy(e.target.value)}
         name="sortby"

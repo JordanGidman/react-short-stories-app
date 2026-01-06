@@ -159,8 +159,8 @@ function App() {
   //8 - Accessibility Improvements - Not done
   //9 - Ability to add multiple genres (maybe)- Not done
   //10 - Either add a dashboard or make a different page on the account the default outlet. - Not done
-
-  //11 - Deployment - Not done
+  //11 - Potentially add the ability to sort by ascending or descending, right now its just one way - Not done
+  //12 - Deployment - Not done
 
   //UNFIXED BUGS
   //on mobile layout the account page navbar is misaligned due to the scroll bar

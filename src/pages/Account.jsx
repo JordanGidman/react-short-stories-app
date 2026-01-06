@@ -15,7 +15,7 @@ import Button from "../components/Button";
 import Spinner from "../components/Spinner";
 import Error from "../pages/Error";
 
-const StyledAccount = styled.div`
+const StyledAccount = styled.main`
   width: 100vw;
   min-height: 100vh;
   padding: 8% 2% 2% 2%;
@@ -170,7 +170,6 @@ const StyledNavItem = styled.li`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   width: 100%;
   padding: 2rem 0rem;
-  color: #999;
 
   /* 1200px */
   @media (max-width: 75em) {
@@ -183,7 +182,7 @@ const StyledNavItem = styled.li`
 `;
 
 const StyledNavLink = styled(NavLink)`
-  color: #999;
+  color: #666;
   transition: all 0.3s ease-in-out;
 
   &:hover {
