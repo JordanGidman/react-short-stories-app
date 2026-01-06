@@ -210,11 +210,6 @@ const StyledButton = styled(Button)`
 `;
 
 function WriteBook() {
-  //Need a check for isLoading state to show a loading spinner while the page is loading
-  //Need to add error handling for the form submission
-  //Need to add a way to save a draft of the story
-  //Need to navigate user to the page of the story they just created.
-
   const { currentUser } = useContext(AuthContext);
   const [storyText, setStoryText] = useState("");
   const [title, setTitle] = useState("");
@@ -228,6 +223,7 @@ function WriteBook() {
   // const story = state ? state.story : null;
   const navigate = useNavigate();
 
+  //Check for unsaved changes and inform the user before leaving the page
   useEffect(() => {
     if (!isDirty) return;
 

@@ -8,7 +8,7 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { db } from "../firebase";
 import styled from "styled-components";
@@ -371,20 +371,25 @@ function MyStories() {
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const [sortBy, setSortBy] = useState("placeholder");
-  const sortedStories = [...stories].sort((a, b) => {
-    if (sortBy === "newest")
-      return b.createdAt.seconds !== a.createdAt.seconds
-        ? b.createdAt.seconds - a.createdAt.seconds
-        : b.createdAt.nanoseconds - a.createdAt.nanoseconds;
-    if (sortBy === "oldest")
-      return b.createdAt.seconds !== a.createdAt.seconds
-        ? a.createdAt.seconds - b.createdAt.seconds
-        : a.createdAt.nanoseconds - b.createdAt.nanoseconds;
+  const sortedStories = useMemo(() => {
+    return [...stories].sort((a, b) => {
+      if (sortBy === "newest")
+        return b.createdAt.seconds !== a.createdAt.seconds
+          ? b.createdAt.seconds - a.createdAt.seconds
+          : b.createdAt.nanoseconds - a.createdAt.nanoseconds;
 
-    if (sortBy === "mostlikes")
-      return (b.likes?.length || 0) - (a.likes?.length || 0);
-    return 0;
-  });
+      if (sortBy === "oldest")
+        return a.createdAt.seconds !== b.createdAt.seconds
+          ? a.createdAt.seconds - b.createdAt.seconds
+          : a.createdAt.nanoseconds - b.createdAt.nanoseconds;
+
+      if (sortBy === "mostlikes")
+        return (b.likes?.length || 0) - (a.likes?.length || 0);
+
+      return 0;
+    });
+  }, [stories, sortBy]);
+
   const [search, setSearch] = useState("");
   const [error, setError] = useState(null);
   const [expandedStories, setExpandedStories] = useState(new Set());

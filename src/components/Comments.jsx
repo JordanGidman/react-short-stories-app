@@ -125,6 +125,7 @@ function Comments({ storyId }) {
     //Submit comment to backend
 
     if (!currentUser) return alert("You must be logged in to post a comment.");
+    if (comment.length <= 0) return alert("Cannot post an empty comment.");
 
     try {
       setLoading(true);
