@@ -147,6 +147,7 @@ function App() {
   //42 - drafts and favorites expand button has a delay when closing and does not look smooth like mystories and favorites - Fixed - Done
   //43 - Notify users when navigating away from pages if their changes/inputs will be saved i.e If they made edits to a story but did not post the changes and are trying to leave the page we should advise them that they havent saved the changes etc - Done
   //44 - Add validation to comments to make sure they are not empty and do not exceed a certain length - Done
+  //45 - Make favorites page the default outlet for account page - Done
 
   //WIP
   //1 - Animations and transitions - Not done
@@ -158,9 +159,8 @@ function App() {
   //7 - SEO Improvements - Not done
   //8 - Accessibility Improvements - Not done
   //9 - Ability to add multiple genres (maybe)- Not done
-  //10 - Either add a dashboard or make a different page on the account the default outlet. - Not done
-  //11 - Potentially add the ability to sort by ascending or descending, right now its just one way - Not done
-  //12 - Deployment - Not done
+  //10 - Potentially add the ability to sort by ascending or descending, right now its just one way - Not done
+  //11 - Deployment - Not done
 
   //UNFIXED BUGS
   //on mobile layout the account page navbar is misaligned due to the scroll bar
@@ -190,6 +190,7 @@ function App() {
                     </ProtectedRoute>
                   }
                 >
+                  <Route index element={<Favorites />} />
                   <Route path="favorites" element={<Favorites />} />
                   <Route path="mystories" element={<MyStories />} />
                   <Route path="drafts" element={<Drafts />} />
