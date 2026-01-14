@@ -92,7 +92,13 @@ const StyledLabel = styled.label`
   border: 0;
 `;
 
-function Search({ sortBy, setSortBy, search, setSearch }) {
+function Search({
+  sortBy,
+  setSortBy,
+  search,
+  setSearch,
+  removeLikesOption = false,
+}) {
   // const [search, setSearch] = useState("");
   const [loading, setLoading] = useState("");
 
@@ -122,9 +128,16 @@ function Search({ sortBy, setSortBy, search, setSearch }) {
         <StyledOption name="newest" value="newest">
           Newest
         </StyledOption>
-        <StyledOption name="mostlieks" value="mostlikes">
-          Most likes
-        </StyledOption>
+        {!removeLikesOption && (
+          <StyledOption name="mostlikes" value="mostlikes">
+            Likes (High to Low)
+          </StyledOption>
+        )}
+        {!removeLikesOption && (
+          <StyledOption name="leastlikes" value="leastlikes">
+            Likes (Low to High)
+          </StyledOption>
+        )}
       </StyledSelect>
     </StyledSorting>
   );

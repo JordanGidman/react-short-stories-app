@@ -269,10 +269,10 @@ function About() {
               stories when i was younger.
             </p>
             <p>
-              I think literature is and always has been the perfect tool to
-              capture the amazing and the outrageous, the absurd and the
-              mystifying, the ordinary and overlooked, the human condition in
-              all its glorious complexity and intricacy.
+              Literature is and always has been the perfect tool to capture the
+              amazing and the outrageous, the absurd and the mystifying, the
+              ordinary and overlooked, the human condition in all its glorious
+              complexity and intricacy.
             </p>
             <p>
               To give people a chance to prove that i have tasked myself with

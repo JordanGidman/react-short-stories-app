@@ -385,6 +385,8 @@ function MyStories() {
 
       if (sortBy === "mostlikes")
         return (b.likes?.length || 0) - (a.likes?.length || 0);
+      if (sortBy === "leastlikes")
+        return (a.likes?.length || 0) - (b.likes?.length || 0);
 
       return 0;
     });

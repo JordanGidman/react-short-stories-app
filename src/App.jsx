@@ -148,6 +148,7 @@ function App() {
   //43 - Notify users when navigating away from pages if their changes/inputs will be saved i.e If they made edits to a story but did not post the changes and are trying to leave the page we should advise them that they havent saved the changes etc - Done
   //44 - Add validation to comments to make sure they are not empty and do not exceed a certain length - Done
   //45 - Make favorites page the default outlet for account page - Done
+  //46 - Potentially add the ability to sort by ascending or descending, right now its just one way - Done
 
   //WIP
   //1 - Animations and transitions - Not done
@@ -156,10 +157,10 @@ function App() {
   //4 - Implement delete account functionality - Not done
   //5 - Optimizations(Img compression, lazy loading, code splitting, memoization, refactors, etc) - Partially done
   //6 - Potentially use session storage to keep write book and other input fields filled - in the case that a user accidentally refreshes before saving we dont want to delete their entire story. - Not done
-  //7 - SEO Improvements - Not done
-  //8 - Accessibility Improvements - Not done
+  //7 - SEO Improvements - Partially done
+  //8 - Accessibility Improvements - Partially done
   //9 - Ability to add multiple genres (maybe)- Not done
-  //10 - Potentially add the ability to sort by ascending or descending, right now its just one way - Not done
+
   //11 - Deployment - Not done
 
   //UNFIXED BUGS

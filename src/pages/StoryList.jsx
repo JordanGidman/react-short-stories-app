@@ -236,6 +236,8 @@ function StoryList() {
           q = query(baseQuery, orderBy("createdAt", "asc"));
         else if (sortBy === "mostlikes")
           q = query(baseQuery, orderBy("likesCount", "desc"));
+        else if (sortBy === "leastlikes")
+          q = query(baseQuery, orderBy("likesCount", "asc"));
         else q = query(baseQuery, orderBy("createdAt", "desc"));
 
         // Pagination - fetch one extra doc to check if more exist

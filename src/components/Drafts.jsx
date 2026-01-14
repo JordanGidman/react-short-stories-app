@@ -337,8 +337,7 @@ function Drafts() {
       return b.createdAt.seconds !== a.createdAt.seconds
         ? a.createdAt.seconds - b.createdAt.seconds
         : a.createdAt.nanoseconds - b.createdAt.nanoseconds;
-    if (sortBy === "mostlikes")
-      return (b.likes?.length || 0) - (a.likes?.length || 0);
+
     return 0;
   });
 
@@ -415,6 +414,7 @@ function Drafts() {
           setSortBy={setSortBy}
           search={search}
           setSearch={setSearch}
+          removeLikesOption={true}
         />
       </StyledHead>
 
