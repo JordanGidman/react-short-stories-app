@@ -151,17 +151,17 @@ function App() {
   //46 - Potentially add the ability to sort by ascending or descending, right now its just one way - Done
 
   //WIP
-  //1 - Animations and transitions - Not done
-  //2 - Edit comments (maybe)
-  //3 - Favicon - Not done
-  //4 - Implement delete account functionality - Not done
-  //5 - Optimizations(Img compression, lazy loading, code splitting, memoization, refactors, etc) - Partially done
-  //6 - Potentially use session storage to keep write book and other input fields filled - in the case that a user accidentally refreshes before saving we dont want to delete their entire story. - Not done
-  //7 - SEO Improvements - Partially done
-  //8 - Accessibility Improvements - Partially done
-  //9 - Ability to add multiple genres (maybe)- Not done
+  //1 - Favicon - Not done
+  //2 - Implement delete account functionality - Not done
+  //3 - Optimizations(Img compression, lazy loading, code splitting, memoization, refactors, etc) - Partially done
+  //4 - SEO Improvements - Partially done
+  //5 - Accessibility Improvements - Partially done
+  //6 - Deployment - Not done
 
-  //11 - Deployment - Not done
+  //POSSIBLE FUTURE FEATURES
+  //1 - Edit comments
+  //2 - Animations and transitions
+  //3 - Ability to add multiple genres
 
   //UNFIXED BUGS
   //on mobile layout the account page navbar is misaligned due to the scroll bar

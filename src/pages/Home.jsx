@@ -1,10 +1,20 @@
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
-import heroImg from "../img/hero-img.jpg";
+// import heroImg from "../img/hero-img.jpg";
 import Button from "../components/Button";
-import Featured from "../components/Featured";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+// import Featured from "../components/Featured";
+const Featured = lazy(() => import("../components/Featured"));
+const StaffPicks = lazy(() => import("../components/StaffPicks"));
 import {
   collection,
   getDocs,
@@ -25,12 +35,13 @@ import Spinner from "../components/Spinner";
 const StyledMain = styled.main``;
 
 const StyledHero = styled.div`
-  background-image: url(${(props) => props.$img});
+  /* background-image: url(${(props) => props.$img}); */
   width: 100vw;
   height: 100vh;
   background-size: cover;
   background-position: center;
   z-index: 2;
+  position: relative;
 
   //Dim image brightness overlay
   &:before {
@@ -43,6 +54,14 @@ const StyledHero = styled.div`
     background: rgba(0, 0, 0, 0.5);
     z-index: 1;
   }
+`;
+
+const StyledHeroImage = styled.img`
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;
 
 const StyledHeroText = styled.div`
@@ -298,95 +317,6 @@ const StyledAltButton = styled.button`
   }
 `;
 
-const StyledPicks = styled.div`
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  width: 100vw;
-  min-height: calc(100vh - 7.8rem);
-  background-color: #f7f7f7;
-
-  h1 {
-    background-color: #1c1f2e;
-    padding: 1rem 2rem;
-    font-family: "Playfair Display", serif;
-    font-weight: 900;
-    box-shadow: 0rem 0.8rem 0.8rem rgba(0, 0, 0, 0.3);
-    text-transform: capitalize;
-    color: #fff;
-    width: auto;
-
-    span {
-      font-style: italic;
-    }
-  }
-  /* 1155px */
-  @media (max-width: 72.2em) {
-    grid-template-rows: 1fr 2fr !important;
-  }
-  @media (max-width: 34.4em) {
-    h1 {
-      font-size: 2.4rem;
-    }
-  }
-`;
-
-const StyledPicksSubheading = styled.div`
-  font-size: 4.8rem;
-  text-transform: uppercase;
-  font-weight: 600;
-  font-family: "Playfair Display", serif;
-
-  @media (max-width: 34.4em) {
-    font-size: 3.6rem;
-  }
-`;
-
-const StyledPicksText = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  text-align: center;
-  width: 100%;
-  height: 100%;
-  background-color: #f7f7f7;
-  padding: 4rem;
-  text-transform: uppercase;
-
-  p {
-    font-size: 2rem;
-    font-weight: 500;
-    letter-spacing: 0.4rem;
-  }
-
-  .underline {
-    background-color: #000;
-    height: 0.1rem;
-    width: 30%;
-  }
-
-  @media (max-width: 34.4em) {
-    p {
-      font-size: 1.6rem;
-    }
-  }
-`;
-
-const StyledCardsBox = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  width: 100vw;
-  gap: 2rem;
-  padding: 4rem;
-
-  /* 1155px */
-  @media (max-width: 72.2em) {
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-    height: auto !important;
-  }
-`;
-
 function Home() {
   const [story, setStory] = useState();
   const [freshStory, setFreshStory] = useState();
@@ -509,8 +439,8 @@ function Home() {
 
   const heroImage = useMemo(() => {
     return story?.img
-      ? resizePicsum(story.img, 1920, 1080)
-      : "https://picsum.photos/seed/fallback/1920/1080";
+      ? resizePicsum(story.img, 1280, 720)
+      : "https://picsum.photos/seed/fallback/1280/720";
   }, [story, resizePicsum]);
 
   const freshImage = useMemo(() => {
@@ -519,14 +449,14 @@ function Home() {
       : "https://picsum.photos/seed/fallback2/1920/1080";
   }, [freshStory, resizePicsum]);
 
-  if (loading) {
-    return (
-      <>
-        <Navbar />
-        <Spinner $height={"calc(100vh - 8rem)"} />
-      </>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <>
+  //       <Navbar />
+  //       <Spinner $height={"calc(100vh - 8rem)"} />
+  //     </>
+  //   );
+  // }
 
   if (isCriticalError) {
     return (
@@ -539,32 +469,50 @@ function Home() {
   //Normal UI render
   return (
     <StyledMain>
-      {!loading ? (
-        <StyledHero $img={heroImage}>
-          <StyledHeroText>
-            <h1>
-              What<span>to Read</span>Today
-            </h1>
-            <p className="author">{story?.author || "Unknown Author"}</p>
-            <p className="title">{story?.title || "Untitled"}</p>
-            <p className="genre">{story?.genre || "Unknown Genre"}</p>
-            <Button
-              onClick={() =>
-                navigate(`/library/${story?.genre}/story/${story?.id}`)
-              }
-            >
-              read now
-            </Button>
-          </StyledHeroText>
-          <StyledHeroFooter>
-            <p>read user written short stories</p>
-          </StyledHeroFooter>
-        </StyledHero>
-      ) : (
+      {/* {!loading ? ( */}
+      <StyledHero>
+        <StyledHeroImage
+          src={heroImage}
+          srcSet={
+            story?.img
+              ? `
+        ${resizePicsum(story.img, 640, 360)} 640w,
+        ${resizePicsum(story.img, 1280, 720)} 1280w,
+        ${resizePicsum(story.img, 1920, 1080)} 1920w
+      `
+              : undefined
+          }
+          sizes="100vw"
+          alt={story?.title || "Featured story"}
+          loading="eager"
+          fetchPriority="high"
+        />
+        <StyledHeroText>
+          <h1>
+            What<span>to Read</span>Today
+          </h1>
+          <p className="author">{story?.author || "Loading..."}</p>
+          <p className="title">{story?.title || "Loading..."}</p>
+          <p className="genre">{story?.genre || "Loading..."}</p>
+          <Button
+            onClick={() =>
+              navigate(`/library/${story?.genre}/story/${story?.id}`)
+            }
+          >
+            read now
+          </Button>
+        </StyledHeroText>
+        <StyledHeroFooter>
+          <p>read user written short stories</p>
+        </StyledHeroFooter>
+      </StyledHero>
+      {/* ) : (
         <Spinner />
-      )}
+       )} */}
 
-      <Featured />
+      <Suspense fallback={null}>
+        <Featured />
+      </Suspense>
 
       <StyledFresh>
         <StyledTextBox>
@@ -592,31 +540,9 @@ function Home() {
         </StyledTextBox>
         <StyledImg $backgroundImage={freshImage}></StyledImg>
       </StyledFresh>
-
-      <StyledPicks id="staff-picks">
-        <StyledPicksText>
-          <h1>
-            <span>Staff</span> Picks
-          </h1>
-          <div>
-            <p>Check out what our staff are recommending</p>
-            <StyledPicksSubheading>
-              What should you read this week
-            </StyledPicksSubheading>
-          </div>
-          <div className="underline"></div>
-        </StyledPicksText>
-
-        <StyledCardsBox>
-          {staffPicks.length > 0 ? (
-            staffPicks.map((story) => (
-              <StoryCard key={story.id} story={story} />
-            ))
-          ) : (
-            <p>No staff picks available.</p>
-          )}
-        </StyledCardsBox>
-      </StyledPicks>
+      <Suspense fallback={null}>
+        <StaffPicks staffPicks={staffPicks} />
+      </Suspense>
     </StyledMain>
   );
 }
