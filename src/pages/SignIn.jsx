@@ -101,13 +101,13 @@ const StyledH1 = styled.h1`
   }
 `;
 
-const StyledImg = styled.div`
-  background-image: url(${loginhero});
+const StyledImg = styled.img`
+  /* background-image: url(${loginhero});
   background-size: cover;
   background-position: center;
 
-  height: 70%;
-  width: 65%;
+  height: 70%; */
+  width: 85%;
 `;
 
 const StyledError = styled.span`
@@ -152,7 +152,7 @@ function SignIn() {
         (userCredential) => {
           const user = userCredential.user;
           console.log("User signed in:", user);
-        }
+        },
       );
       navigate("/", {
         state: { justSignedIn: true },
@@ -166,8 +166,9 @@ function SignIn() {
 
   return (
     <StyledContainer>
+      <Navbar />
       <SecondWrapper>
-        <StyledImg></StyledImg>
+        <StyledImg src={loginhero} alt="Login Hero" loading="lazy" />
       </SecondWrapper>
       <StyledWrapper>
         <StyledH1>

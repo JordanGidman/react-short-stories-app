@@ -50,6 +50,9 @@ const StyledWrapper = styled.div`
   }
 `;
 const SecondWrapper = styled(StyledWrapper)`
+  display: flex;
+  padding: 4rem;
+  overflow: hidden;
   background-color: #85e9e1;
 
   /* 1200px */
@@ -103,13 +106,12 @@ const StyledH1 = styled.h1`
   }
 `;
 
-const StyledImg = styled.div`
-  background-image: url(${signuphero});
+const StyledImg = styled.img`
+  /* background-image: url(${signuphero});
   background-size: cover;
-  background-position: center;
+  background-position: center; */
 
-  height: 70%;
-  width: 65%;
+  width: 85%;
 `;
 
 const StyledFooter = styled.p`
@@ -185,8 +187,9 @@ function SignUp() {
   }
   return (
     <StyledContainer>
+      <Navbar />
       <SecondWrapper>
-        <StyledImg></StyledImg>
+        <StyledImg src={signuphero} alt="Sign Up Hero" loading="lazy" />
       </SecondWrapper>
       <StyledWrapper>
         <StyledH1>

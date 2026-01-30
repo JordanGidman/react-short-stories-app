@@ -103,7 +103,8 @@ const StyledHeader = styled.header`
   grid-template-columns: 40% 60%;
   height: 50vh;
   width: 95vw;
-  background-image: url(${religious});
+  overflow-y: hidden;
+  /* background-image: url(${religious}); */
   background-color: #fff;
   background-size: 30% auto;
   background-repeat: no-repeat;
@@ -136,6 +137,7 @@ const StyledHeader = styled.header`
     justify-content: center;
   }
 `;
+
 const StyledWrapper = styled.div`
   display: flex;
   width: 100%;
@@ -155,7 +157,7 @@ const StyledWrapper = styled.div`
   }
 `;
 
-const StyledImg = styled.div`
+const StyledImg = styled.img`
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -256,7 +258,7 @@ function Library() {
     <StyledLibrary>
       <StyledContainer>
         <StyledHeader>
-          <StyledImg />
+          <StyledImg src={religious} alt="" fetchpriority="high"></StyledImg>
           <StyledWrapper>
             <StyledH1>Browse by Genre</StyledH1>
             <StyledSubheading>

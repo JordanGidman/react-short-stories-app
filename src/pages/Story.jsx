@@ -1,9 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   arrayRemove,
   arrayUnion,
   doc,
+  getDoc,
   increment,
   onSnapshot,
   updateDoc,
@@ -217,6 +218,9 @@ function Book() {
 
   // State
   const [story, setStory] = useState(null);
+  const sanitizedStory = useMemo(() => {
+    return DOMPurify.sanitize(story?.storyText);
+  }, [story?.storyText]);
   const [user, setUser] = useState(null);
   const [author, setAuthor] = useState(null);
 
@@ -244,7 +248,7 @@ function Book() {
       (err) => {
         setError(err);
         setLoading(false);
-      }
+      },
     );
 
     return () => unsub();
@@ -264,7 +268,7 @@ function Book() {
           toast.error("Your user data could not be loaded.");
         }
       },
-      (err) => toast.error("Error loading your user data.")
+      (err) => toast.error("Error loading your user data."),
     );
 
     return () => unsub();
@@ -274,24 +278,41 @@ function Book() {
   useEffect(() => {
     if (!story?.creatorID) return;
 
-    const authorRef = doc(db, "users", story.creatorID);
-    const unsub = onSnapshot(
-      authorRef,
-      (docSnap) => {
-        if (docSnap.exists()) {
-          setAuthor({ id: docSnap.id, ...docSnap.data() });
-        } else {
-          console.log("Could not load author details.");
+    async function fetchAuthor() {
+      try {
+        const snap = await getDoc(doc(db, "users", story.creatorID));
+        if (snap.exists()) {
+          setAuthor({ id: snap.id, ...snap.data() });
         }
-      },
-      (err) => toast.error("Error fetching author data.")
-    );
+      } catch (err) {
+        toast.error("Error fetching author data.");
+      }
+    }
 
-    return () => unsub();
+    fetchAuthor();
   }, [story?.creatorID]);
+  // useEffect(() => {
+  //   if (!story?.creatorID) return;
+
+  //   const authorRef = doc(db, "users", story.creatorID);
+  //   const unsub = onSnapshot(
+  //     authorRef,
+  //     (docSnap) => {
+  //       if (docSnap.exists()) {
+  //         setAuthor({ id: docSnap.id, ...docSnap.data() });
+  //       } else {
+  //         console.log("Could not load author details.");
+  //       }
+  //     },
+  //     (err) => toast.error("Error fetching author data.")
+  //   );
+
+  //   return () => unsub();
+  // }, [story?.creatorID]);
 
   //Like & Favorite handlers
   async function handleLike(userId, isLiked) {
+    if (!story?.id || !userId) return;
     try {
       await updateDoc(doc(db, "stories", story.id), {
         likes: isLiked ? arrayRemove(userId) : arrayUnion(userId),
@@ -304,6 +325,7 @@ function Book() {
   }
 
   async function handleFavorite(userId, isFavorite) {
+    if (!story?.id || !userId) return;
     try {
       await updateDoc(doc(db, "users", currentUser.uid), {
         favorites: isFavorite ? arrayRemove(story.id) : arrayUnion(story.id),
@@ -311,7 +333,7 @@ function Book() {
       toast.success(
         isFavorite
           ? `Removed ${story.title} from favorites.`
-          : `${story.title} favorited!`
+          : `${story.title} favorited!`,
       );
     } catch (err) {
       toast.error("Could not update favorites.");
@@ -339,11 +361,7 @@ function Book() {
       </StyledHeader>
 
       {!story.isSeedData ? (
-        <StyledBody
-          dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(story.storyText),
-          }}
-        />
+        <StyledBody dangerouslySetInnerHTML={{ __html: sanitizedStory }} />
       ) : (
         <StyledBody>
           <p>
@@ -363,7 +381,7 @@ function Book() {
                 onClick={() =>
                   handleLike(
                     currentUser.uid,
-                    story.likes?.includes(currentUser.uid)
+                    story.likes?.includes(currentUser.uid),
                   )
                 }
               >
@@ -383,7 +401,7 @@ function Book() {
                 onClick={() =>
                   handleFavorite(
                     currentUser.uid,
-                    user?.favorites?.includes(story.id)
+                    user?.favorites?.includes(story.id),
                   )
                 }
               >

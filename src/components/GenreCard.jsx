@@ -5,6 +5,8 @@ import { memo } from "react";
 
 const StyledCard = styled.li`
   display: flex;
+  position: relative;
+  overflow: hidden;
   /* flex-direction: column; */
   height: 35rem;
   font-size: 6.4rem;
@@ -18,8 +20,8 @@ const StyledCard = styled.li`
   color: #1c1f2e;
   font-family: "Playfair Display", serif;
   font-weight: 800;
-  /* background-image: url(${(props) => props.$genre.src}); */
-  background-image: url(${(props) => props.$backgroundImage});
+
+  /* background-image: url(${(props) => props.$backgroundImage});
   background-position: ${(props) =>
     props.$justify === "start" ? "right" : "left"};
   background-size: 50% auto;
@@ -45,7 +47,7 @@ const StyledCard = styled.li`
     ) {
       return "bottom right";
     }
-  }};
+  }}; */
 
   &:hover {
     cursor: pointer;
@@ -82,6 +84,45 @@ const StyledCard = styled.li`
   @media (max-width: 24.3em) {
     font-size: 3rem;
   }
+`;
+
+const ImageLayer = styled.div`
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+`;
+
+const StyledImg = styled.img`
+  position: absolute;
+  width: 50%;
+  height: auto;
+
+  ${(props) => (props.$justify === "start" ? "right: 0;" : "left: 0;")}
+
+  ${(props) => {
+    if (
+      props.$span === 1 &&
+      props.$align === "start" &&
+      props.$justify === "end"
+    ) {
+      return "bottom: 0; left: 0;";
+    }
+    if (
+      props.$span === 1 &&
+      props.$align === "end" &&
+      props.$justify === "start"
+    ) {
+      return "top: 0; right: 0;";
+    }
+    if (
+      props.$span === 1 &&
+      props.$align === "start" &&
+      props.$justify === "start"
+    ) {
+      return "bottom: 0; right: 0;";
+    }
+  }}
 `;
 
 const StyledLink = styled(Link)`
@@ -137,6 +178,17 @@ const GenreCard = memo(function GenreCard({
       $backgroundImage={backgroundImage}
       // onClick={(e) => handleClick(e)}
     >
+      <ImageLayer>
+        <StyledImg
+          src={backgroundImage}
+          alt=""
+          loading="lazy"
+          $span={span}
+          $align={align}
+          $justify={justify}
+        />
+      </ImageLayer>
+
       <StyledLink to={`${genre.toLowerCase()}`}>
         <StyledWrapper $align={align} $justify={justify}>
           {genre}
