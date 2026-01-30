@@ -139,7 +139,7 @@ function SignUp() {
     setIsLoading(true);
 
     const displayName = e.target[0].value; // Assuming the first input is for display name
-    const fullName = e.target[1].value; // Assuming the first input is for display name
+    const fullName = e.target[1].value;
 
     const email = e.target[2].value;
     const password = e.target[3].value;

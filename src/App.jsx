@@ -150,10 +150,10 @@ function App() {
   //45 - Make favorites page the default outlet for account page - Done
   //46 - Potentially add the ability to sort by ascending or descending, right now its just one way - Done
   //47 - On mobile layout the account page navbar is misaligned due to the scroll bar - Done
+  //48 - Implement delete account functionality - Done
+  //49 - Favicon, i previously used photoshop to make these but my student access finally ran out so i have just taken this from the internet for now - Done
 
   //WIP
-  //1 - Favicon - Not done
-  //2 - Implement delete account functionality - Not done
   //3 - Optimizations(Img compression, lazy loading, code splitting, memoization, refactors, etc) - Partially done
   //4 - SEO Improvements - Partially done
   //5 - Accessibility Improvements - Partially done
