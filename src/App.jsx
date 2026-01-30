@@ -149,6 +149,7 @@ function App() {
   //44 - Add validation to comments to make sure they are not empty and do not exceed a certain length - Done
   //45 - Make favorites page the default outlet for account page - Done
   //46 - Potentially add the ability to sort by ascending or descending, right now its just one way - Done
+  //47 - On mobile layout the account page navbar is misaligned due to the scroll bar - Done
 
   //WIP
   //1 - Favicon - Not done
@@ -164,7 +165,6 @@ function App() {
   //3 - Ability to add multiple genres
 
   //UNFIXED BUGS
-  //on mobile layout the account page navbar is misaligned due to the scroll bar
 
   return (
     <AuthContextProvider>

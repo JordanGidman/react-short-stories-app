@@ -20,7 +20,7 @@ const StyledSearch = styled.div`
   align-items: center;
   gap: 1rem;
   width: 100%;
-  margin-right: 2rem;
+  /* margin-right: 2rem; */
 
   .icon {
     font-size: 2.4rem;
@@ -73,6 +73,7 @@ const StyledSelect = styled.select`
   @media (max-width: 50em) {
     font-size: 1.4rem;
     width: auto;
+    text-align: center;
   }
 `;
 

@@ -14,9 +14,10 @@ import { AuthContext } from "../context/AuthContext";
 import Button from "../components/Button";
 import Spinner from "../components/Spinner";
 import Error from "../pages/Error";
+import { toast } from "react-toastify";
 
 const StyledAccount = styled.main`
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
   padding: 8% 2% 2% 2%;
   display: grid;
@@ -109,7 +110,7 @@ const StyledWrapper = styled.div`
   /* 800px */
   @media (max-width: 50em) {
     padding: 1rem;
-    padding-right: 2.2rem;
+    /* padding-right: 2.2rem; */
   }
 `;
 
@@ -204,7 +205,7 @@ const StyledDropdown = styled.select`
   /* 525px */
   @media (max-width: 58.1em) {
     display: flex;
-    width: 90vw;
+    width: 90%;
     padding: 1rem;
     font-size: 1.6rem;
     border: 1px solid rgba(0, 0, 0, 0.1);
@@ -343,7 +344,7 @@ function Account() {
       (err) => {
         setError(err);
         setLoading(false);
-      }
+      },
     );
 
     return () => unsub();
@@ -364,8 +365,11 @@ function Account() {
   async function handleDelete() {
     //1 Sign User out.
     //2 Delete user from users array
+    await currentUser?.delete();
     //3 Delete the user from the authentication
     //4 Give user Notification
+    toast.success("Account deleted successfully. You have been signed out.");
+
     console.log("Deleting Account...");
   }
 
