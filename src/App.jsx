@@ -16,7 +16,7 @@ const Account = lazy(() => import("./pages/Account"));
 const WriteStory = lazy(() => import("./pages/WriteStory"));
 const Library = lazy(() => import("./pages/Library"));
 const StoryList = lazy(() => import("./pages/StoryList"));
-const Book = lazy(() => import("./pages/Story"));
+const Story = lazy(() => import("./pages/Story"));
 const MyStories = lazy(() => import("./pages/MyStories"));
 const EditStory = lazy(() => import("./pages/EditStory"));
 const Favorites = lazy(() => import("./components/Favorites"));
@@ -180,7 +180,14 @@ function App() {
                 <Route path="about" element={<About />} />
                 <Route path="library" element={<Library />} />
                 <Route path="library/:genre" element={<StoryList />} />
-                <Route path="library/:genre/story/:id" element={<Book />} />
+                <Route
+                  path="library/:genre/story/:id"
+                  element={
+                    <ProtectedRoute>
+                      <Story />
+                    </ProtectedRoute>
+                  }
+                />
 
                 {/* Protected nested routes */}
                 <Route
