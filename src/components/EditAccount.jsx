@@ -108,7 +108,7 @@ const Tooltip = styled.span`
 
   z-index: 1;
 
-  /* arrow, ill be honest i took this from the internet, thank you random person */
+  /* tooltip arrow */
   &::after {
     content: "";
     position: absolute;
@@ -167,7 +167,6 @@ function EditAccount() {
     e.preventDefault();
 
     //Form validation
-    //Form validation
     const allowedChars = /^[a-zA-Z0-9\s.,!?'"-:;()\n\r]+$/;
     //Make sure required fields arent empty
     if (!displayName || !fullName) {
@@ -177,14 +176,14 @@ function EditAccount() {
     //Make sure no special characters are being used and the lengths arent longer than they should be.
     if (!allowedChars.test(fullName) || fullName.split("").length > 30) {
       toast.error(
-        "full name must be less than 30 characters long, and must NOT contain any special characters"
+        "full name must be less than 30 characters long, and must NOT contain any special characters",
       );
       return;
     }
 
     if (!allowedChars.test(displayName) || displayName.split("").length > 20) {
       toast.error(
-        "display name must be less than 20 characters long, and must NOT contain any special characters"
+        "display name must be less than 20 characters long, and must NOT contain any special characters",
       );
       return;
     }
@@ -202,7 +201,7 @@ function EditAccount() {
 
       const querySnapshot = await getDocs(q);
       const updates = querySnapshot.docs.map((storyDoc) =>
-        updateDoc(storyDoc.ref, { author: displayName })
+        updateDoc(storyDoc.ref, { author: displayName }),
       );
 
       //Ensure all updates are finished before moving on.
@@ -236,13 +235,13 @@ function EditAccount() {
     if (email !== "New Email") {
       //Alert the user that this is a portfolio project and firebase auth requires real email verification to change email. I may add this in future as firebase auth seems to require a valid email to run
       alert(
-        "Apologies but firebase auth requires real email verfication to change email and as this is a portfolio piece i do not expect users to use a real email."
+        "Apologies but firebase auth requires real email verfication to change email and as this is a portfolio piece i do not expect users to use a real email.",
       );
     }
     if (password !== "New Password") {
       //Alert the user that this is a portfolio project and firebase auth requires real email verification to change email.
       alert(
-        "Apologies but firebase auth requires real email verfication to change password and as this is a portfolio piece i do not expect users to use a real email."
+        "Apologies but firebase auth requires real email verfication to change password and as this is a portfolio piece i do not expect users to use a real email.",
       );
     }
   }

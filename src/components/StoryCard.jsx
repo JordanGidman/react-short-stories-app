@@ -4,13 +4,7 @@ import placeholder from "../img/placeholder.jpg";
 import { useContext, useEffect, useState, memo, useMemo } from "react";
 import Button from "./Button";
 import { Link } from "react-router-dom";
-import {
-  arrayRemove,
-  arrayUnion,
-  doc,
-  onSnapshot,
-  updateDoc,
-} from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
 import Spinner from "./Spinner";
 import { toast } from "react-toastify";
@@ -58,7 +52,9 @@ const StyledImageBox = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  transition: background-image 0.3s ease-in-out, filter 0.3s ease-in-out;
+  transition:
+    background-image 0.3s ease-in-out,
+    filter 0.3s ease-in-out;
 `;
 
 const StyledTitle = styled.h2`
@@ -137,55 +133,6 @@ const StyledButtons = styled.div`
   width: 100%;
 `;
 
-// const StyledLikesButton = styled.button`
-//   position: relative;
-//   border: none;
-//   background-color: transparent;
-//   transition: all 0.3s ease-in-out;
-
-//   .icon-star {
-//     color: #ffbe0b;
-//   }
-
-//   &:hover {
-//     cursor: pointer;
-//     color: #ffbe0b;
-//   }
-// `;
-
-// const Tooltip = styled.span`
-//   visibility: hidden;
-//   opacity: 0;
-//   transition: opacity 0.2s ease;
-//   position: absolute;
-//   bottom: 125%;
-//   left: 50%;
-//   transform: translateX(-50%);
-//   background-color: #1c1f2e;
-//   color: #fff;
-//   padding: 0.4rem 0.8rem;
-//   border-radius: 0.4rem;
-//   font-size: 1.2rem;
-//   white-space: nowrap;
-//   z-index: 1;
-
-//   &::after {
-//     content: "";
-//     position: absolute;
-//     top: 100%;
-//     left: 50%;
-//     margin-left: -5px;
-//     border-width: 5px;
-//     border-style: solid;
-//     border-color: #333 transparent transparent transparent;
-//   }
-
-//   ${StyledButton}:hover & {
-//     visibility: visible;
-//     opacity: 1;
-//   }
-// `;
-
 const StyledLink = styled(Link)``;
 
 const StoryCard = memo(function StoryCard({ story }) {
@@ -222,7 +169,7 @@ const StoryCard = memo(function StoryCard({ story }) {
         (error) => {
           console.log("Error fetching author:", error);
           setAuthor("Unknown author");
-        }
+        },
       );
 
       return () => unsub();

@@ -100,17 +100,15 @@ const StyledWrapper = styled.div`
   padding: 2rem 4rem;
   display: flex;
   flex-direction: column;
-  /* overflow-y: scroll; */
+
   min-height: 100%;
   width: auto;
-  /* flex: 1; */
+
   min-height: 0;
-  /* overflow-y: visible;  */
 
   /* 800px */
   @media (max-width: 50em) {
     padding: 1rem;
-    /* padding-right: 2.2rem; */
   }
 `;
 
@@ -187,7 +185,6 @@ const StyledNavLink = styled(NavLink)`
   transition: all 0.3s ease-in-out;
 
   &:hover {
-    /* color: #85e9e1; */
     color: #1c1f2e;
     font-weight: 500;
   }

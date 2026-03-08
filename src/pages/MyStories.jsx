@@ -12,15 +12,13 @@ import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { db } from "../firebase";
 import styled from "styled-components";
-// import mystories from "../img/mystories.jpg";
-// import Navbar from "../components/Navbar";
+
 import Button from "../components/Button";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Search from "../components/Search";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
-// import Footer from "../components/Footer";
 
 const StyledMyStories = styled.div`
   min-height: 100%;
@@ -61,21 +59,16 @@ const StyledStoryList = styled.ul`
   align-items: center;
   justify-content: flex-start;
   gap: 2rem;
-  /* background-color: #fff; */
+
   width: 100%;
   height: calc(100% - 8rem);
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
-  /* overflow-y: scroll;
-  overflow-x: hidden;
-  &::-webkit-scrollbar {
-    display: none;
-  } */
 `;
 
 const StyledListItem = styled.li`
   display: grid;
   position: relative;
-  /* grid-template-columns: repeat(${(props) => props.$span}, 1fr); */
+
   grid-template-columns: repeat(6, 1fr);
 
   align-items: center;
@@ -105,7 +98,9 @@ const StyledListItem = styled.li`
 `;
 
 const StyledItemText = styled.p`
-  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transition:
+    max-height 0.3s ease-in-out,
+    opacity 0.3s ease-in-out;
   overflow: hidden;
 
   @media (max-width: 58.125em) {
@@ -147,19 +142,19 @@ const StyledButtons = styled.div`
 
   /* 930px */
   @media (max-width: 58.125em) {
-    /* display: grid;
-    grid-template-columns: repeat(3, 1fr); */
     grid-column: span 3;
     width: 100%;
     overflow: hidden;
     align-items: center;
     justify-content: center;
-    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    transition:
+      max-height 0.3s ease-in-out,
+      opacity 0.3s ease-in-out;
     max-height: ${(props) => (props.$expanded ? "100px" : "0px")};
     opacity: ${(props) => (props.$expanded ? 1 : 0)};
     visibility: ${(props) => (props.$expanded ? "visible" : "hidden")};
     gap: 0rem;
-    /* margin-top: ${(props) => (props.$expanded ? "2rem" : "0rem")}; */
+
     padding-bottom: ${(props) => (props.$expanded ? "1rem" : "0rem")};
   }
 `;
@@ -291,7 +286,7 @@ const Tooltip = styled.span`
 
   z-index: 999;
 
-  /* arrow, ill be honest i took this from the internet, thank you random person */
+  /* tooltip arrow */
   &::after {
     content: "";
     position: absolute;
@@ -457,7 +452,7 @@ function MyStories() {
         hidden: !story.hidden,
       });
       toast.success(
-        `Made ${story.title} ${story.hidden ? "Public" : "Private"}`
+        `Made ${story.title} ${story.hidden ? "Public" : "Private"}`,
       );
     } catch (error) {
       console.log(error.message);
@@ -481,10 +476,6 @@ function MyStories() {
 
       //Delete the story
       await deleteDoc(doc(db, "stories", storyId));
-      // //Also want to remove the story from the stories state to force a re-render
-      // setStories((prevStories) =>
-      //   prevStories.filter((story) => story.id !== storyId)
-      // );
     } catch (error) {
       setError(error);
       toast.error(`Delete failed: ${error.message}`);
@@ -524,7 +515,7 @@ function MyStories() {
               (story) =>
                 (story.hidden !== true &&
                   story.author.toLowerCase().includes(search)) ||
-                story.title.toLowerCase().includes(search)
+                story.title.toLowerCase().includes(search),
             )
             .map((story) => (
               <StyledListItem
@@ -549,7 +540,7 @@ function MyStories() {
                 <StyledItemText $expanded={expandedStories.has(story.id)}>
                   Created:{" "}
                   {new Date(story.createdAt?.seconds * 1000).toLocaleDateString(
-                    "en-US"
+                    "en-US",
                   )}
                 </StyledItemText>
 
@@ -557,7 +548,7 @@ function MyStories() {
                   Edited:{" "}
                   {story.editedAt
                     ? new Date(
-                        story.editedAt?.seconds * 1000
+                        story.editedAt?.seconds * 1000,
                       ).toLocaleDateString("en-US")
                     : "N/A"}
                 </StyledItemText>
@@ -634,8 +625,6 @@ function MyStories() {
           </StyledButtons>
         </StyledModalContent>
       </StyledModal>
-
-      {/* <Footer /> */}
     </StyledMyStories>
   );
 }

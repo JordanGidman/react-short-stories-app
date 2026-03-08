@@ -62,11 +62,6 @@ const StyledStoryList = styled.ul`
   width: 100%;
   height: 92%;
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
-  /* overflow-y: scroll;
-
-  &::-webkit-scrollbar {
-    display: none;
-  } */
 `;
 
 function Favorites() {
@@ -137,7 +132,7 @@ function Favorites() {
         setError(err);
         setLoading(false);
         toast.error("Could not load favorites.");
-      }
+      },
     );
 
     return () => unsub();
@@ -166,7 +161,7 @@ function Favorites() {
         setError(err);
         setDataLoading(false);
         toast.error("Could not load favorite stories.");
-      }
+      },
     );
 
     return () => unsub();
@@ -202,7 +197,7 @@ function Favorites() {
               (story) =>
                 (story.hidden !== true &&
                   story.author.toLowerCase().includes(search)) ||
-                story.title.toLowerCase().includes(search)
+                story.title.toLowerCase().includes(search),
             )
             .map((story) => (
               <FavoriteStoryItem

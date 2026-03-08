@@ -152,8 +152,6 @@ function Comments({ storyId }) {
     console.log("Submitting comment:", comment);
   }
 
-  function handleDeleteComment() {}
-
   return (
     <StyledComments>
       <StyledH3>

@@ -17,9 +17,6 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Error from "./Error";
 
-import Spinner from "../components/Spinner";
-import { s } from "motion/react-client";
-
 const StyledWriteBook = styled.main`
   display: flex;
   flex-direction: column;
@@ -78,7 +75,7 @@ const StyledForm = styled.form`
         font-family: "Montserrat", sans-serif;
         box-shadow: 0rem 0.8rem 0.6rem -1rem rgba(0, 0, 0, 0.8);
         font-style: italic;
-        /* border-bottom: 1px solid rgb(0, 0, 0, 0.2); */
+
         min-height: 35vh;
         overflow-y: visible;
 
@@ -112,8 +109,6 @@ const TitleInput = styled.textarea`
   padding-left: 0rem;
 
   border: none;
-  /* border-bottom: 1px solid rgb(0, 0, 0, 0.2); */
-  /* box-shadow: 0rem 0.8rem 0.6rem -1rem rgba(0, 0, 0, 0.8); */
   color: #1c1f2e;
   border-radius: 1.6rem;
   font-family: "Montserrat", sans-serif;
@@ -219,12 +214,11 @@ function WriteBook() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isDirty, setIsDirty] = useState(false);
-  // const { state } = useLocation();
-  // const story = state ? state.story : null;
+
   const navigate = useNavigate();
 
   //Check for unsaved changes and inform the user before leaving the page
-  useEffect(() => {
+  (useEffect(() => {
     if (!isDirty) return;
 
     const handler = (e) => {
@@ -235,7 +229,7 @@ function WriteBook() {
     window.addEventListener("beforeunload", handler);
     return () => window.removeEventListener("beforeunload", handler);
   }),
-    [isDirty];
+    [isDirty]);
 
   async function handleSubmit(e, isDraft) {
     console.log(e);
@@ -254,14 +248,14 @@ function WriteBook() {
     //Make sure no special characters are being used and the title and synopsis arent too long and the story is more than 10 characters to avoid accidental submissions.
     if (!allowedChars.test(title) || title.split("").length > 100) {
       toast.error(
-        "Title must be less than 100 characters long, and must NOT contain any special characters"
+        "Title must be less than 100 characters long, and must NOT contain any special characters",
       );
       return;
     }
 
     if (!allowedChars.test(synopsis) || synopsis.split("").length > 500) {
       toast.error(
-        "Synopsis must be less than 500 characters long, and must NOT contain any special characters"
+        "Synopsis must be less than 500 characters long, and must NOT contain any special characters",
       );
       return;
     }
@@ -270,18 +264,6 @@ function WriteBook() {
       toast.error("story must be more than 10 characters long.");
       return;
     }
-
-    //Capture input data not using controlled components because of issues saving to firebase will refactor later
-    // const title = e.target[0].value;
-    // const genre = e.target[1].value;
-
-    // console.log("Genre selected:", genre);
-
-    // const synopsis = e.target[2].value;
-    // const img =
-    //   e.target[3].value === ""
-    //     ? "https://picsum.photos/seed/hireme/600/400"
-    //     : e.target[3].value;
 
     //Save input data to firebase
     try {
@@ -337,7 +319,7 @@ function WriteBook() {
         `/account/${currentUser.uid}/${isDraft ? "drafts" : "mystories"}`,
         {
           state: { storyCreated: true },
-        }
+        },
       );
     } catch (error) {
       toast.error(`Error: ${error.message}`);
@@ -418,7 +400,7 @@ function WriteBook() {
                   setImg(
                     e.target.value
                       ? e.target.value
-                      : `https://picsum.photos/seed/hireme/600/400`
+                      : `https://picsum.photos/seed/hireme/600/400`,
                   )
                 }
               />

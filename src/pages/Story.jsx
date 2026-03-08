@@ -19,7 +19,7 @@ import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
 import Error from "./Error";
 
-// Styled components (unchanged for brevity)
+// Styled components
 const StyledBook = styled.main`
   display: flex;
   flex-direction: column;
@@ -291,24 +291,6 @@ function Book() {
 
     fetchAuthor();
   }, [story?.creatorID]);
-  // useEffect(() => {
-  //   if (!story?.creatorID) return;
-
-  //   const authorRef = doc(db, "users", story.creatorID);
-  //   const unsub = onSnapshot(
-  //     authorRef,
-  //     (docSnap) => {
-  //       if (docSnap.exists()) {
-  //         setAuthor({ id: docSnap.id, ...docSnap.data() });
-  //       } else {
-  //         console.log("Could not load author details.");
-  //       }
-  //     },
-  //     (err) => toast.error("Error fetching author data.")
-  //   );
-
-  //   return () => unsub();
-  // }, [story?.creatorID]);
 
   //Like & Favorite handlers
   async function handleLike(userId, isLiked) {

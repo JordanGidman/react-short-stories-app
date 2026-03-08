@@ -7,7 +7,6 @@ const StyledCard = styled.li`
   display: flex;
   position: relative;
   overflow: hidden;
-  /* flex-direction: column; */
   height: 35rem;
   font-size: 6.4rem;
   padding: 3rem;
@@ -20,34 +19,6 @@ const StyledCard = styled.li`
   color: #1c1f2e;
   font-family: "Playfair Display", serif;
   font-weight: 800;
-
-  /* background-image: url(${(props) => props.$backgroundImage});
-  background-position: ${(props) =>
-    props.$justify === "start" ? "right" : "left"};
-  background-size: 50% auto;
-  background-repeat: no-repeat;
-
-  background-position: ${(props) => {
-    if (
-      props.$span === 1 &&
-      props.$align === "start" &&
-      props.$justify === "end"
-    ) {
-      return "bottom left";
-    } else if (
-      props.$span === 1 &&
-      props.$align === "end" &&
-      props.$justify === "start"
-    ) {
-      return "top right";
-    } else if (
-      props.$span === 1 &&
-      props.$align === "start" &&
-      props.$justify === "start"
-    ) {
-      return "bottom right";
-    }
-  }}; */
 
   &:hover {
     cursor: pointer;
@@ -162,12 +133,6 @@ const GenreCard = memo(function GenreCard({
   backgroundColor,
   backgroundImage,
 }) {
-  // function handleClick(e) {
-  //   e.preventDefault();
-
-  //   console.log("Click");
-  // }
-
   return (
     <StyledCard
       $genre={genre}

@@ -29,12 +29,6 @@ const StyledBurgerMenu = styled.div`
   justify-content: center;
   flex-direction: column;
   gap: 0.4rem;
-
-  /* 425px */
-  /* @media (max-width: 26.5em) {
-    width: 4rem;
-    height: 4rem;
-  } */
 `;
 
 const StyledBurgerLine = styled(motion.div)`

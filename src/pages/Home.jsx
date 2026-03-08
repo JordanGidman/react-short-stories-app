@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Navbar from "../components/Navbar";
+
 import {
   lazy,
   Suspense,
@@ -26,16 +26,13 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { useLocation, useNavigate } from "react-router-dom";
-import Footer from "../components/Footer";
-import StoryCard from "../components/StoryCard";
+
 import Error from "../pages/Error";
 import { toast } from "react-toastify";
-import Spinner from "../components/Spinner";
 
 const StyledMain = styled.main``;
 
 const StyledHero = styled.div`
-  /* background-image: url(${(props) => props.$img}); */
   width: 100vw;
   height: 100vh;
   background-size: cover;
@@ -111,26 +108,6 @@ const StyledHeroText = styled.div`
     font-weight: 300;
     margin-bottom: 6rem;
   }
-
-  /* button {
-    background-color: #ffbe0b;
-    border: none;
-    color: #000;
-    font-size: 2rem;
-    letter-spacing: 0.1rem;
-    padding: 1rem 3rem;
-    transition: all 0.3s ease-in-out;
-    margin-top: 2rem;
-    font-weight: 500;
-    border-radius: 2rem;
-    text-transform: uppercase;
-
-    &:hover {
-      background-color: #fff;
-      color: #000;
-      cursor: pointer;
-    }
-  } */
 
   @media (max-width: 31.25em) {
     gap: 1rem;
@@ -358,7 +335,7 @@ function Home() {
           where("isSeedData", "==", true),
           orderBy("randomNumber"),
           startAt(rand),
-          limit(5)
+          limit(5),
         );
 
         let querySnapshot = await getDocs(q);
@@ -374,7 +351,7 @@ function Home() {
             storiesRef,
             where("isSeedData", "==", true),
             orderBy("randomNumber"),
-            limit(remaining)
+            limit(remaining),
           );
           const qs2 = await getDocs(q2);
           fetchedStories = [
@@ -449,15 +426,6 @@ function Home() {
       : "https://picsum.photos/seed/fallback2/1920/1080";
   }, [freshStory, resizePicsum]);
 
-  // if (loading) {
-  //   return (
-  //     <>
-  //       <Navbar />
-  //       <Spinner $height={"calc(100vh - 8rem)"} />
-  //     </>
-  //   );
-  // }
-
   if (isCriticalError) {
     return (
       <Error
@@ -469,7 +437,6 @@ function Home() {
   //Normal UI render
   return (
     <StyledMain>
-      {/* {!loading ? ( */}
       <StyledHero>
         <StyledHeroImage
           src={heroImage}
@@ -506,9 +473,6 @@ function Home() {
           <p>read user written short stories</p>
         </StyledHeroFooter>
       </StyledHero>
-      {/* ) : (
-        <Spinner />
-       )} */}
 
       <Suspense fallback={null}>
         <Featured />

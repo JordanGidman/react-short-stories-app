@@ -172,7 +172,7 @@ function EditStory() {
   const [genre, setGenre] = useState(story.genre || "");
   const [synopsis, setSynopsis] = useState(story.synopsis || "");
   const [img, setImg] = useState(
-    story.img || "https://picsum.photos/seed/hireme/600/400"
+    story.img || "https://picsum.photos/seed/hireme/600/400",
   );
   const navigate = useNavigate();
   const [error, setError] = useState(null);
@@ -203,7 +203,7 @@ function EditStory() {
                 storyText,
                 editedAt: new Date(),
               }
-            : d
+            : d,
         );
         await updateDoc(userRef, { drafts: updatedDrafts });
         toast.success("Draft updated!");
@@ -282,14 +282,14 @@ function EditStory() {
         // If it was a draft remove it from drafts
         if (isDraft) {
           const updatedDrafts = (userData.drafts || []).filter(
-            (d) => d.draftId !== story.draftId
+            (d) => d.draftId !== story.draftId,
           );
           await updateDoc(userRef, { drafts: updatedDrafts });
         }
 
         toast.success("Story posted!");
         navigate(
-          `/library/${genre.split("-").join(" ")}/story/${storyIdToUpdate}`
+          `/library/${genre.split("-").join(" ")}/story/${storyIdToUpdate}`,
         );
       }
     } catch (error) {
@@ -309,7 +309,6 @@ function EditStory() {
             <StyledH1>Edit your story</StyledH1>
             <TitleInput
               type="text"
-              // defaultValue={story ? story.title : ""}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Title of your story *"
@@ -318,7 +317,6 @@ function EditStory() {
 
             <StyledSelect
               name="genre"
-              // defaultValue={story ? story.genre : "placeholder"}
               value={genre}
               onChange={(e) => setGenre(e.target.value)}
               disabled={loading}

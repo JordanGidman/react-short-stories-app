@@ -16,7 +16,6 @@ const StyledNotFound = styled.div`
   text-align: center;
   background-color: #f9f9f9;
 
-  /* min-height: 100vh; */
   /* 700px */
   @media (max-width: 43.75em) {
   }
@@ -57,8 +56,6 @@ const StyledH1 = styled.h1`
   text-transform: uppercase;
   font-family: "Playfair Display", serif;
   font-weight: 600;
-  /* font-style: italic; */
-  /* white-space: nowrap; */
 
   /* 700px */
   @media (max-width: 43.75em) {

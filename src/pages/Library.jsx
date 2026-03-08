@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Navbar from "../components/Navbar";
+
 import GenreCard from "../components/GenreCard";
 //image imports
 import comedy from "../img/comedy.png";
@@ -9,8 +9,6 @@ import historical from "../img/historical.webp";
 import mystery from "../img/mystery.webp";
 import drama from "../img/drama.webp";
 import religious from "../img/religious.webp";
-import { Outlet } from "react-router-dom";
-import Footer from "../components/Footer";
 
 // Styled components
 const StyledLibrary = styled.main`
@@ -104,7 +102,7 @@ const StyledHeader = styled.header`
   height: 50vh;
   width: 95vw;
   overflow-y: hidden;
-  /* background-image: url(${religious}); */
+
   background-color: #fff;
   background-size: 30% auto;
   background-repeat: no-repeat;
@@ -248,12 +246,6 @@ function Library() {
   //   };
   // }
 
-  //Problems to solve
-  //I will likely need to use an API for importing some stories as otherwise i would have to write a bunch myself to actually have some data
-  //The issue is that i want user generated posts to be lumped in as well so i will need to likely combine them
-  //I will need to pull stories based on genre
-  //I will likely also need a search function
-
   return (
     <StyledLibrary>
       <StyledContainer>
@@ -303,8 +295,6 @@ function Library() {
           })}
         </StyledGenreList>
       </StyledContainer>
-
-      {/* <Outlet /> */}
     </StyledLibrary>
   );
 }

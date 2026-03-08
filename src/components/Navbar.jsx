@@ -138,14 +138,6 @@ function Navbar() {
           <StyledLink to={"/about"}>About</StyledLink>
         </Li>
 
-        {/* {currentUser && (
-          <Li>
-            <StyledButton onClick={() => navigate("/mystories")}>
-              My Stories
-            </StyledButton>
-          </Li>
-        )} */}
-
         <Li>
           {currentUser ? (
             <StyledLink to={`/account/${currentUser.uid}`}>

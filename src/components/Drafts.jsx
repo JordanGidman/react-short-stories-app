@@ -60,12 +60,6 @@ const StyledStoryList = styled.ul`
   gap: 2rem;
   width: 100%;
   min-height: 92%;
-  /* box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8); */
-  /* overflow-y: scroll;
-
-  &::-webkit-scrollbar {
-    display: none;
-  } */
 `;
 
 const StyledListItem = styled.li`
@@ -104,7 +98,9 @@ const StyledListItem = styled.li`
 `;
 
 const StyledItemText = styled.p`
-  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transition:
+    max-height 0.3s ease-in-out,
+    opacity 0.3s ease-in-out;
   overflow: hidden;
 
   /* 930px */
@@ -153,7 +149,9 @@ const StyledButtons = styled.div`
     width: 100%;
     overflow: hidden;
     gap: 1rem;
-    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    transition:
+      max-height 0.3s ease-in-out,
+      opacity 0.3s ease-in-out;
     max-height: ${(props) => (props.$expanded ? "100px" : "0px")};
     opacity: ${(props) => (props.$expanded ? 1 : 0)};
     padding-bottom: ${(props) => (props.$expanded ? "1rem" : "0rem")};
@@ -365,7 +363,7 @@ function Drafts() {
         setError(err);
         setLoading(false);
         toast.error("Could not load drafts.");
-      }
+      },
     );
 
     return () => unsub();
@@ -379,7 +377,7 @@ function Drafts() {
     if (userSnap.exists()) {
       const userData = userSnap.data();
       const updatedDrafts = (userData.drafts || []).filter(
-        (draft) => draft.draftId !== draftId
+        (draft) => draft.draftId !== draftId,
       );
 
       await updateDoc(userRef, { drafts: updatedDrafts });
@@ -427,7 +425,7 @@ function Drafts() {
               (story) =>
                 (story.hidden !== true &&
                   story.author?.toLowerCase().includes(search)) ||
-                story.title?.toLowerCase().includes(search)
+                story.title?.toLowerCase().includes(search),
             )
             .map((story, i) => (
               <StyledListItem
@@ -448,7 +446,7 @@ function Drafts() {
                 >
                   Created:{" "}
                   {new Date(story.createdAt?.seconds * 1000).toLocaleDateString(
-                    "en-US"
+                    "en-US",
                   )}
                 </StyledItemText>
 

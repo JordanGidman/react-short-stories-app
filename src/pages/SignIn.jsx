@@ -102,11 +102,6 @@ const StyledH1 = styled.h1`
 `;
 
 const StyledImg = styled.img`
-  /* background-image: url(${loginhero});
-  background-size: cover;
-  background-position: center;
-
-  height: 70%; */
   width: 85%;
 `;
 

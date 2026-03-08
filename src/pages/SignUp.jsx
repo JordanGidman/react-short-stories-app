@@ -3,7 +3,7 @@ import { auth, db } from "../firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Spinner from "../components/Spinner";
+
 import styled from "styled-components";
 import Button from "../components/Button";
 import Navbar from "../components/Navbar";

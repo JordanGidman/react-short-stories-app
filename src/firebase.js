@@ -6,7 +6,7 @@ import {
   initializeFirestore,
   persistentLocalCache,
 } from "firebase/firestore";
-// import { getStorage } from "firebase/storage";
+
 const firebaseConfig = {
   apiKey: "AIzaSyCaN_ovEZWJpaaGQrWI8tBo8fk9dpc657s",
   authDomain: "react-short-story-app.firebaseapp.com",
@@ -25,7 +25,5 @@ const auth = getAuth(app);
 const db = initializeFirestore(app, {
   localCache: persistentLocalCache(),
 });
-
-// const storage = getStorage(app);
 
 export { app, analytics, auth, db };
