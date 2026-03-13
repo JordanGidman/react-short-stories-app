@@ -97,8 +97,6 @@ const Tooltip = styled.span`
 `;
 
 function CommentCard({ comment, story }) {
-  console.log(comment);
-
   const { currentUser } = useContext(AuthContext);
 
   async function handleDelete() {
@@ -123,7 +121,7 @@ function CommentCard({ comment, story }) {
         <StyledAuthor>{comment?.author}</StyledAuthor>
         <StyledDate>
           {new Date(comment.createdAt?.seconds * 1000).toLocaleDateString(
-            "en-US"
+            "en-EU",
           )}
         </StyledDate>
         {currentUser.uid === comment.creatorID && (

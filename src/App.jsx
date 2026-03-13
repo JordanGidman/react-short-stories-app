@@ -152,10 +152,14 @@ function App() {
   //47 - On mobile layout the account page navbar is misaligned due to the scroll bar - Done
   //48 - Implement delete account functionality - Done
   //49 - Favicon, i previously used photoshop to make these but my student access finally ran out so i have just taken this from the internet for now - Done
+  //50 - Removed comments and old code - Done
+  //51 - Improve firebase rules. - Done
+  //52 - Need to prevent blank comments or comments that are just whitespace - Done.
+  //53 - SEO Improvements - Done
 
   //WIP
+  //1 - Resize images to be the max size they are rendered at. - Not done
   //3 - Optimizations(Img compression, lazy loading, code splitting, memoization, refactors, etc) - Partially done
-  //4 - SEO Improvements - Partially done
   //5 - Accessibility Improvements - Partially done
   //6 - Deployment - Not done
 

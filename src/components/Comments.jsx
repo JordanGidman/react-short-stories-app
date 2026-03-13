@@ -102,7 +102,7 @@ function Comments({ storyId }) {
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
-  console.log(story?.comments);
+  console.log(comment);
 
   useEffect(() => {
     const docRef = doc(db, "stories", storyId);
@@ -124,8 +124,16 @@ function Comments({ storyId }) {
     setSubmitting(true);
     //Submit comment to backend
 
-    if (!currentUser) return alert("You must be logged in to post a comment.");
-    if (comment.length <= 0) return alert("Cannot post an empty comment.");
+    //Validation - might be better to move to a seperate function or even a custom hook if we end up needing to reuse this logic for other forms
+    if (!currentUser)
+      return toast.error("You must be logged in to post a comment.");
+    if (comment.length <= 0)
+      return toast.error("Cannot post an empty comment.");
+    const text = comment.replace(/<[^>]*>/g, "").trim();
+
+    if (!text) {
+      return toast.error("Cannot post an empty comment.");
+    }
 
     try {
       setLoading(true);
@@ -149,7 +157,6 @@ function Comments({ storyId }) {
 
     //Clear form
     //Update comments list
-    console.log("Submitting comment:", comment);
   }
 
   return (
@@ -171,7 +178,7 @@ function Comments({ storyId }) {
           placeholder="Leave a comment..."
           className="text-editor"
           value={comment}
-          onChange={(value) => setComment(value)}
+          onChange={(e) => setComment(e)}
           readOnly={submitting}
           modules={{ toolbar: false }}
         />
