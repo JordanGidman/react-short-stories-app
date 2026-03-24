@@ -169,6 +169,7 @@ function App() {
   //3 - Ability to add multiple genres
 
   //UNFIXED BUGS
+  //Tooltip on the edit account page is offscreen and needs to be adjusted.
 
   return (
     <AuthContextProvider>

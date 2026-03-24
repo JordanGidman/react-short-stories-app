@@ -8,7 +8,7 @@ import Navbar from "../components/Navbar";
 import InputBox from "../components/InputBox";
 import Error from "../pages/Error";
 import { toast } from "react-toastify";
-import loginhero from "../img/login-hero.jpg";
+import loginhero from "../img/login-hero.webp";
 
 const SigninButton = styled(Button)`
   margin-top: 6rem;

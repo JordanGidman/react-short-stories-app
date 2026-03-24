@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import StoryCard from "../components/StoryCard";
 import styled from "styled-components";
-import book from "../img/book.png";
+import book from "../img/book.webp";
 import {
   collection,
   getDocs,
@@ -225,7 +225,7 @@ function StoryList() {
         let baseQuery = query(
           storiesRef,
           where("genre", "==", genreName),
-          where("hidden", "==", false)
+          where("hidden", "==", false),
         );
 
         // Sorting
@@ -272,7 +272,7 @@ function StoryList() {
         setLoading(false);
       }
     },
-    [genreName, sortBy]
+    [genreName, sortBy],
   );
 
   // Fetch first page when genre or sort changes
@@ -288,7 +288,7 @@ function StoryList() {
   const filteredStories = stories.filter(
     (story) =>
       story.title?.toLowerCase().includes(search.toLowerCase()) ||
-      story.author?.toLowerCase().includes(search.toLowerCase())
+      story.author?.toLowerCase().includes(search.toLowerCase()),
   );
 
   if (loading && stories.length === 0) {

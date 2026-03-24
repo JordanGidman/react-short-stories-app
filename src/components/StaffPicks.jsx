@@ -99,8 +99,6 @@ const StyledCardsBox = styled.div`
 `;
 
 function StaffPicks({ staffPicks }) {
-  console.log(staffPicks);
-
   return (
     <StyledPicks id="staff-picks">
       <StyledPicksText>

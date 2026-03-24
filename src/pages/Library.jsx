@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import GenreCard from "../components/GenreCard";
 //image imports
-import comedy from "../img/comedy.png";
+import comedy from "../img/comedy.webp";
 import existential from "../img/existential.webp";
 import romance from "../img/romance.webp";
 import historical from "../img/historical.webp";

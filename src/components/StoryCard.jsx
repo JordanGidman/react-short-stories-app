@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 import styled from "styled-components";
-import placeholder from "../img/placeholder.jpg";
+import placeholder from "../img/placeholder.webp";
 import { useContext, useEffect, useState, memo, useMemo } from "react";
 import Button from "./Button";
 import { Link } from "react-router-dom";

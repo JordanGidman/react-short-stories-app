@@ -138,10 +138,6 @@ function EditAccount() {
   const [stories, setStories] = useState();
   const [error, setError] = useState(null);
 
-  console.log(currentUser);
-  console.log(fullName);
-  console.log(displayName);
-
   useEffect(() => {
     if (!currentUser?.uid) return;
 

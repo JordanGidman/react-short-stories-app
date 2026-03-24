@@ -10,9 +10,8 @@ import {
   useState,
 } from "react";
 
-// import heroImg from "../img/hero-img.jpg";
 import Button from "../components/Button";
-// import Featured from "../components/Featured";
+
 const Featured = lazy(() => import("../components/Featured"));
 const StaffPicks = lazy(() => import("../components/StaffPicks"));
 import {

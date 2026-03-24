@@ -10,7 +10,7 @@ import Navbar from "../components/Navbar";
 import InputBox from "../components/InputBox";
 import { doc, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
-import signuphero from "../img/signup-hero.jpg";
+import signuphero from "../img/signup-hero.webp";
 
 const SigninButton = styled(Button)`
   margin-top: 6rem;
