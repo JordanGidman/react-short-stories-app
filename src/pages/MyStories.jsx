@@ -406,6 +406,7 @@ function MyStories() {
     }
   }, [location, navigate]);
 
+  //Fetch stories made by the current user
   useEffect(() => {
     if (!currentUser?.uid) return;
 

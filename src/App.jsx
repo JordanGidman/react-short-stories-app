@@ -25,6 +25,7 @@ import Error from "./pages/Error";
 import Spinner from "./components/Spinner";
 const Drafts = lazy(() => import("./components/Drafts"));
 import MainLayout from "./layouts/MainLayout";
+import AuthorProfile from "./pages/AuthorProfile";
 
 const StyledApp = styled.div`
   .Toastify__toast-theme--colored.Toastify__toast--success {
@@ -162,11 +163,13 @@ function App() {
   //3 - Optimizations(Img compression, lazy loading, code splitting, memoization, refactors, etc) - Partially done
   //5 - Accessibility Improvements - Partially done
   //6 - Deployment - Not done
+  //7 - Ability to follow authors and view their profiles - Not done
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments
   //2 - Animations and transitions
   //3 - Ability to add multiple genres
+  //5 - Personalized feed
 
   //UNFIXED BUGS
   //Tooltip on the edit account page is offscreen and needs to be adjusted.
@@ -184,6 +187,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="about" element={<About />} />
                 <Route path="library" element={<Library />} />
+                <Route path="author/:id" element={<AuthorProfile />} />
                 <Route path="library/:genre" element={<StoryList />} />
                 <Route
                   path="library/:genre/story/:id"

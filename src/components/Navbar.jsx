@@ -63,6 +63,7 @@ const StyledLink = styled(NavLink)`
   font-size: 1.6rem;
   transition: all 0.3s ease-in-out;
   text-transform: capitalize;
+  letter-spacing: 0.1rem;
   padding: 1rem 2rem;
   text-transform: uppercase;
 
