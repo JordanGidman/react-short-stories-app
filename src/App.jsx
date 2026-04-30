@@ -164,6 +164,9 @@ function App() {
   //5 - Accessibility Improvements - Partially done
   //6 - Deployment - Not done
   //7 - Ability to follow authors and view their profiles - Not done
+  //8 - Make author names and genre's clickable and link to the author profile and genre page respectively everywhere they appear - Not done
+  //9 - Need to be able to see followed authors - Not done
+  //10 - Need to be able to access public account as well as back-end (for this i think i will have the navbar link to the public facing profile with a button on there hidden unless the logged in user is the same as the profile being viewed and profile owner to access the current account page) - Not done
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments

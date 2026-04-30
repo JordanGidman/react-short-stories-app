@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import {
   arrayRemove,
   arrayUnion,
@@ -94,6 +94,11 @@ const StyledSubheading = styled.p`
   @media (max-width: 27.5em) {
     font-size: 1.6rem;
   }
+`;
+
+const StyledNavLink = styled(NavLink)`
+  font-weight: 600;
+  color: #333;
 `;
 
 const StyledSynopsis = styled.p`
@@ -334,8 +339,11 @@ function Book() {
         <StyledTextWrapper>
           <StyledH1>{story.title}</StyledH1>
           <StyledSubheading>
-            By: <span>{story.author || "Unknown author"}</span> | Genre:{" "}
-            <span>{story.genre}</span>
+            By:{" "}
+            <StyledNavLink to={`/author/${story.creatorID}`}>
+              {story.author || "Unknown author"}
+            </StyledNavLink>{" "}
+            | Genre: <span>{story.genre}</span>
           </StyledSubheading>
           <StyledSynopsis>{story.synopsis}</StyledSynopsis>
         </StyledTextWrapper>

@@ -3,7 +3,13 @@ import styled from "styled-components";
 import Button from "../components/Button";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import { db } from "../firebase";
 
 let testImg = faker.image.personPortrait();
@@ -213,6 +219,7 @@ function AuthorProfile() {
   const [stories, setStories] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [author, setAuthor] = useState(null);
 
   //Fetch stories made by the current user
   useEffect(() => {
@@ -225,7 +232,7 @@ function AuthorProfile() {
       where("hidden", "==", false),
     );
 
-    // Use onSnapshot instead of getDocs
+    // Using onSnapshot instead of getDocs for live updates
     const unsub = onSnapshot(q, (querySnapshot) => {
       const fetchedStories = querySnapshot.docs
         .sort((a, b) => b.data().createdAt - a.data().createdAt)
@@ -244,11 +251,37 @@ function AuthorProfile() {
     return () => unsub();
   }, [id]);
 
+  //Fetch author info
+  useEffect(() => {
+    const fetchAuthor = async () => {
+      try {
+        const authorRef = collection(db, "users");
+        const q = query(authorRef, where("uid", "==", id));
+
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+          const userData = querySnapshot.docs[0].data();
+
+          setAuthor(userData);
+        } else {
+          console.log("No user found");
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+
+    if (id) {
+      fetchAuthor();
+    }
+  }, [id]);
+
   return (
     <StyledAuthorProfile>
       <StyledImgWrapper>
         <StyledBanner>
-          <span>Jordan Giddy</span>
+          <span>{author?.displayName}</span>
         </StyledBanner>
         <StyledAuthorImg $img={testImg} />
       </StyledImgWrapper>
@@ -256,14 +289,13 @@ function AuthorProfile() {
       <StyledAuthorInfo>
         <div></div>
         <StyledInfoWrapper>
-          <StyledH1>Jordan Giddy</StyledH1>
+          <StyledH1>{author?.displayName}</StyledH1>
           <StyledSubheading>Spain</StyledSubheading>
           <FollowButton>+ Follow Author</FollowButton>
           <StyledOverview>
-            Her debut novel, Panza de Burro, was first published in Spain to
-            great acclaim. In 2021, Jordan Giddy was included in Granta‘s new
-            selection in a decade of the Best of Young Spanish Language
-            Novelists. Photograph © Alex de la Torre
+            Their debut novel, Panza de Burro, was first published in Spain to
+            great acclaim. In 2021, They were included in Granta‘s new selection
+            in a decade of the Best of Young Spanish Language Novelists.
           </StyledOverview>
           <StyledStories>
             <StyledTitle>
