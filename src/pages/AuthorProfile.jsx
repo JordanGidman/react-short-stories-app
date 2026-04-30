@@ -220,6 +220,19 @@ function AuthorProfile() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [author, setAuthor] = useState(null);
+  const nationalities = [
+    "Spain",
+    "England",
+    "France",
+    "Germany",
+    "Italy",
+    "Russia",
+    "China",
+    "Japan",
+    "India",
+  ];
+  const randomNationality =
+    nationalities[Math.floor(Math.random() * nationalities.length)];
 
   //Fetch stories made by the current user
   useEffect(() => {
@@ -290,7 +303,7 @@ function AuthorProfile() {
         <div></div>
         <StyledInfoWrapper>
           <StyledH1>{author?.displayName}</StyledH1>
-          <StyledSubheading>Spain</StyledSubheading>
+          <StyledSubheading>{randomNationality}</StyledSubheading>
           <FollowButton>+ Follow Author</FollowButton>
           <StyledOverview>
             Their debut novel, Panza de Burro, was first published in Spain to
