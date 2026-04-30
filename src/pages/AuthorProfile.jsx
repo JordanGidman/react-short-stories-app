@@ -1,16 +1,21 @@
 import { faker } from "@faker-js/faker";
 import styled from "styled-components";
 import Button from "../components/Button";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
+  arrayRemove,
+  arrayUnion,
   collection,
+  doc,
   getDocs,
   onSnapshot,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { db } from "../firebase";
+import { AuthContext } from "../context/AuthContext";
 
 let testImg = faker.image.personPortrait();
 console.log(testImg);
@@ -216,6 +221,8 @@ function AuthorProfile() {
   // - Header
   // - Need to change what is shown and changeable based on if its the current users page or someone elses.
   const { id } = useParams();
+  const { currentUser } = useContext(AuthContext);
+  const [user, setUser] = useState(null);
   const [stories, setStories] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -233,6 +240,8 @@ function AuthorProfile() {
   ];
   const randomNationality =
     nationalities[Math.floor(Math.random() * nationalities.length)];
+  const followed = user?.followed?.includes(id);
+  console.log(currentUser);
 
   //Fetch stories made by the current user
   useEffect(() => {
@@ -290,6 +299,36 @@ function AuthorProfile() {
     }
   }, [id]);
 
+  //Fetch current user
+  useEffect(() => {
+    if (!currentUser?.uid) return;
+
+    const userRef = doc(db, "users", currentUser.uid);
+    const unsub = onSnapshot(userRef, (docSnap) => {
+      if (docSnap.exists()) {
+        setUser({ id: docSnap.id, ...docSnap.data() });
+      } else {
+        console.log("No user found");
+      }
+    });
+
+    return () => unsub();
+  }, [currentUser]);
+
+  async function handleFollow() {
+    //Add the id of the author to the users followed array
+    await updateDoc(doc(db, "users", currentUser.uid), {
+      followed: arrayUnion(id),
+    });
+  }
+
+  async function handleUnfollow() {
+    //Remove the id of the author from the users followed array
+    await updateDoc(doc(db, "users", currentUser.uid), {
+      followed: arrayRemove(id),
+    });
+  }
+
   return (
     <StyledAuthorProfile>
       <StyledImgWrapper>
@@ -304,7 +343,11 @@ function AuthorProfile() {
         <StyledInfoWrapper>
           <StyledH1>{author?.displayName}</StyledH1>
           <StyledSubheading>{randomNationality}</StyledSubheading>
-          <FollowButton>+ Follow Author</FollowButton>
+          <FollowButton
+            onClick={() => (followed ? handleUnfollow() : handleFollow())}
+          >
+            {followed ? "Unfollow" : "Follow"}
+          </FollowButton>
           <StyledOverview>
             Their debut novel, Panza de Burro, was first published in Spain to
             great acclaim. In 2021, They were included in Granta‘s new selection
