@@ -157,18 +157,21 @@ function App() {
   //51 - Improve firebase rules. - Done
   //52 - Need to prevent blank comments or comments that are just whitespace - Done.
   //53 - SEO Improvements - Done
+  //54 - Ability to follow authors and view their profiles - Done
+  //55 - Make author names a clickable link to their profile - Done
+  //56 - Make genre's clickable and link to the genre page on the story page - Done
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
   //3 - Optimizations(Img compression, lazy loading, code splitting, memoization, refactors, etc) - Partially done
   //5 - Accessibility Improvements - Partially done
   //6 - Deployment - Not done
-  //7 - Ability to follow authors and view their profiles - Not done
-  //8 - Make author names and genre's clickable and link to the author profile and genre page respectively everywhere they appear - Not done
   //9 - Need to be able to see followed authors - Not done
   //10 - Need to be able to access public account as well as back-end (for this i think i will have the navbar link to the public facing profile with a button on there hidden unless the logged in user is the same as the profile being viewed and profile owner to access the current account page) - Not done
-  //11 - Need to make a script to give each user an image url and allow new users to add an image url to use for theirs as well - Not done
+  //11 - Need to make a script to give each user an image url and allow new users to add an image url as well - Not done
   //12 - Add ability for new users to choose their country of residence and make a script to add this info for existing users as well - Not done
+  //13 - Make the likes icon on story cards an outline if the user has not liked it and filled if they have - Not done
+  //14 - Need to make the read button on the story cards on the author profile page link to the story page - Not done
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments

@@ -343,7 +343,10 @@ function Book() {
             <StyledNavLink to={`/author/${story.creatorID}`}>
               {story.author || "Unknown author"}
             </StyledNavLink>{" "}
-            | Genre: <span>{story.genre}</span>
+            | Genre:{" "}
+            <StyledNavLink to={`/library/${story.genre.toLowerCase()}`}>
+              {story.genre}
+            </StyledNavLink>
           </StyledSubheading>
           <StyledSynopsis>{story.synopsis}</StyledSynopsis>
         </StyledTextWrapper>
