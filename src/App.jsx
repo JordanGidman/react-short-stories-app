@@ -24,6 +24,7 @@ const EditAccount = lazy(() => import("./components/EditAccount"));
 import Error from "./pages/Error";
 import Spinner from "./components/Spinner";
 const Drafts = lazy(() => import("./components/Drafts"));
+const FollowedList = lazy(() => import("./components/FollowedList"));
 import MainLayout from "./layouts/MainLayout";
 import AuthorProfile from "./pages/AuthorProfile";
 
@@ -160,13 +161,13 @@ function App() {
   //54 - Ability to follow authors and view their profiles - Done
   //55 - Make author names a clickable link to their profile - Done
   //56 - Make genre's clickable and link to the genre page on the story page - Done
+  //57 - Need to be able to see followed authors - Done
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
   //3 - Optimizations(Img compression, lazy loading, code splitting, memoization, refactors, etc) - Partially done
   //5 - Accessibility Improvements - Partially done
   //6 - Deployment - Not done
-  //9 - Need to be able to see followed authors - Not done
   //10 - Need to be able to access public account as well as back-end (for this i think i will have the navbar link to the public facing profile with a button on there hidden unless the logged in user is the same as the profile being viewed and profile owner to access the current account page) - Not done
   //11 - Need to make a script to give each user an image url and allow new users to add an image url as well - Not done
   //12 - Add ability for new users to choose their country of residence and make a script to add this info for existing users as well - Not done
@@ -181,6 +182,7 @@ function App() {
 
   //UNFIXED BUGS
   //Tooltip on the edit account page is offscreen and needs to be adjusted.
+  //Fix responsive design of account page now that the followed page is added some of it breaks like the mobile nav breakpoint needing to be bigger now to compensate the extra nav item.
 
   return (
     <AuthContextProvider>
@@ -219,6 +221,7 @@ function App() {
                   <Route path="favorites" element={<Favorites />} />
                   <Route path="mystories" element={<MyStories />} />
                   <Route path="drafts" element={<Drafts />} />
+                  <Route path="followed" element={<FollowedList />} />
                   <Route path="edit" element={<EditAccount />} />
                 </Route>
 

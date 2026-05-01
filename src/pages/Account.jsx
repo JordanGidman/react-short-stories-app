@@ -157,11 +157,16 @@ const StyledNavList = styled.ul`
   @media (max-width: 75em) {
     flex-direction: row;
     align-items: center;
-
     grid-row: 2 / 3;
     grid-column: span 2;
     padding: 2rem;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  /* 645px */
+  @media (max-width: 40.3em) {
+    padding-left: 0rem;
+    padding-right: 0rem;
   }
 `;
 
@@ -387,7 +392,7 @@ function Account() {
     <>
       {/* <Navbar /> */}
       <StyledAccount>
-        {windowWidth >= 525 ? (
+        {windowWidth >= 645 ? (
           <StyledNav>
             <StyledName>{user?.displayName}</StyledName>
             <StyledNavList>
@@ -405,6 +410,11 @@ function Account() {
               <StyledNavItem>
                 <StyledNavLink className="nav-link" to={`drafts`}>
                   Drafts
+                </StyledNavLink>
+              </StyledNavItem>
+              <StyledNavItem>
+                <StyledNavLink className="nav-link" to={`followed`}>
+                  Followed
                 </StyledNavLink>
               </StyledNavItem>
               <StyledNavItem>
@@ -432,6 +442,9 @@ function Account() {
               </option>
               <option name="drafts" value="drafts">
                 Drafts
+              </option>
+              <option name="followed" value="followed">
+                Followed
               </option>
               <option name="edit" value="edit">
                 Edit Account
