@@ -20,7 +20,7 @@ import Spinner from "./Spinner";
 import Error from "../pages/Error"; // assuming this exists
 import Navbar from "./Navbar";
 import FavoriteStoryItem from "./FavoriteStoryItem";
-import FollowedCard from "./FollwedCard";
+import FollowedCard from "./FollowedCard";
 
 const StyledFavorites = styled.div`
   min-height: 100%;

@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker";
 import styled from "styled-components";
 import Button from "../components/Button";
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   arrayRemove,
   arrayUnion,
@@ -364,7 +364,11 @@ function AuthorProfile() {
                   <StyledCard key={story.id} $backgroundImage={story.img}>
                     <p>{story.author}</p>
                     <h4>{story.title}</h4>
-                    <Button>Read</Button>
+                    <Button>
+                      <Link to={`/library/${story.genre}/story/${story.id}`}>
+                        Read
+                      </Link>
+                    </Button>
                   </StyledCard>
                 );
               })}

@@ -162,6 +162,7 @@ function App() {
   //55 - Make author names a clickable link to their profile - Done
   //56 - Make genre's clickable and link to the genre page on the story page - Done
   //57 - Need to be able to see followed authors - Done
+  //58 - Need to make the read button on the story cards on the author profile page link to the story page - Done
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
@@ -172,7 +173,7 @@ function App() {
   //11 - Need to make a script to give each user an image url and allow new users to add an image url as well - Not done
   //12 - Add ability for new users to choose their country of residence and make a script to add this info for existing users as well - Not done
   //13 - Make the likes icon on story cards an outline if the user has not liked it and filled if they have - Not done
-  //14 - Need to make the read button on the story cards on the author profile page link to the story page - Not done
+  //14 - Need a way for the logged in user to check their public profile from their accounts page - Not done
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments

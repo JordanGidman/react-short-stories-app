@@ -37,7 +37,7 @@ const StyledListItem = styled.li`
   }
 `;
 
-const StyledAuthor = styled(Link)`
+const StyledLink = styled(Link)`
   font-weight: 600;
   font-family: "Playfair Display", serif;
   letter-spacing: 0.1rem;
@@ -74,9 +74,7 @@ function FollowedCard({ author }) {
   return (
     <StyledListItem>
       <div>Image</div>
-      <StyledAuthor to={`/authors/${author.id}`}>
-        {author.displayName}
-      </StyledAuthor>
+      <StyledLink to={`/authors/${author.id}`}>{author.displayName}</StyledLink>
       <p>{author.stories.length} stories</p>
       <StyledButton className="btn-unfollow">Unfollow</StyledButton>
     </StyledListItem>
