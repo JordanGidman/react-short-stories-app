@@ -163,6 +163,7 @@ function App() {
   //56 - Make genre's clickable and link to the genre page on the story page - Done
   //57 - Need to be able to see followed authors - Done
   //58 - Need to make the read button on the story cards on the author profile page link to the story page - Done
+  //59 - //Tooltip on the edit account page is offscreen at smaller viewports and needs to be adjusted. - Done
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
@@ -171,9 +172,8 @@ function App() {
   //6 - Deployment - Not done
   //10 - Need to be able to access public account as well as back-end (for this i think i will have the navbar link to the public facing profile with a button on there hidden unless the logged in user is the same as the profile being viewed and profile owner to access the current account page) - Not done
   //11 - Need to make a script to give each user an image url and allow new users to add an image url as well - Not done
-  //12 - Add ability for new users to choose their country of residence and make a script to add this info for existing users as well - Not done
+  //12 - Add ability for new users to choose their country of residence and make a script to add this info for existing users as well and connect it to the user profile - Not done
   //13 - Make the likes icon on story cards an outline if the user has not liked it and filled if they have - Not done
-  //14 - Need a way for the logged in user to check their public profile from their accounts page - Not done
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments
@@ -182,7 +182,7 @@ function App() {
   //5 - Personalized feed
 
   //UNFIXED BUGS
-  //Tooltip on the edit account page is offscreen and needs to be adjusted.
+
   //Fix responsive design of account page now that the followed page is added some of it breaks like the mobile nav breakpoint needing to be bigger now to compensate the extra nav item.
 
   return (

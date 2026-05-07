@@ -104,7 +104,7 @@ const Tooltip = styled.span`
   padding: 0.4rem 0.8rem;
   border-radius: 0.4rem;
   font-size: 1.2rem;
-  white-space: nowrap;
+  /* white-space: nowrap; */
 
   z-index: 1;
 
