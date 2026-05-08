@@ -16,6 +16,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { AuthContext } from "../context/AuthContext";
+import { getData } from "country-list";
 
 let testImg = faker.image.personPortrait();
 console.log(testImg);
@@ -227,6 +228,7 @@ function AuthorProfile() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [author, setAuthor] = useState(null);
+  const countryData = getData();
   const nationalities = [
     "Spain",
     "England",
@@ -342,7 +344,11 @@ function AuthorProfile() {
         <div></div>
         <StyledInfoWrapper>
           <StyledH1>{author?.displayName}</StyledH1>
-          <StyledSubheading>{randomNationality}</StyledSubheading>
+          <StyledSubheading>
+            {author?.country
+              ? countryData.find((c) => c.code === author.country)?.name
+              : randomNationality}
+          </StyledSubheading>
           <FollowButton
             onClick={() => (followed ? handleUnfollow() : handleFollow())}
           >

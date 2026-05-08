@@ -165,6 +165,8 @@ function App() {
   //58 - Need to make the read button on the story cards on the author profile page link to the story page - Done
   //59 - //Tooltip on the edit account page is offscreen at smaller viewports and needs to be adjusted. - Done
   //60 - ability for new users to choose their country of residence when signing up
+  //61 -When signing in if there is an error the page gets stuck and even if correct details are entered after the first error the signin wont work unless the page is refreshed.
+  //62 - When signing up if a field is left empty the button stays stuck as signingup... forever. We need to throw an error to the user and set the loading state back to false. - Fixed
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
@@ -173,23 +175,23 @@ function App() {
   //6 - Deployment - Not done
   //10 - Need to be able to access public account as well as back-end (for this i think i will have the navbar link to the public facing profile with a button on there hidden unless the logged in user is the same as the profile being viewed and profile owner to access the current account page) - Not done
   //11 - Need to make a script to give each user an image url and allow new users to add an image url as well - Not done
-  //12 - Add a script to add country info for existing and connect it to the user profile - Not done
+  //12 - Add a script to add country info for existing and connect it to the user profile and remove the random nationality from the author profile - Not done
   //13 - Make the likes icon on story cards an outline if the user has not liked it and filled if they have - Not done
   //14 - Need to make country select fill the screen at a certain viewport as the options overflow. - Not done
   //15 - Need to add a password confirmation field to the signup page to ensure the user knows what password they are setting and to prevent typos. - Not done
+  //16 - Add a button to the story page to view the authors profile, although we can click their name its not immediately obvious that its a link. - Not done
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments
   //2 - Animations and transitions
   //3 - Ability to add multiple genres
   //5 - Personalized feed
+  //6 - Back button on genre pages to go back to library
 
   //UNFIXED BUGS
 
   //Fix responsive design of account page now that the followed page is added some of it breaks like the mobile nav breakpoint needing to be bigger now to compensate the extra nav item.
   //When opening the mobile nav at the bottom of the page the footer is still visible but it should be hiddeb when the mobile nav is open.
-  //When signing up if a field is left empty the button stays stuck as signingup... forever. We need to throw an error to the user and set the loading state back to false.
-  //When signing in if there is an error the page gets stuck and even if correct details are entered after the first error the signin wont work unless the page is refreshed.
 
   return (
     <AuthContextProvider>

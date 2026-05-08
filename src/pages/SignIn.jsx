@@ -131,15 +131,24 @@ function SignIn() {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e, email, password) {
     e.preventDefault();
     setIsLoading(true);
 
+    if (!email || !password) {
+      setIsLoading(false);
+      setError("Please fill in all required fields.");
+      toast.error("Please fill in all required fields.");
+      return;
+    }
+
     //capture all details at once. Not using controlled components in this case due to file upload
 
-    const email = e.target[0].value;
-    const password = e.target[1].value;
+    // const email = e.target[0].value;
+    // const password = e.target[1].value;
 
     //sign the user up through firebase authentication
     try {
@@ -156,6 +165,7 @@ function SignIn() {
     } catch (error) {
       setError(error);
       toast.error(`Error: ${error.message}`);
+      setIsLoading(false);
     }
   }
 
@@ -170,9 +180,19 @@ function SignIn() {
           Welcome <span>Back!</span>
         </StyledH1>
         <StyledSubheading>Sign In ↓</StyledSubheading>
-        <StyledForm onSubmit={handleSubmit}>
-          <StyledInputBox type="email" placeholder="* Email" />
-          <StyledInputBox type="password" placeholder="* Password" />
+        <StyledForm onSubmit={(e) => handleSubmit(e, email, password)}>
+          <StyledInputBox
+            type="email"
+            placeholder="* Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <StyledInputBox
+            type="password"
+            placeholder="* Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
           <SigninButton disabled={isLoading}>Sign in</SigninButton>
           {error && <StyledError>Something went wrong..</StyledError>}
         </StyledForm>
