@@ -11,6 +11,7 @@ import InputBox from "../components/InputBox";
 import { doc, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import signuphero from "../img/signup-hero.webp";
+import CountrySelect from "../components/CountrySelect";
 
 const SigninButton = styled(Button)`
   margin-top: 6rem;
@@ -94,6 +95,7 @@ const StyledH1 = styled.h1`
   font-size: 4.6rem;
   font-family: "Playfair Display", serif;
   font-weight: 900;
+  text-align: center;
 
   span {
     font-weight: 500;
@@ -134,17 +136,34 @@ function SignUp() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  async function handleSignUp(e) {
+  const [country, setCountry] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("New Email");
+  const [password, setPassword] = useState("New Password");
+
+  async function handleSignUp(
+    e,
+    country,
+    displayName,
+    fullName,
+    email,
+    password,
+    isLoading,
+    setIsLoading,
+    setError,
+  ) {
     e.preventDefault();
     setIsLoading(true);
 
-    const displayName = e.target[0].value; // Assuming the first input is for display name
-    const fullName = e.target[1].value;
+    if (!country || !displayName || !fullName || !email || !password) {
+      setIsLoading(false);
+      setError("Please fill in all required fields.");
+      toast.error("Please fill in all required fields.");
+      return;
+    }
 
-    const email = e.target[2].value;
-    const password = e.target[3].value;
-
-    //Might need to create a user in the DB also for saving their stories.
+    //Create a user in auth and in the DB for saving their stories.
     try {
       //Create user with email and password
       await createUserWithEmailAndPassword(auth, email, password)
@@ -171,6 +190,7 @@ function SignUp() {
         uid: auth.currentUser.uid,
         displayName: displayName,
         fullName,
+        country,
         stories: [],
         drafts: [],
       });
@@ -182,7 +202,7 @@ function SignUp() {
       //replace with proper error handling later
       console.log(err.message);
       setError(error);
-      toast.error(`Error: ${error.message}`);
+      toast.error(`Error: ${error?.message}`);
     }
   }
   return (
@@ -193,19 +213,49 @@ function SignUp() {
       </SecondWrapper>
       <StyledWrapper>
         <StyledH1>
-          Welcome <span>Back!</span>
+          Welcome <span>fellow reader!</span>
         </StyledH1>
         <StyledSubheading>Sign Up ↓</StyledSubheading>
 
-        <StyledForm onSubmit={handleSignUp}>
-          <StyledInputBox type="text" placeholder="* Display Name" />
-          <StyledInputBox type="text" placeholder="* Full Name" />
-          <StyledInputBox type="email" placeholder="* Email" />
-          <StyledInputBox type="password" placeholder="* Password" />
+        <StyledForm
+          onSubmit={(e) =>
+            handleSignUp(
+              e,
+              country,
+              displayName,
+              fullName,
+              email,
+              password,
+              isLoading,
+              setIsLoading,
+              setError,
+            )
+          }
+        >
+          <StyledInputBox
+            type="text"
+            placeholder="* Display Name"
+            onChange={(e) => setDisplayName(e.target.value)}
+          />
+          <StyledInputBox
+            type="text"
+            placeholder="* Full Name"
+            onChange={(e) => setFullName(e.target.value)}
+          />
+          <CountrySelect country={country} setCountry={setCountry} />
+          <StyledInputBox
+            type="email"
+            placeholder="* Email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <StyledInputBox
+            type="password"
+            placeholder="* Password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
           <SigninButton disabled={isLoading}>
             {isLoading ? "Signing Up..." : "Sign Up"}
           </SigninButton>
-          {error && <span>Something went wrong..</span>}
         </StyledForm>
         <StyledFooter>
           Already have an account?{" "}
