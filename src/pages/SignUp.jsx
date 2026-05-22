@@ -141,6 +141,7 @@ function SignUp() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("New Email");
   const [password, setPassword] = useState("New Password");
+  const [confirmPassword, setConfirmPassword] = useState(false);
 
   async function handleSignUp(
     e,
@@ -160,6 +161,12 @@ function SignUp() {
       setIsLoading(false);
       setError("Please fill in all required fields.");
       toast.error("Please fill in all required fields.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setIsLoading(false);
+      setError("Passwords do not match.");
+      toast.error("Passwords do not match.");
       return;
     }
 
@@ -252,6 +259,13 @@ function SignUp() {
             type="password"
             placeholder="* Password"
             onChange={(e) => setPassword(e.target.value)}
+          />
+          <StyledInputBox
+            type="password"
+            placeholder="* Confirm Password"
+            onChange={(e) =>
+              setConfirmPassword(() => e.target.value === password)
+            }
           />
           <SigninButton disabled={isLoading}>
             {isLoading ? "Signing Up..." : "Sign Up"}

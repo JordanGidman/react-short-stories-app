@@ -167,6 +167,7 @@ function App() {
   //60 - ability for new users to choose their country of residence when signing up
   //61 -When signing in if there is an error the page gets stuck and even if correct details are entered after the first error the signin wont work unless the page is refreshed.
   //62 - When signing up if a field is left empty the button stays stuck as signingup... forever. We need to throw an error to the user and set the loading state back to false. - Fixed
+  //63 - Need to add a password confirmation field to the signup page to ensure the user knows what password they are setting and to prevent typos. - Done
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
@@ -177,8 +178,7 @@ function App() {
   //11 - Need to make a script to give each user an image url and allow new users to add an image url as well - Not done
   //12 - Add a script to add country info for existing and connect it to the user profile and remove the random nationality from the author profile - Not done
   //13 - Make the likes icon on story cards an outline if the user has not liked it and filled if they have - Not done
-  //14 - Need to make country select fill the screen at a certain viewport as the options overflow. - Not done
-  //15 - Need to add a password confirmation field to the signup page to ensure the user knows what password they are setting and to prevent typos. - Not done
+
   //16 - Add a button to the story page to view the authors profile, although we can click their name its not immediately obvious that its a link. - Not done
 
   //POSSIBLE FUTURE FEATURES

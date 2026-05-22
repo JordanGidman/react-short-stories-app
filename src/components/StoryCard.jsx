@@ -141,6 +141,9 @@ const StoryCard = memo(function StoryCard({ story }) {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const { currentUser } = useContext(AuthContext);
+  const [currentUserData, setCurrentUserData] = useState(null);
+
+  console.log(currentUserData);
 
   const isCriticalError = useMemo(() => {
     return (
@@ -150,6 +153,20 @@ const StoryCard = memo(function StoryCard({ story }) {
       (!author || author === "Unknown author")
     );
   }, [story.title, story.synopsis, loadedImg, author]);
+
+  useEffect(() => {
+    if (!currentUser) return;
+
+    const userRef = doc(db, "users", currentUser.uid);
+
+    const unsub = onSnapshot(userRef, (docSnap) => {
+      if (docSnap.exists()) {
+        setCurrentUserData(docSnap.data());
+      }
+    });
+
+    return () => unsub();
+  }, [currentUser]);
 
   useEffect(() => {
     if (!story.creatorID) return;
@@ -242,7 +259,11 @@ const StoryCard = memo(function StoryCard({ story }) {
               <StyledButton>Read</StyledButton>
             </StyledLink>
             <StyledLikes>
-              <ion-icon name="heart"></ion-icon>{" "}
+              {currentUserData?.likes?.includes(story.id) ? (
+                <ion-icon name="heart"></ion-icon>
+              ) : (
+                <ion-icon name="heart-outline"></ion-icon>
+              )}
               <span>{story.likes?.length || 0}</span>
             </StyledLikes>
           </StyledButtons>

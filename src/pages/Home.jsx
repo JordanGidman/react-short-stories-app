@@ -490,7 +490,7 @@ function Home() {
           </div>
           <StyledFreshButton
             onClick={() =>
-              navigate(`/library/${freshStory?.genre}/book/${freshStory?.id}`)
+              navigate(`/library/${freshStory?.genre}/story/${freshStory?.id}`)
             }
           >
             Read
