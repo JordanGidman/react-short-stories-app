@@ -322,12 +322,18 @@ function AuthorProfile() {
     await updateDoc(doc(db, "users", currentUser.uid), {
       followed: arrayUnion(id),
     });
+    await updateDoc(doc(db, "users", id), {
+      followers: arrayUnion(currentUser.uid),
+    });
   }
 
   async function handleUnfollow() {
     //Remove the id of the author from the users followed array
     await updateDoc(doc(db, "users", currentUser.uid), {
       followed: arrayRemove(id),
+    });
+    await updateDoc(doc(db, "users", id), {
+      followers: arrayRemove(currentUser.uid),
     });
   }
 
@@ -354,6 +360,7 @@ function AuthorProfile() {
           >
             {followed ? "Unfollow" : "Follow"}
           </FollowButton>
+
           <StyledOverview>
             Their debut novel, Panza de Burro, was first published in Spain to
             great acclaim. In 2021, They were included in Granta‘s new selection

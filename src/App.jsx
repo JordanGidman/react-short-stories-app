@@ -168,18 +168,24 @@ function App() {
   //61 -When signing in if there is an error the page gets stuck and even if correct details are entered after the first error the signin wont work unless the page is refreshed.
   //62 - When signing up if a field is left empty the button stays stuck as signingup... forever. We need to throw an error to the user and set the loading state back to false. - Fixed
   //63 - Need to add a password confirmation field to the signup page to ensure the user knows what password they are setting and to prevent typos. - Done
+  //5 - Need to be able to access public account as well as back-end - Done
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
-  //3 - Optimizations(Img compression, lazy loading, code splitting, memoization, refactors, etc) - Partially done
-  //5 - Accessibility Improvements - Partially done
-  //6 - Deployment - Not done
-  //10 - Need to be able to access public account as well as back-end (for this i think i will have the navbar link to the public facing profile with a button on there hidden unless the logged in user is the same as the profile being viewed and profile owner to access the current account page) - Not done
-  //11 - Need to make a script to give each user an image url and allow new users to add an image url as well - Not done
-  //12 - Add a script to add country info for existing and connect it to the user profile and remove the random nationality from the author profile - Not done
-  //13 - Make the likes icon on story cards an outline if the user has not liked it and filled if they have - Not done
+  //2 - Optimizations(Img compression, lazy loading, code splitting, memoization, refactors, etc) - Partially done
+  //3 - Accessibility Improvements - Partially done
+  //4 - Deployment - Not done
 
-  //16 - Add a button to the story page to view the authors profile, although we can click their name its not immediately obvious that its a link. - Not done
+  //6 - Need to make a script to give each user an image url and allow new users to add an image url as well - Not done
+  //7 - Add a script to add country info for existing and connect it to the user profile and remove the random nationality from the author profile - Not done
+  //8 - Make the likes icon on story cards an outline if the user has not liked it and filled if they have - Not done
+  //9 - Add a button to the story page to view the authors profile, although we can click their name its not immediately obvious that its a link. - Not done
+  //10 - Refactor the way likes work to have a likes array on each user with the id's of their liked stories - Not done
+  //11 - Add a section to view stories the user has liked. - Not done
+  //12 - Dont show follow button when user is on their own profile - Not done.
+
+  //13 - Add the ability to see how many followers an author has on their profile - Not done
+  //14 - Add the ability to change profile picture - Not done
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments
@@ -187,11 +193,14 @@ function App() {
   //3 - Ability to add multiple genres
   //5 - Personalized feed
   //6 - Back button on genre pages to go back to library
+  //7 - possibly change the account link in the nav to be a drop down to either their profile or their account page.
+  //15 - Add the ability to see how many people an author is following on their profile - Not done
 
   //UNFIXED BUGS
 
   //Fix responsive design of account page now that the followed page is added some of it breaks like the mobile nav breakpoint needing to be bigger now to compensate the extra nav item.
   //When opening the mobile nav at the bottom of the page the footer is still visible but it should be hiddeb when the mobile nav is open.
+  //Liking a story doesnt work due to firebase permissions. I want to move likes to the users collection anyway but the user should still be able to affect the likes count on the story page and story card. - Not done
 
   return (
     <AuthContextProvider>

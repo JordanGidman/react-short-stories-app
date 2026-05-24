@@ -154,6 +154,7 @@ const StoryCard = memo(function StoryCard({ story }) {
     );
   }, [story.title, story.synopsis, loadedImg, author]);
 
+  //Fetch logged in user data
   useEffect(() => {
     if (!currentUser) return;
 
@@ -168,6 +169,7 @@ const StoryCard = memo(function StoryCard({ story }) {
     return () => unsub();
   }, [currentUser]);
 
+  //Fetch author data
   useEffect(() => {
     if (!story.creatorID) return;
 
@@ -197,6 +199,7 @@ const StoryCard = memo(function StoryCard({ story }) {
     }
   }, [story.creatorID]);
 
+  //Make sure there is a placeholder image if there is no image or if the image fails to load.
   useEffect(() => {
     if (!story.img) return;
     setLoading(true);

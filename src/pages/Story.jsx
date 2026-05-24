@@ -307,6 +307,7 @@ function Book() {
       });
       toast.success(isLiked ? "Like removed." : "Story liked!");
     } catch (err) {
+      console.error("Error updating like status:", err);
       toast.error("Could not update like status.");
     }
   }
