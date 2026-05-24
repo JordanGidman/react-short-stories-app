@@ -74,7 +74,7 @@ function FollowedCard({ author }) {
   return (
     <StyledListItem>
       <div>Image</div>
-      <StyledLink to={`/authors/${author.id}`}>{author.displayName}</StyledLink>
+      <StyledLink to={`/author/${author.id}`}>{author.displayName}</StyledLink>
       <p>{author.stories.length} stories</p>
       <StyledButton className="btn-unfollow">Unfollow</StyledButton>
     </StyledListItem>

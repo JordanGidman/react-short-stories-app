@@ -214,6 +214,22 @@ const StyledCard = styled.div`
   }
 `;
 
+const StyledFollowContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+
+  font-family: "Montserrat", sans-serif;
+
+  p {
+    font-size: 2.2rem;
+
+    span {
+      font-weight: 700;
+    }
+  }
+`;
+
 function AuthorProfile() {
   // Here we want to be able to:
   // - Fetch and view all stories made by an author
@@ -277,28 +293,22 @@ function AuthorProfile() {
 
   //Fetch author info
   useEffect(() => {
-    const fetchAuthor = async () => {
-      try {
-        const authorRef = collection(db, "users");
-        const q = query(authorRef, where("uid", "==", id));
+    if (!id) return;
 
-        const querySnapshot = await getDocs(q);
+    const authorRef = collection(db, "users");
+    const q = query(authorRef, where("uid", "==", id));
 
-        if (!querySnapshot.empty) {
-          const userData = querySnapshot.docs[0].data();
+    const unsub = onSnapshot(q, (querySnapshot) => {
+      if (!querySnapshot.empty) {
+        const userData = querySnapshot.docs[0].data();
 
-          setAuthor(userData);
-        } else {
-          console.log("No user found");
-        }
-      } catch (error) {
-        console.error("Error fetching user:", error);
+        setAuthor(userData);
+      } else {
+        console.log("No user found");
       }
-    };
+    });
 
-    if (id) {
-      fetchAuthor();
-    }
+    return () => unsub();
   }, [id]);
 
   //Fetch current user
@@ -355,11 +365,16 @@ function AuthorProfile() {
               ? countryData.find((c) => c.code === author.country)?.name
               : randomNationality}
           </StyledSubheading>
-          <FollowButton
-            onClick={() => (followed ? handleUnfollow() : handleFollow())}
-          >
-            {followed ? "Unfollow" : "Follow"}
-          </FollowButton>
+          <StyledFollowContainer>
+            <p>
+              <span>{author?.followers?.length || 0}</span> followers
+            </p>
+            <FollowButton
+              onClick={() => (followed ? handleUnfollow() : handleFollow())}
+            >
+              {followed ? "Unfollow" : "Follow"}
+            </FollowButton>
+          </StyledFollowContainer>
 
           <StyledOverview>
             Their debut novel, Panza de Burro, was first published in Spain to

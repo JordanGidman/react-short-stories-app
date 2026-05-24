@@ -168,7 +168,8 @@ function App() {
   //61 -When signing in if there is an error the page gets stuck and even if correct details are entered after the first error the signin wont work unless the page is refreshed.
   //62 - When signing up if a field is left empty the button stays stuck as signingup... forever. We need to throw an error to the user and set the loading state back to false. - Fixed
   //63 - Need to add a password confirmation field to the signup page to ensure the user knows what password they are setting and to prevent typos. - Done
-  //5 - Need to be able to access public account as well as back-end - Done
+  //64 - Need to be able to access public account as well as back-end - Done
+  //65 - Add the ability to see how many followers an author has on their profile - Done
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
@@ -183,8 +184,7 @@ function App() {
   //10 - Refactor the way likes work to have a likes array on each user with the id's of their liked stories - Not done
   //11 - Add a section to view stories the user has liked. - Not done
   //12 - Dont show follow button when user is on their own profile - Not done.
-
-  //13 - Add the ability to see how many followers an author has on their profile - Not done
+  //13 - Add ability to see who is following you - Not done.
   //14 - Add the ability to change profile picture - Not done
 
   //POSSIBLE FUTURE FEATURES
@@ -201,6 +201,7 @@ function App() {
   //Fix responsive design of account page now that the followed page is added some of it breaks like the mobile nav breakpoint needing to be bigger now to compensate the extra nav item.
   //When opening the mobile nav at the bottom of the page the footer is still visible but it should be hiddeb when the mobile nav is open.
   //Liking a story doesnt work due to firebase permissions. I want to move likes to the users collection anyway but the user should still be able to affect the likes count on the story page and story card. - Not done
+  //Following/unfollowing authors doesnt work because of firebase rules- Not done
 
   return (
     <AuthContextProvider>
