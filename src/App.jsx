@@ -170,6 +170,7 @@ function App() {
   //63 - Need to add a password confirmation field to the signup page to ensure the user knows what password they are setting and to prevent typos. - Done
   //64 - Need to be able to access public account as well as back-end - Done
   //65 - Add the ability to see how many followers an author has on their profile - Done
+  //66 - Add a button to the story page to view the authors profile, although we can click their name its not immediately obvious that its a link. - Not done
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
@@ -180,7 +181,7 @@ function App() {
   //6 - Need to make a script to give each user an image url and allow new users to add an image url as well - Not done
   //7 - Add a script to add country info for existing and connect it to the user profile and remove the random nationality from the author profile - Not done
   //8 - Make the likes icon on story cards an outline if the user has not liked it and filled if they have - Not done
-  //9 - Add a button to the story page to view the authors profile, although we can click their name its not immediately obvious that its a link. - Not done
+
   //10 - Refactor the way likes work to have a likes array on each user with the id's of their liked stories - Not done
   //11 - Add a section to view stories the user has liked. - Not done
   //12 - Dont show follow button when user is on their own profile - Not done.
@@ -202,6 +203,7 @@ function App() {
   //When opening the mobile nav at the bottom of the page the footer is still visible but it should be hiddeb when the mobile nav is open.
   //Liking a story doesnt work due to firebase permissions. I want to move likes to the users collection anyway but the user should still be able to affect the likes count on the story page and story card. - Not done
   //Following/unfollowing authors doesnt work because of firebase rules- Not done
+  //Styling on the subheading on the story page breaks at smaller viewports and needs to be adjusted - Not done
 
   return (
     <AuthContextProvider>

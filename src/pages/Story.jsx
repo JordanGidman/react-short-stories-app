@@ -85,7 +85,10 @@ const StyledH1 = styled.h1`
 
 const StyledSubheading = styled.p`
   font-size: 1.8rem;
-  span {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  ww span {
     font-weight: 600;
     color: #333;
   }
@@ -99,6 +102,16 @@ const StyledSubheading = styled.p`
 const StyledNavLink = styled(NavLink)`
   font-weight: 600;
   color: #333;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    color: #ffbe0b;
+    text-decoration: underline;
+  }
+
+  ion-icon {
+    font-size: 1.4rem;
+  }
 `;
 
 const StyledSynopsis = styled.p`
@@ -343,12 +356,17 @@ function Book() {
             By:{" "}
             <StyledNavLink to={`/author/${story.creatorID}`}>
               {story.author || "Unknown author"}
-            </StyledNavLink>{" "}
-            | Genre:{" "}
+            </StyledNavLink>
+            {" | "}
+            Genre:{" "}
             <StyledNavLink to={`/library/${story.genre.toLowerCase()}`}>
               {story.genre}
             </StyledNavLink>
+            {" | "}
           </StyledSubheading>
+          <StyledNavLink to={`/author/${story.creatorID}`}>
+            Author Profile <ion-icon name="open-outline"></ion-icon>
+          </StyledNavLink>
           <StyledSynopsis>{story.synopsis}</StyledSynopsis>
         </StyledTextWrapper>
         <StyledImgWrapper $backgroundImage={story.img} />
