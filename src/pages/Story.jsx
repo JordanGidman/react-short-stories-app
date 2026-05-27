@@ -88,14 +88,16 @@ const StyledSubheading = styled.p`
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  ww span {
+  /* span {
     font-weight: 600;
     color: #333;
-  }
+  } */
 
   /* 440px */
   @media (max-width: 27.5em) {
     font-size: 1.6rem;
+    flex-direction: column;
+    align-items: flex-start;
   }
 `;
 
@@ -353,16 +355,19 @@ function Book() {
         <StyledTextWrapper>
           <StyledH1>{story.title}</StyledH1>
           <StyledSubheading>
-            By:{" "}
-            <StyledNavLink to={`/author/${story.creatorID}`}>
-              {story.author || "Unknown author"}
-            </StyledNavLink>
-            {" | "}
-            Genre:{" "}
-            <StyledNavLink to={`/library/${story.genre.toLowerCase()}`}>
-              {story.genre}
-            </StyledNavLink>
-            {" | "}
+            <span>
+              By:{" "}
+              <StyledNavLink to={`/author/${story.creatorID}`}>
+                {story.author || "Unknown author"}
+              </StyledNavLink>
+            </span>
+
+            <span>
+              Genre:{" "}
+              <StyledNavLink to={`/library/${story.genre.toLowerCase()}`}>
+                {story.genre}
+              </StyledNavLink>
+            </span>
           </StyledSubheading>
           <StyledNavLink to={`/author/${story.creatorID}`}>
             Author Profile <ion-icon name="open-outline"></ion-icon>
