@@ -18,8 +18,8 @@ import { db } from "../firebase";
 import { AuthContext } from "../context/AuthContext";
 import { getData } from "country-list";
 
-let testImg = faker.image.personPortrait();
-console.log(testImg);
+// let testImg = faker.image.personPortrait();
+// console.log(testImg);
 
 const StyledAuthorProfile = styled.div`
   position: relative;
@@ -353,7 +353,7 @@ function AuthorProfile() {
         <StyledBanner>
           <span>{author?.displayName}</span>
         </StyledBanner>
-        <StyledAuthorImg $img={testImg} />
+        <StyledAuthorImg $img={author?.photoURL} />
       </StyledImgWrapper>
 
       <StyledAuthorInfo>

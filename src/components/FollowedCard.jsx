@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Button from "./Button";
+import Spinner from "./Spinner";
 
 const StyledListItem = styled.li`
   display: grid;
@@ -17,7 +18,7 @@ const StyledListItem = styled.li`
   /* 930px */
   @media (max-width: 58.125em) {
     justify-items: center;
-    padding-right: 4rem;
+    /* padding-right: 4rem; */
 
     grid-template-columns: repeat(3, 1fr);
     row-gap: 2rem;
@@ -70,10 +71,16 @@ const StyledButton = styled(Button)`
   width: 80%;
 `;
 
+const StyledAuthorImg = styled.img`
+  width: 50%;
+`;
+
 function FollowedCard({ author }) {
+  console.log(author.photoURL);
   return (
     <StyledListItem>
-      <div>Image</div>
+      <StyledAuthorImg src={author?.photoURL} alt={<Spinner />} />
+
       <StyledLink to={`/author/${author.id}`}>{author.displayName}</StyledLink>
       <p>{author.stories.length} stories</p>
       <StyledButton className="btn-unfollow">Unfollow</StyledButton>

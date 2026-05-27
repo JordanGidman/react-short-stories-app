@@ -53,7 +53,7 @@ const StyledH1 = styled.h1`
   }
 `;
 
-const StyledStoryList = styled.ul`
+const StyledAuthorList = styled.ul`
   display: flex;
   flex-direction: column;
   list-style: none;
@@ -76,6 +76,18 @@ function FollowedList() {
   const [sortBy, setSortBy] = useState("placeholder");
   const [search, setSearch] = useState("");
 
+  // Derived sorted authors
+  let sortedAuthors = [...authors].sort((a, b) => {
+    if (sortBy === "most followers")
+      return b.followers?.length - a.followers?.length;
+
+    if (sortBy === "least followers")
+      return a.followers?.length - b.followers?.length;
+
+    return 0;
+  });
+  console.log(authors);
+  console.log(sortedAuthors);
   // function toggleExpand(storyId) {
   //   setExpandedStories((prev) => {
   //     const newSet = new Set(prev);
@@ -179,17 +191,23 @@ function FollowedList() {
           setSortBy={setSortBy}
           search={search}
           setSearch={setSearch}
+          sortOptions={["most followers", "least followers"]}
+          removeLikesOption={true}
         />
       </StyledHead>
 
       {dataLoading ? (
         <Spinner $height={"100%"} />
       ) : (
-        <StyledStoryList>
-          {authors?.map((author) => (
-            <FollowedCard key={author.id} author={author} />
-          ))}
-        </StyledStoryList>
+        <StyledAuthorList>
+          {sortedAuthors
+            ?.filter((author) =>
+              author.fullName?.toLowerCase().includes(search),
+            )
+            ?.map((author) => (
+              <FollowedCard key={author.id} author={author} />
+            ))}
+        </StyledAuthorList>
       )}
     </StyledFavorites>
   );

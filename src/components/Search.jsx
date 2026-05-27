@@ -99,6 +99,7 @@ function Search({
   search,
   setSearch,
   removeLikesOption = false,
+  sortOptions,
 }) {
   // const [search, setSearch] = useState("");
   const [loading, setLoading] = useState("");
@@ -123,12 +124,22 @@ function Search({
         <StyledOption disabled hidden name="placeholder" value="placeholder">
           Sort By
         </StyledOption>
-        <StyledOption name="oldest" value="oldest">
-          Oldest
-        </StyledOption>
-        <StyledOption name="newest" value="newest">
-          Newest
-        </StyledOption>
+        {sortOptions ? (
+          sortOptions.map((option) => (
+            <StyledOption key={option} name={option} value={option}>
+              {option}
+            </StyledOption>
+          ))
+        ) : (
+          <>
+            <StyledOption name="oldest" value="oldest">
+              Oldest
+            </StyledOption>
+            <StyledOption name="newest" value="newest">
+              Newest
+            </StyledOption>
+          </>
+        )}
         {!removeLikesOption && (
           <StyledOption name="mostlikes" value="mostlikes">
             Likes (High to Low)
