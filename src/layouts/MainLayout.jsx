@@ -13,6 +13,7 @@ const StyledLayout = styled.div`
 
 function MainLayout() {
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
+  const [navOpen, setNavOpen] = useState(false);
 
   function getResizeWidth(e) {
     setViewportWidth(e.target.innerWidth);
@@ -25,9 +26,13 @@ function MainLayout() {
   }, []);
   return (
     <StyledLayout>
-      {viewportWidth < 929 ? <MobileNavbar /> : <Navbar />}
+      {viewportWidth < 929 ? (
+        <MobileNavbar navOpen={navOpen} setNavOpen={setNavOpen} />
+      ) : (
+        <Navbar />
+      )}
       <Outlet />
-      <Footer />
+      {!navOpen && <Footer />}
     </StyledLayout>
   );
 }

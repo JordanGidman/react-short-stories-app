@@ -172,6 +172,9 @@ function App() {
   //65 - Add the ability to see how many followers an author has on their profile - Done
   //66 - Add a button to the story page to view the authors profile, although we can click their name its not immediately obvious that its a link. - Done
   //67 - Styling on the subheading on the story page breaks at smaller viewports and needs to be adjusted - Done
+  //68 - Need to allow new users to add an image url as well - Done
+  //69 - Add a script to add country info for existing and connect it to the user profile and remove the random nationality from the author profile - Done
+  //70 - Add the ability to change profile picture - Done
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
@@ -179,14 +182,12 @@ function App() {
   //3 - Accessibility Improvements - Partially done
   //4 - Deployment - Not done
 
-  //5 - Need to make a script to give each user an image url and allow new users to add an image url as well - Not done
-  //6 - Add a script to add country info for existing and connect it to the user profile and remove the random nationality from the author profile - Not done
-  //7 - Make the likes icon on story cards an outline if the user has not liked it and filled if they have - Not done
-  //8 - Refactor the way likes work to have a likes array on each user with the id's of their liked stories - Not done
-  //9 - Add a section to view stories the user has liked. - Not done
-  //10 - Dont show follow button when user is on their own profile - Not done.
-  //11 - Add ability to see who is following you - Not done.
-  //12 - Add the ability to change profile picture - Not done
+  //5 - Make the likes icon on story cards an outline if the user has not liked it and filled if they have - Not done
+  //6 - Refactor the way likes work to have a likes array on each user with the id's of their liked stories - Not done
+  //7 - Add a section to view stories the user has liked. - Not done
+  //8 - Dont show follow button when user is on their own profile - Not done.
+  //9 - Add ability to see who is following you - Not done.
+  //10 - Add a button to password fields to show/hide the password - Not done
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments
@@ -202,8 +203,8 @@ function App() {
   //Fix responsive design of account page now that the followed page is added some of it breaks like the mobile nav breakpoint needing to be bigger now to compensate the extra nav item.
   //When opening the mobile nav at the bottom of the page the footer is still visible but it should be hiddeb when the mobile nav is open.
   //Liking a story doesnt work due to firebase permissions. I want to move likes to the users collection anyway but the user should still be able to affect the likes count on the story page and story card. - Not done
-  //Following/unfollowing authors doesnt work because of firebase rules- Not done
-  //Styling breaks at small viewports on the followed authors page - Not done
+  //Firebase rules dont allow correct access when deployed- Not done
+  //Styling breaks at small viewports on the followed authors/author profile page - Not done
 
   return (
     <AuthContextProvider>
@@ -220,6 +221,8 @@ function App() {
                 <Route path="library" element={<Library />} />
                 <Route path="author/:id" element={<AuthorProfile />} />
                 <Route path="library/:genre" element={<StoryList />} />
+                <Route path="signin" element={<SignIn />} />
+                <Route path="signup" element={<SignUp />} />
                 <Route
                   path="library/:genre/story/:id"
                   element={
@@ -267,9 +270,8 @@ function App() {
                 <Route path="*" element={<PageNotFound />} />
               </Route>
 
-              {/* Routes WITHOUT navbar (auth, spinner, etc.) */}
-              <Route path="signin" element={<SignIn />} />
-              <Route path="signup" element={<SignUp />} />
+              {/* Routes WITHOUT navbar ( spinner, etc.) */}
+
               <Route path="error" element={<Error />} />
               <Route path="spinner" element={<Spinner />} />
             </Routes>

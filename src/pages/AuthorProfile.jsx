@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker";
 import styled from "styled-components";
 import Button from "../components/Button";
 import { useContext, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   arrayRemove,
   arrayUnion,
@@ -259,6 +259,7 @@ function AuthorProfile() {
   const randomNationality =
     nationalities[Math.floor(Math.random() * nationalities.length)];
   const followed = user?.followed?.includes(id);
+  const navigate = useNavigate();
   console.log(currentUser);
 
   //Fetch stories made by the current user
@@ -369,11 +370,19 @@ function AuthorProfile() {
             <p>
               <span>{author?.followers?.length || 0}</span> followers
             </p>
-            <FollowButton
-              onClick={() => (followed ? handleUnfollow() : handleFollow())}
-            >
-              {followed ? "Unfollow" : "Follow"}
-            </FollowButton>
+            {currentUser?.uid !== id ? (
+              <FollowButton
+                onClick={() => (followed ? handleUnfollow() : handleFollow())}
+              >
+                {followed ? "Unfollow" : "Follow"}
+              </FollowButton>
+            ) : (
+              <FollowButton
+                onClick={() => navigate(`/account/${currentUser.uid}/edit`)}
+              >
+                Edit Profile
+              </FollowButton>
+            )}
           </StyledFollowContainer>
 
           <StyledOverview>

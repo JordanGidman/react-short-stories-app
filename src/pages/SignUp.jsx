@@ -3,15 +3,14 @@ import { auth, db } from "../firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
 import styled from "styled-components";
 import Button from "../components/Button";
-import Navbar from "../components/Navbar";
 import InputBox from "../components/InputBox";
 import { doc, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import signuphero from "../img/signup-hero.webp";
 import CountrySelect from "../components/CountrySelect";
+import { faker } from "@faker-js/faker";
 
 const SigninButton = styled(Button)`
   margin-top: 6rem;
@@ -64,7 +63,7 @@ const SecondWrapper = styled(StyledWrapper)`
 const StyledSubheading = styled.span`
   font-size: 2.4rem;
   text-transform: uppercase;
-  margin-bottom: 6rem;
+  margin-bottom: 2rem;
 
   /* 440px */
   @media (max-width: 27.5em) {
@@ -96,6 +95,7 @@ const StyledH1 = styled.h1`
   font-family: "Playfair Display", serif;
   font-weight: 900;
   text-align: center;
+  margin-top: 2rem;
 
   span {
     font-weight: 500;
@@ -103,7 +103,7 @@ const StyledH1 = styled.h1`
   }
 
   /* 440px */
-  @media (max-width: 27.5em) {
+  @media (max-width: 30em) {
     font-size: 3.6rem;
   }
 `;
@@ -114,6 +114,47 @@ const StyledImg = styled.img`
   background-position: center; */
 
   width: 85%;
+`;
+
+// Tooltip text
+const Tooltip = styled.span`
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+
+  position: absolute;
+  bottom: 110%; /* show above button */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  background-color: #1c1f2e;
+  color: #fff;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.4rem;
+  font-size: 1.2rem;
+  /* white-space: nowrap; */
+
+  z-index: 1;
+
+  /* tooltip arrow */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 100%; /* point downwards */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+  }
+
+  .photo-input:hover & {
+    visibility: visible;
+    opacity: 1;
+    .icon {
+      font-size: 2.4rem;
+    }
+  }
 `;
 
 const StyledFooter = styled.p`
@@ -142,6 +183,7 @@ function SignUp() {
   const [email, setEmail] = useState("New Email");
   const [password, setPassword] = useState("New Password");
   const [confirmPassword, setConfirmPassword] = useState(false);
+  const [photoURL, setPhotoURL] = useState("");
 
   async function handleSignUp(
     e,
@@ -153,6 +195,7 @@ function SignUp() {
     isLoading,
     setIsLoading,
     setError,
+    photoURL,
   ) {
     e.preventDefault();
     setIsLoading(true);
@@ -164,6 +207,7 @@ function SignUp() {
       return;
     }
     if (password !== confirmPassword) {
+      console.log(password, confirmPassword);
       setIsLoading(false);
       setError("Passwords do not match.");
       toast.error("Passwords do not match.");
@@ -190,6 +234,7 @@ function SignUp() {
       await updateProfile(auth.currentUser, {
         displayName: displayName,
         fullName: fullName,
+        photoURL: photoURL || faker.image.personPortrait(),
       });
 
       //Create a user in the db
@@ -200,6 +245,8 @@ function SignUp() {
         country,
         stories: [],
         drafts: [],
+        photoURL:
+          photoURL.length === 0 ? faker.image.personPortrait() : photoURL,
       });
       navigate("/", {
         state: { justSignedUp: true },
@@ -214,7 +261,7 @@ function SignUp() {
   }
   return (
     <StyledContainer>
-      <Navbar />
+      {/* <Navbar /> */}
       <SecondWrapper>
         <StyledImg src={signuphero} alt="Sign Up Hero" loading="lazy" />
       </SecondWrapper>
@@ -236,36 +283,53 @@ function SignUp() {
               isLoading,
               setIsLoading,
               setError,
+              photoURL,
             )
           }
         >
           <StyledInputBox
             type="text"
             placeholder="* Display Name"
+            name="displayName"
             onChange={(e) => setDisplayName(e.target.value)}
           />
           <StyledInputBox
             type="text"
             placeholder="* Full Name"
+            name="fullName"
             onChange={(e) => setFullName(e.target.value)}
           />
           <CountrySelect country={country} setCountry={setCountry} />
           <StyledInputBox
             type="email"
             placeholder="* Email"
+            name="email"
             onChange={(e) => setEmail(e.target.value)}
           />
+          <div className="photo-input" style={{ position: "relative" }}>
+            <StyledInputBox
+              type="text"
+              placeholder="* Photo URL"
+              name="photoURL"
+              onChange={(e) => setPhotoURL(e.target.value)}
+            />
+            <Tooltip>
+              Firebase has pay-walled their storage buckets, so it must be a URL
+              instead of an upload. If you leave this blank a random image will
+              be generated for you.
+            </Tooltip>
+          </div>
           <StyledInputBox
             type="password"
             placeholder="* Password"
+            name="password"
             onChange={(e) => setPassword(e.target.value)}
           />
           <StyledInputBox
             type="password"
             placeholder="* Confirm Password"
-            onChange={(e) =>
-              setConfirmPassword(() => e.target.value === password)
-            }
+            name="confirmPassword"
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
           <SigninButton disabled={isLoading}>
             {isLoading ? "Signing Up..." : "Sign Up"}

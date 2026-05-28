@@ -4,7 +4,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import styled from "styled-components";
 import Button from "../components/Button";
-import Navbar from "../components/Navbar";
+
 import InputBox from "../components/InputBox";
 import Error from "../pages/Error";
 import { toast } from "react-toastify";
@@ -171,7 +171,6 @@ function SignIn() {
 
   return (
     <StyledContainer>
-      <Navbar />
       <SecondWrapper>
         <StyledImg src={loginhero} alt="Login Hero" loading="lazy" />
       </SecondWrapper>

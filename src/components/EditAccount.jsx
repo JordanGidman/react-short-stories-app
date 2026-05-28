@@ -16,6 +16,7 @@ import { updateProfile } from "firebase/auth";
 import { toast } from "react-toastify";
 import Error from "../pages/Error";
 import { Link } from "react-router-dom";
+import { faker } from "@faker-js/faker";
 
 const StyledEditAccount = styled.div`
   min-height: 100%;
@@ -167,6 +168,7 @@ function EditAccount() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("New Email");
   const [password, setPassword] = useState("New Password");
+  const [photoURL, setPhotoURL] = useState("");
   const [stories, setStories] = useState();
   const [error, setError] = useState(null);
 
@@ -180,6 +182,7 @@ function EditAccount() {
         if (docSnap.exists()) {
           setDisplayName(docSnap.data().displayName);
           setFullName(docSnap.data().fullName);
+          setPhotoURL(docSnap.data().photoURL);
         } else {
           console.log("No such user exists");
         }
@@ -260,6 +263,16 @@ function EditAccount() {
       toast.success("Full name updated successfully");
     }
 
+    if (photoURL !== currentUser.photoURL) {
+      //Update the photoURL Field on the db
+      await updateDoc(doc(db, "users", currentUser.uid), {
+        photoURL: photoURL || faker.image.personPortrait(),
+      });
+
+      //Show toast notification
+      toast.success("Photo URL updated successfully");
+    }
+
     if (email !== "New Email") {
       //Alert the user that this is a portfolio project and firebase auth requires real email verification to change email. I may add this in future as firebase auth seems to require a valid email to run
       alert(
@@ -297,6 +310,21 @@ function EditAccount() {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
               />
+            </StyledField>
+            <StyledField>
+              <p>Photo URL: </p>
+              <StyledInput
+                type="text"
+                name="photoURL"
+                value={photoURL}
+                onChange={(e) => setPhotoURL(e.target.value)}
+              />
+              <Tooltip>
+                It must be a URL instead of an upload as firebase has pay-walled
+                their storage buckets. You can use any image hosting site to
+                host your image and then paste the url here. Or just use a
+                random image url from the internet to test it out.
+              </Tooltip>
             </StyledField>
             <StyledField>
               <p>Email: </p>

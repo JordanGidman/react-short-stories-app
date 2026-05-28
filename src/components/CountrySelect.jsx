@@ -38,7 +38,6 @@ const StyledOption = styled.option`
 function CountrySelect({ country, setCountry }) {
   //Get country codes and names from country-list package
   const countryData = getData();
-  console.log(countryData);
 
   return (
     <>

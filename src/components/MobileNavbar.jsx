@@ -80,10 +80,16 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
-function MobileNav() {
+function MobileNav({ navOpen, setNavOpen }) {
   const [open, setOpen] = useState(false);
   const { currentUser } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    if (open) {
+      setNavOpen(true);
+    }
+  }, [open, setNavOpen]);
 
   useEffect(() => {
     if (!currentUser?.uid) return;
