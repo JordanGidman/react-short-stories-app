@@ -173,6 +173,64 @@ const StyledFooter = styled.p`
   }
 `;
 
+const StyledPasswordWrapper = styled.div`
+  position: relative;
+`;
+
+const ShowPasswordButton = styled.button`
+  /* position: absolute;
+  right: 2rem;
+  top: 50%; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+
+  /* transform: translateY(-50%); */
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  ion-icon {
+    width: 2.4rem;
+    height: 2.4rem;
+    color: rgb(0, 0, 0, 0.7);
+  }
+`;
+
+const TooltipWrapper = styled.div`
+  position: absolute;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+`;
+
+const PasswordTooltip = styled(Tooltip)`
+  bottom: 101%; /* show above button */
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+
+  /* tooltip arrow */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 100%; /* point downwards */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+  }
+
+  ${TooltipWrapper}:hover & {
+    visibility: visible;
+    opacity: 1;
+  }
+`;
+
 function SignUp() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -180,9 +238,11 @@ function SignUp() {
   const [country, setCountry] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("New Email");
-  const [password, setPassword] = useState("New Password");
-  const [confirmPassword, setConfirmPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowpassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [photoURL, setPhotoURL] = useState("");
 
   async function handleSignUp(
@@ -319,18 +379,54 @@ function SignUp() {
               be generated for you.
             </Tooltip>
           </div>
-          <StyledInputBox
-            type="password"
-            placeholder="* Password"
-            name="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <StyledInputBox
-            type="password"
-            placeholder="* Confirm Password"
-            name="confirmPassword"
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
+          <StyledPasswordWrapper>
+            <StyledInputBox
+              type={showPassword ? "text" : "password"}
+              placeholder="* Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <TooltipWrapper>
+              <ShowPasswordButton
+                onClick={() => setShowpassword((prev) => !prev)}
+                type="button"
+              >
+                {showPassword ? (
+                  <ion-icon name="eye-off-outline" />
+                ) : (
+                  <ion-icon name="eye-outline" />
+                )}
+              </ShowPasswordButton>
+
+              <PasswordTooltip>
+                {showPassword ? "Hide" : "Show"}
+              </PasswordTooltip>
+            </TooltipWrapper>
+          </StyledPasswordWrapper>
+          <StyledPasswordWrapper>
+            <StyledInputBox
+              type={showConfirmPassword ? "text" : "password"}
+              placeholder="* Confirm Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+            <TooltipWrapper>
+              <ShowPasswordButton
+                onClick={() => setShowConfirmPassword((prev) => !prev)}
+                type="button"
+              >
+                {showConfirmPassword ? (
+                  <ion-icon name="eye-off-outline" />
+                ) : (
+                  <ion-icon name="eye-outline" />
+                )}
+              </ShowPasswordButton>
+
+              <PasswordTooltip>
+                {showConfirmPassword ? "Hide" : "Show"}
+              </PasswordTooltip>
+            </TooltipWrapper>
+          </StyledPasswordWrapper>
           <SigninButton disabled={isLoading}>
             {isLoading ? "Signing Up..." : "Sign Up"}
           </SigninButton>

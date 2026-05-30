@@ -175,19 +175,23 @@ function App() {
   //68 - Need to allow new users to add an image url as well - Done
   //69 - Add a script to add country info for existing and connect it to the user profile and remove the random nationality from the author profile - Done
   //70 - Add the ability to change profile picture - Done
+  //71 - Dont show follow button when user is on their own profile - Done
+  //72 - Add a button to password fields to show/hide the password - Done
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
   //2 - Optimizations(Img compression, lazy loading, code splitting, memoization, refactors, etc) - Partially done
   //3 - Accessibility Improvements - Partially done
   //4 - Deployment - Not done
-
   //5 - Make the likes icon on story cards an outline if the user has not liked it and filled if they have - Not done
   //6 - Refactor the way likes work to have a likes array on each user with the id's of their liked stories - Not done
   //7 - Add a section to view stories the user has liked. - Not done
-  //8 - Dont show follow button when user is on their own profile - Not done.
   //9 - Add ability to see who is following you - Not done.
-  //10 - Add a button to password fields to show/hide the password - Not done
+  //11 redesign story page - Not done
+  //12 - Move the view porfile button to the account nav bar - Not done
+  //13 - Profanity filter for comments - Not done
+  //14 - DisplayNames should probably be unique - Not done
+  //15 - Character limits for display names and full names, if its multiple words for display name we should only take the first word and ignore the rest - Not done
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments
@@ -196,7 +200,10 @@ function App() {
   //5 - Personalized feed
   //6 - Back button on genre pages to go back to library
   //7 - possibly change the account link in the nav to be a drop down to either their profile or their account page.
-  //15 - Add the ability to see how many people an author is following on their profile - Not done
+  //8 - Add the ability to see how many people an author is following on their profile - Not done
+  //9 - Rating system for stories - Not done
+  //10 - Ability to report stories and comments - Not done
+  //11 - Add the ability to see who liked a story - Not done
 
   //UNFIXED BUGS
 

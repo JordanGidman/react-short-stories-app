@@ -101,6 +101,33 @@ const StyledH1 = styled.h1`
   }
 `;
 
+const StyledPasswordWrapper = styled.div`
+  position: relative;
+`;
+
+const ShowPasswordButton = styled.button`
+  /* position: absolute;
+  right: 2rem;
+  top: 50%; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+
+  /* transform: translateY(-50%); */
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  ion-icon {
+    width: 2.4rem;
+    height: 2.4rem;
+    color: rgb(0, 0, 0, 0.7);
+  }
+`;
+
 const StyledImg = styled.img`
   width: 85%;
 `;
@@ -127,12 +154,58 @@ const StyledFooter = styled.p`
   }
 `;
 
+const TooltipWrapper = styled.div`
+  position: absolute;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+`;
+
+// Tooltip text
+const Tooltip = styled.span`
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+
+  position: absolute;
+  bottom: 101%; /* show above button */
+  left: 50%;
+  transform: translateX(-50%);
+
+  background-color: #1c1f2e;
+  color: #fff;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.4rem;
+  font-size: 1.2rem;
+  white-space: nowrap;
+
+  z-index: 1;
+
+  /* tooltip arrow */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 100%; /* point downwards */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+  }
+
+  ${TooltipWrapper}:hover & {
+    visibility: visible;
+    opacity: 1;
+  }
+`;
+
 function SignIn() {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowpassword] = useState(false);
 
   async function handleSubmit(e, email, password) {
     e.preventDefault();
@@ -186,12 +259,28 @@ function SignIn() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <StyledInputBox
-            type="password"
-            placeholder="* Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <StyledPasswordWrapper>
+            <StyledInputBox
+              type={showPassword ? "text" : "password"}
+              placeholder="* Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <TooltipWrapper>
+              <ShowPasswordButton
+                onClick={() => setShowpassword((prev) => !prev)}
+                type="button"
+              >
+                {showPassword ? (
+                  <ion-icon name="eye-off-outline" />
+                ) : (
+                  <ion-icon name="eye-outline" />
+                )}
+              </ShowPasswordButton>
+
+              <Tooltip>{showPassword ? "Hide" : "Show"}</Tooltip>
+            </TooltipWrapper>
+          </StyledPasswordWrapper>
           <SigninButton disabled={isLoading}>Sign in</SigninButton>
           {error && <StyledError>Something went wrong..</StyledError>}
         </StyledForm>
