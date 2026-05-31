@@ -17,6 +17,7 @@ const WriteStory = lazy(() => import("./pages/WriteStory"));
 const Library = lazy(() => import("./pages/Library"));
 const StoryList = lazy(() => import("./pages/StoryList"));
 const Story = lazy(() => import("./pages/Story"));
+const NewStory = lazy(() => import("./pages/NewStory"));
 const MyStories = lazy(() => import("./pages/MyStories"));
 const EditStory = lazy(() => import("./pages/EditStory"));
 const Favorites = lazy(() => import("./components/Favorites"));
@@ -206,7 +207,7 @@ function App() {
   //11 - Add the ability to see who liked a story - Not done
 
   //UNFIXED BUGS
-
+  //The homepage is not accessible without being signed in.
   //Fix responsive design of account page now that the followed page is added some of it breaks like the mobile nav breakpoint needing to be bigger now to compensate the extra nav item.
   //When opening the mobile nav at the bottom of the page the footer is still visible but it should be hiddeb when the mobile nav is open.
   //Liking a story doesnt work due to firebase permissions. I want to move likes to the users collection anyway but the user should still be able to affect the likes count on the story page and story card. - Not done
@@ -234,7 +235,7 @@ function App() {
                   path="library/:genre/story/:id"
                   element={
                     <ProtectedRoute>
-                      <Story />
+                      <NewStory />
                     </ProtectedRoute>
                   }
                 />
