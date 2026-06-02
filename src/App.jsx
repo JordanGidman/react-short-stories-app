@@ -195,6 +195,7 @@ function App() {
   //15 - Character limits for display names and full names, if its multiple words for display name we should only take the first word and ignore the rest - Not done
   //16 - Responsive design for new story page - Not done
   //17 - Refactor code that is being reused into single components and hooks (such as tooltip and resizepicsumimages) - Not done
+  //18 - Add a cta to other stories at the bottom of the story page to keep users engaged and on the site longer - Not done
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments

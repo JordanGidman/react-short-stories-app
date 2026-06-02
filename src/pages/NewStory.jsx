@@ -25,6 +25,11 @@ const StyledStory = styled.div`
   grid-template-columns: 40vw 1fr;
   min-height: 100vh;
   font-family: "Playfair Display", sans-serif;
+
+  @media (max-width: 64em) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const StyledImgWrapper = styled.div`
@@ -33,6 +38,12 @@ const StyledImgWrapper = styled.div`
   left: 0;
   width: 40vw;
   height: 100vh;
+
+  @media (max-width: 64em) {
+    position: static;
+    height: 40vh;
+    width: 100vw;
+  }
 `;
 
 const StyledStoryImg = styled.div`
@@ -52,6 +63,10 @@ const StyledStoryContent = styled.div`
   min-height: 50vh;
   padding: 3% 3% 0 3%;
   margin-top: 8rem;
+
+  @media (max-width: 64em) {
+    margin-top: 0rem;
+  }
 `;
 
 const StyledHeader = styled.header`
@@ -60,12 +75,28 @@ const StyledHeader = styled.header`
   align-items: center;
 
   margin-top: 4rem;
+
+  @media (max-width: 64em) {
+    margin-top: 2rem;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 const StyledWrapper = styled.div`
   flex: 1;
   border-left: 1px solid black;
   padding-left: 2rem;
+
+  @media (max-width: 64em) {
+    border-left: none;
+    padding: 0rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const StyledAuthor = styled.p`
@@ -99,6 +130,10 @@ const StyledWordCount = styled.div`
       color: #1c1f2e;
     }
   }
+
+  @media (max-width: 64em) {
+    justify-content: center;
+  }
 `;
 const StyledCountry = styled.p`
   font-size: 1.8rem;
@@ -109,6 +144,10 @@ const StyledCountry = styled.p`
   color: #848796;
   letter-spacing: 0.2rem;
   rotate: 180deg;
+
+  @media (max-width: 64em) {
+    display: none;
+  }
 `;
 
 const StyledBanner = styled.div`
