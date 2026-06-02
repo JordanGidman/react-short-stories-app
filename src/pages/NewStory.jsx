@@ -146,7 +146,7 @@ const StyledButton = styled.button`
     --ionicon-stroke-width: 45px;
   }
 
-  span {
+  .font-size {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -190,6 +190,39 @@ const StyledBody = styled.div`
   margin-bottom: 4rem;
   font-family: "Montserrat", serif;
   line-height: 1.6;
+`;
+
+const Tooltip = styled.span`
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #1c1f2e;
+  color: #fff;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.4rem;
+  font-size: 1.4rem;
+  white-space: nowrap;
+  z-index: 1;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+  }
+
+  ${StyledButton}:hover & {
+    visibility: visible;
+    opacity: 1;
+  }
 `;
 
 function NewStory() {
@@ -378,6 +411,9 @@ function NewStory() {
               ) : (
                 <ion-icon name="heart-outline"></ion-icon>
               )}
+              <Tooltip>
+                {user?.likes?.includes(story.id) ? "Remove Like" : "Like Story"}
+              </Tooltip>
             </StyledButton>
             {/* Favorite Button */}
             <StyledButton
@@ -393,10 +429,16 @@ function NewStory() {
               ) : (
                 <ion-icon className="icon-star" name="star-outline"></ion-icon>
               )}
+              <Tooltip>
+                {user?.favorites?.includes(story.id)
+                  ? "Remove Favorite"
+                  : "Favorite Story"}
+              </Tooltip>
             </StyledButton>
             {/* Font Size Button */}
             <StyledButton>
-              <span>Aa</span>
+              <span className="font-size">Aa</span>
+              <Tooltip>Font size</Tooltip>
             </StyledButton>
           </StyledButtons>
           {/* Language and Likes */}

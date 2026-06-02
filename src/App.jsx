@@ -194,6 +194,7 @@ function App() {
   //14 - DisplayNames should probably be unique - Not done
   //15 - Character limits for display names and full names, if its multiple words for display name we should only take the first word and ignore the rest - Not done
   //16 - Responsive design for new story page - Not done
+  //17 - Refactor code that is being reused into single components and hooks (such as tooltip and resizepicsumimages) - Not done
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments
