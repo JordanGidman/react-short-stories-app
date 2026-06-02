@@ -1,9 +1,14 @@
 import {
+  addDoc,
   arrayUnion,
+  collection,
   doc,
   getDoc,
   onSnapshot,
+  orderBy,
+  query,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { use, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
@@ -26,6 +31,7 @@ const StyledComments = styled.div`
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
   min-width: 100%;
   min-height: 30vh;
+  grid-column: 2;
   /* margin-top: 4rem; */
 
   /* 930px */
@@ -101,8 +107,7 @@ function Comments({ storyId }) {
   const { currentUser } = useContext(AuthContext);
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
-
-  console.log(comment);
+  const [comments, setComments] = useState([]);
 
   useEffect(() => {
     const docRef = doc(db, "stories", storyId);
@@ -117,6 +122,36 @@ function Comments({ storyId }) {
     });
 
     return () => unsubscribe(); // clean up listener on unmount
+  }, [storyId]);
+
+  //Fetch comments
+  useEffect(() => {
+    const commentsQuery = query(
+      collection(db, "comments"),
+      where("storyID", "==", storyId),
+      orderBy("createdAt", "desc"),
+    );
+
+    const unsubscribe = onSnapshot(
+      commentsQuery,
+      (querySnapshot) => {
+        const commentsData = [];
+
+        querySnapshot.forEach((doc) => {
+          commentsData.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+
+        setComments(commentsData);
+      },
+      (error) => {
+        console.error(error.message);
+      },
+    );
+
+    return unsubscribe;
   }, [storyId]);
 
   async function handleCommentSubmit(e) {
@@ -137,38 +172,34 @@ function Comments({ storyId }) {
 
     try {
       setLoading(true);
-      await updateDoc(doc(db, "stories", story.id), {
-        comments: arrayUnion({
-          comment,
-          createdAt: new Date(),
-          author: currentUser.displayName,
-          creatorID: currentUser.uid,
-        }),
+      const docRef = await addDoc(collection(db, "comments"), {
+        comment,
+        createdAt: new Date(),
+        author: currentUser.displayName,
+        creatorID: currentUser.uid,
+        storyID: storyId,
       });
       setComment("");
       setLoading(false);
+      toast.success("Comment posted");
     } catch (error) {
       console.error("Error submitting comment:", error);
       toast.error(`Comment failed: ${error.message}`);
     } finally {
-      toast.success("Comment posted");
       setSubmitting(false);
     }
-
-    //Clear form
-    //Update comments list
   }
 
   return (
     <StyledComments>
       <StyledH3>
-        {story?.comments?.length > 0
-          ? `${story.comments.length} Comments`
+        {comments?.length > 0
+          ? `${comments.length} Comments`
           : "No Comments Yet"}
       </StyledH3>
       <StyledList>
-        {story?.comments?.length > 0 &&
-          story.comments.map((comment, index) => (
+        {comments?.length > 0 &&
+          comments.map((comment, index) => (
             <CommentCard key={index} comment={comment} story={story} />
           ))}
       </StyledList>

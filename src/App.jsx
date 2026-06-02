@@ -193,6 +193,7 @@ function App() {
   //13 - Profanity filter for comments - Not done
   //14 - DisplayNames should probably be unique - Not done
   //15 - Character limits for display names and full names, if its multiple words for display name we should only take the first word and ignore the rest - Not done
+  //16 - Responsive design for new story page - Not done
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments
@@ -213,6 +214,7 @@ function App() {
   //Liking a story doesnt work due to firebase permissions. I want to move likes to the users collection anyway but the user should still be able to affect the likes count on the story page and story card. - Not done
   //Firebase rules dont allow correct access when deployed- Not done
   //Styling breaks at small viewports on the followed authors/author profile page - Not done
+  //comments allow for random whitespace.
 
   return (
     <AuthContextProvider>

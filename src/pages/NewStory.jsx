@@ -49,7 +49,7 @@ const StyledStoryContent = styled.div`
   display: flex;
   flex-direction: column;
   grid-column: 2;
-  min-height: 100vh;
+  min-height: 50vh;
   padding: 3% 3% 0 3%;
   margin-top: 8rem;
 `;
@@ -410,6 +410,7 @@ function NewStory() {
           </StyledBody>
         )}
       </StyledStoryContent>
+      <Comments storyId={story.id} />
     </StyledStory>
   );
 }

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { AuthContext } from "../context/AuthContext";
 import { useContext } from "react";
 import { toast } from "react-toastify";
-import { arrayRemove, doc, updateDoc } from "firebase/firestore";
+import { arrayRemove, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 const StyledCard = styled.li`
@@ -24,15 +24,18 @@ const StyledWrapper = styled.div`
 const StyledAuthor = styled.div`
   font-weight: 700;
   font-size: 1.6rem;
+  text-transform: capitalize;
 `;
 
 const StyledDate = styled.div`
   font-size: 1.6rem;
+  font-family: "Montserrat", sans-serif;
 `;
 
 const StyledComment = styled.div`
   font-style: italic;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
+  font-family: "Montserrat", sans-serif;
 `;
 
 const StyledDeleteButton = styled.button`
@@ -101,16 +104,13 @@ function CommentCard({ comment, story }) {
 
   async function handleDelete() {
     //remove the comment from the stories comments array.
-    if (currentUser.id === comment.creatorID) {
+    console.log(comment);
+    if (currentUser.uid !== comment.creatorID) {
       toast.error("You can only delete your comments.");
       return;
     }
 
-    const storyRef = doc(db, "stories", story.id);
-
-    await updateDoc(storyRef, {
-      comments: arrayRemove(comment),
-    });
+    await deleteDoc(doc(db, "comments", comment.id));
 
     toast.success(`Comment deleted.`);
   }
