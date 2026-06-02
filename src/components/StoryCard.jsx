@@ -98,7 +98,8 @@ const StyledLikes = styled.div`
 
   ion-icon {
     font-size: 2rem;
-    color: #c92a2a;
+    --ionicon-stroke-width: 45px;
+    color: #1c1f2e;
   }
 `;
 
@@ -267,7 +268,7 @@ const StoryCard = memo(function StoryCard({ story }) {
               ) : (
                 <ion-icon name="heart-outline"></ion-icon>
               )}
-              <span>{story.likes?.length || 0}</span>
+              <span>{story.likesCount}</span>
             </StyledLikes>
           </StyledButtons>
         </div>

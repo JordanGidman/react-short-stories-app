@@ -96,6 +96,7 @@ const StyledWordCount = styled.div`
     ion-icon {
       font-size: 2.2rem;
       --ionicon-stroke-width: 50px;
+      color: #1c1f2e;
     }
   }
 `;
