@@ -289,9 +289,13 @@ function NewStory() {
   async function handleLike(userId, isLiked) {
     if (!story?.id || !userId) return;
     try {
+      //Need to refactor this to be users liking stories instead of stories keeping track of which users liked them.
       await updateDoc(doc(db, "stories", story.id), {
-        likes: isLiked ? arrayRemove(userId) : arrayUnion(userId),
         likesCount: isLiked ? increment(-1) : increment(1),
+      });
+
+      await updateDoc(doc(db, "users", userId), {
+        likes: isLiked ? arrayRemove(story.id) : arrayUnion(story.id),
       });
       toast.success(isLiked ? "Like removed." : "Story liked!");
     } catch (err) {
@@ -303,7 +307,7 @@ function NewStory() {
   async function handleFavorite(userId, isFavorite) {
     if (!story?.id || !userId) return;
     try {
-      await updateDoc(doc(db, "users", currentUser.uid), {
+      await updateDoc(doc(db, "users", userId), {
         favorites: isFavorite ? arrayRemove(story.id) : arrayUnion(story.id),
       });
       toast.success(
@@ -349,12 +353,34 @@ function NewStory() {
         <StyledBanner>
           {/* Buttons */}
           <StyledButtons>
-            <StyledButton>
-              <ion-icon name="heart-outline"></ion-icon>
+            {/* Like Button */}
+            <StyledButton
+              onClick={() =>
+                handleLike(currentUser.uid, user?.likes?.includes(story.id))
+              }
+            >
+              {user?.likes?.includes(story.id) ? (
+                <ion-icon name="heart"></ion-icon>
+              ) : (
+                <ion-icon name="heart-outline"></ion-icon>
+              )}
             </StyledButton>
-            <StyledButton>
-              <ion-icon name="star-outline"></ion-icon>
+            {/* Favorite Button */}
+            <StyledButton
+              onClick={() =>
+                handleFavorite(
+                  currentUser.uid,
+                  user?.favorites?.includes(story.id),
+                )
+              }
+            >
+              {user?.favorites?.includes(story.id) ? (
+                <ion-icon className="icon-star" name="star"></ion-icon>
+              ) : (
+                <ion-icon className="icon-star" name="star-outline"></ion-icon>
+              )}
             </StyledButton>
+            {/* Font Size Button */}
             <StyledButton>
               <span>Aa</span>
             </StyledButton>
