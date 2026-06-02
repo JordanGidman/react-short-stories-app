@@ -204,8 +204,9 @@ function App() {
   //7 - possibly change the account link in the nav to be a drop down to either their profile or their account page.
   //8 - Add the ability to see how many people an author is following on their profile - Not done
   //9 - Rating system for stories - Not done
-  //10 - Ability to report stories and comments - Not done
-  //11 - Add the ability to see who liked a story - Not done
+  //10 - Ability to report stories and comments
+  //11 - Add the ability to see who liked a story
+  //12 - Mood based recommendations
 
   //UNFIXED BUGS
   //The homepage is not accessible without being signed in.

@@ -104,7 +104,7 @@ function CommentCard({ comment, story }) {
 
   async function handleDelete() {
     //remove the comment from the stories comments array.
-    console.log(comment);
+
     if (currentUser.uid !== comment.creatorID) {
       toast.error("You can only delete your comments.");
       return;

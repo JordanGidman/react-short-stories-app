@@ -189,6 +189,7 @@ const StyledBody = styled.div`
   gap: 1.5rem;
   margin-bottom: 4rem;
   font-family: "Montserrat", serif;
+  line-height: 1.6;
 `;
 
 function NewStory() {
@@ -197,8 +198,20 @@ function NewStory() {
 
   // State
   const [story, setStory] = useState(null);
+  // const sanitizedStory = useMemo(() => {
+  //   return DOMPurify.sanitize(story?.storyText);
+  // }, [story?.storyText]);
   const sanitizedStory = useMemo(() => {
-    return DOMPurify.sanitize(story?.storyText);
+    const dirty = story?.storyText || "";
+
+    const cleaned = dirty
+      // remove <p><br></p>
+      .replace(/<p>\s*<br\s*\/?>\s*<\/p>/gi, "")
+
+      // remove empty paragraphs <p></p>
+      .replace(/<p>\s*<\/p>/gi, "");
+
+    return DOMPurify.sanitize(cleaned);
   }, [story?.storyText]);
   const [user, setUser] = useState(null);
   const [author, setAuthor] = useState(null);
