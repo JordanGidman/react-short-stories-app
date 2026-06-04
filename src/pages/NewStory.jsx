@@ -3,11 +3,17 @@ import { NavLink, useParams } from "react-router-dom";
 import {
   arrayRemove,
   arrayUnion,
+  collection,
   doc,
   getDoc,
+  getDocs,
   increment,
+  limit,
   onSnapshot,
+  orderBy,
+  query,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import styled from "styled-components";
@@ -19,6 +25,9 @@ import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
 import Error from "./Error";
 import { getData } from "country-list";
+import StoryCard from "../components/StoryCard";
+import Button from "../components/Button";
+import StoryActions from "../components/StoryActions";
 
 const StyledStory = styled.div`
   display: grid;
@@ -165,40 +174,6 @@ const StyledBanner = styled.div`
   grid-template-columns: 40% 60%; */
 `;
 
-const StyledButtons = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-`;
-
-const StyledButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-
-  ion-icon {
-    font-size: 2.4rem;
-    --ionicon-stroke-width: 45px;
-  }
-
-  .font-size {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.4rem;
-    font-weight: 600;
-    font-family: "Playfair Display", sans-serif;
-  }
-
-  &:hover {
-    transform: translateY(-15%);
-  }
-`;
-
 const StyledLanguage = styled.div`
   display: flex;
   align-items: center;
@@ -231,37 +206,190 @@ const StyledBody = styled.div`
   line-height: 1.6;
 `;
 
-const Tooltip = styled.span`
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  position: absolute;
-  bottom: 125%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #1c1f2e;
+const StyledDetails = styled.div`
+  border-top: 0.2rem solid rgba(0, 0, 0, 0.3);
+  background-color: #f5f5f5;
+  min-height: 30vh;
+  /* margin-top: 4rem; */
+  /* margin: 0rem 3% 0 3%; */
+  padding-top: 2rem;
+`;
+
+const StyledGenres = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding-top: 2em;
+  width: 100%;
+
+  p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    background-color: #cecece;
+    padding: 1rem 2rem;
+    text-transform: capitalize;
+    border-radius: 2em;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      background-color: #ffee34;
+      cursor: pointer;
+    }
+  }
+`;
+
+const NavButtons = styled.ul`
+  display: flex;
+  list-style: none;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+  padding-top: 4em;
+
+  .btn-divider {
+    width: 0.1rem;
+    height: 4rem;
+    background-color: rgba(0, 0, 0, 0.3);
+    align-self: center;
+  }
+`;
+
+const BtnLink = styled(NavLink)`
+  display: flex;
+  text-decoration: none;
+  width: 100%;
+  align-items: center;
+  gap: 15px;
+`;
+
+const BtnText = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-weight: 800;
+  font-size: 1.8rem;
+
+  span {
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    font-weight: 400;
+    font-family: "Montserrat", sans-serif;
+    letter-spacing: 0.1rem;
+    font-size: 1em;
+  }
+`;
+
+const BtnItem = styled.li`
+  width: 50%;
+  display: flex;
+
+  &:last-child {
+    & ${BtnLink} {
+      justify-content: flex-end;
+    }
+
+    & ${BtnText} {
+      text-align: end;
+    }
+  }
+`;
+
+const StyledOffersText = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-items: center;
+  margin-top: 4em;
+  margin-bottom: 4em;
+  h2 {
+    font-size: 3rem;
+    font-weight: 700;
+    text-transform: capitalize;
+    font-family: "Playfair Display", serif;
+  }
+
+  ion-icon {
+    font-size: 4rem;
+    /* --ionicon-stroke-width: 50px; */
+  }
+
+  div {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    width: 80%;
+  }
+
+  .black-bar {
+    height: 0.1rem;
+    background-color: #1c1f2e;
+    width: 100%;
+  }
+`;
+
+const StoryCardBox = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  gap: 2rem;
+  margin-bottom: 4em;
+`;
+
+const CustomStoryCard = styled.div`
+  /* width: 50%; */
+  min-height: 35vh;
+  padding: 1rem;
   color: #fff;
-  padding: 0.4rem 0.8rem;
-  border-radius: 0.4rem;
-  font-size: 1.4rem;
-  white-space: nowrap;
-  z-index: 1;
 
-  &::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #333 transparent transparent transparent;
+  background-image:
+    linear-gradient(to top, rgb(28, 31, 46) 0%, rgba(0, 0, 0, 0) 80%),
+    url(${(props) => props.story.img || "/placeholder.jpg"});
+
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  .word-count {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    justify-self: flex-end;
   }
 
-  ${StyledButton}:hover & {
-    visibility: visible;
-    opacity: 1;
+  .info {
+    display: flex;
+    flex-direction: column;
+    height: 90%;
+    justify-content: flex-end;
+    z-index: 999;
   }
+
+  span {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+  }
+
+  p {
+    font-family: "Playfair Display", sans-serif;
+    font-weight: 300;
+    font-size: 2.6rem;
+    font-weight: 700;
+    text-transform: capitalize;
+    margin-bottom: 4rem;
+  }
+`;
+
+const StyledReadBtn = styled(Button)`
+  width: fit-content;
 `;
 
 function NewStory() {
@@ -291,6 +419,7 @@ function NewStory() {
   const country = countryData.find((c) => c.code === author?.country)?.name;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [recommendations, setRecommendations] = useState([]);
 
   // fetch story
   useEffect(() => {
@@ -319,6 +448,30 @@ function NewStory() {
 
     return () => unsub();
   }, [id]);
+
+  // Fetch recommendations (2 random stories from different genres)
+  useEffect(() => {
+    if (!story) return;
+    const recommendationsQuery = query(
+      collection(db, "stories"),
+      where("genre", "!=", story.genre),
+      limit(2),
+    );
+    const unsub = onSnapshot(
+      recommendationsQuery,
+      (querySnapshot) => {
+        const recs = [];
+        querySnapshot.forEach((doc) => {
+          recs.push({ id: doc.id, ...doc.data() });
+        });
+        setRecommendations(recs);
+        console.log(recs);
+      },
+      (err) => {
+        console.error("Error fetching recommendations:", err);
+      },
+    );
+  }, [story]);
 
   // fetch current user
   useEffect(() => {
@@ -438,48 +591,13 @@ function NewStory() {
         {/* Banner */}
         <StyledBanner>
           {/* Buttons */}
-          <StyledButtons>
-            {/* Like Button */}
-            <StyledButton
-              onClick={() =>
-                handleLike(currentUser.uid, user?.likes?.includes(story.id))
-              }
-            >
-              {user?.likes?.includes(story.id) ? (
-                <ion-icon name="heart"></ion-icon>
-              ) : (
-                <ion-icon name="heart-outline"></ion-icon>
-              )}
-              <Tooltip>
-                {user?.likes?.includes(story.id) ? "Remove Like" : "Like Story"}
-              </Tooltip>
-            </StyledButton>
-            {/* Favorite Button */}
-            <StyledButton
-              onClick={() =>
-                handleFavorite(
-                  currentUser.uid,
-                  user?.favorites?.includes(story.id),
-                )
-              }
-            >
-              {user?.favorites?.includes(story.id) ? (
-                <ion-icon className="icon-star" name="star"></ion-icon>
-              ) : (
-                <ion-icon className="icon-star" name="star-outline"></ion-icon>
-              )}
-              <Tooltip>
-                {user?.favorites?.includes(story.id)
-                  ? "Remove Favorite"
-                  : "Favorite Story"}
-              </Tooltip>
-            </StyledButton>
-            {/* Font Size Button */}
-            <StyledButton>
-              <span className="font-size">Aa</span>
-              <Tooltip>Font size</Tooltip>
-            </StyledButton>
-          </StyledButtons>
+          <StoryActions
+            story={story}
+            user={user}
+            currentUser={currentUser}
+            onLike={handleLike}
+            onFavorite={handleFavorite}
+          />
           {/* Language and Likes */}
           <StyledLanguage>
             <strong>Read in:</strong>{" "}
@@ -503,8 +621,62 @@ function NewStory() {
             <p>{story.storyText}</p>
           </StyledBody>
         )}
+
+        <Comments storyId={story.id} />
+        <StyledDetails>
+          <StyledGenres>
+            {/* temp */}
+            <p>Horror</p>
+            <p>Thriller</p>
+            <p>Existential</p>
+          </StyledGenres>
+
+          <NavButtons>
+            <BtnItem>
+              <BtnLink to="#">
+                <ion-icon name="chevron-back-outline"></ion-icon>
+                <BtnText>
+                  <span>Previous</span>
+                  <p>Book Name</p>
+                </BtnText>
+              </BtnLink>
+            </BtnItem>
+            <div className="btn-divider"></div>
+            <BtnItem>
+              <BtnLink to="#">
+                <BtnText>
+                  <span>Next</span>
+                  <p>Book Name</p>
+                </BtnText>
+                <ion-icon name="chevron-forward-outline"></ion-icon>
+              </BtnLink>
+            </BtnItem>
+          </NavButtons>
+          <StyledOffersText>
+            <h2>Want something different?</h2>
+            <div>
+              <ion-icon name="arrow-down-outline"></ion-icon>
+              <div className="black-bar"></div>
+            </div>
+          </StyledOffersText>
+          <StoryCardBox>
+            {recommendations.map((rec) => (
+              <CustomStoryCard key={rec.id} story={rec}>
+                <div className="word-count">
+                  <ion-icon name="timer-outline"></ion-icon>
+                  {rec.storyText.split(" ").length} Words
+                </div>
+                <div className="info">
+                  <span>{rec.author}</span>
+                  <p>{rec.title}</p>
+
+                  <StyledReadBtn>Read</StyledReadBtn>
+                </div>
+              </CustomStoryCard>
+            ))}
+          </StoryCardBox>
+        </StyledDetails>
       </StyledStoryContent>
-      <Comments storyId={story.id} />
     </StyledStory>
   );
 }

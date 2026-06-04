@@ -178,14 +178,14 @@ function App() {
   //70 - Add the ability to change profile picture - Done
   //71 - Dont show follow button when user is on their own profile - Done
   //72 - Add a button to password fields to show/hide the password - Done
+  //73 - Make the likes icon on story cards an outline if the user has not liked it and filled if they have - Not done
+  //74 - Refactor the way likes work to have a likes array on each user with the id's of their liked stories - Not done
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
   //2 - Optimizations(Img compression, lazy loading, code splitting, memoization, refactors, etc) - Partially done
   //3 - Accessibility Improvements - Partially done
   //4 - Deployment - Not done
-  //5 - Make the likes icon on story cards an outline if the user has not liked it and filled if they have - Not done
-  //6 - Refactor the way likes work to have a likes array on each user with the id's of their liked stories - Not done
   //7 - Add a section to view stories the user has liked. - Not done
   //9 - Add ability to see who is following you - Not done.
   //11 redesign story page - Not done
@@ -218,6 +218,7 @@ function App() {
   //Firebase rules dont allow correct access when deployed- Not done
   //Styling breaks at small viewports on the followed authors/author profile page - Not done
   //comments allow for random whitespace.
+  //tooltips off screen on smaller viewports on story page
 
   return (
     <AuthContextProvider>

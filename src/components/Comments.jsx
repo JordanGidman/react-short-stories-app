@@ -25,10 +25,11 @@ const StyledComments = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  background-color: #fff;
-  padding: 4rem;
+  /* background-color: #fff; */
+  /* padding: 4rem; */
+  /* padding: 3% 3% 0 3%; */
   font-size: 2rem;
-  box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
+  /* box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8); */
   min-width: 100%;
   min-height: 30vh;
   grid-column: 2;
@@ -36,8 +37,8 @@ const StyledComments = styled.div`
 
   /* 930px */
   @media (max-width: 58.1em) {
-    padding: 2rem;
-    width: 100vw;
+    /* padding: 2rem; */
+    /* width: 100vw; */
   }
 `;
 
@@ -45,7 +46,7 @@ const StyledH3 = styled.h3`
   /* 930px */
   @media (max-width: 58.1em) {
     font-size: 1.8rem;
-    padding: 1rem;
+    /* padding: 3% 3% 0 3%; */
   }
 `;
 
