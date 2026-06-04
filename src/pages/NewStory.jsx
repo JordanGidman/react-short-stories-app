@@ -30,6 +30,8 @@ import Button from "../components/Button";
 import StoryActions from "../components/StoryActions";
 import RecommendationsSection from "../components/RecommendationsSection";
 import StoryHeader from "../components/StoryHeader";
+import { useStory } from "../hooks/useStory";
+import { useAuthor } from "../hooks/useAuthor";
 
 const StyledStory = styled.div`
   display: grid;
@@ -225,7 +227,8 @@ function NewStory() {
   const { currentUser } = useContext(AuthContext);
 
   // State
-  const [story, setStory] = useState(null);
+  const { story, loading: storyLoading, error: storyError } = useStory(id);
+  // const [story, setStory] = useState(null);
   // const sanitizedStory = useMemo(() => {
   //   return DOMPurify.sanitize(story?.storyText);
   // }, [story?.storyText]);
@@ -242,40 +245,17 @@ function NewStory() {
     return DOMPurify.sanitize(cleaned);
   }, [story?.storyText]);
   const [user, setUser] = useState(null);
-  const [author, setAuthor] = useState(null);
+  // const [author, setAuthor] = useState(null);
+  const {
+    author,
+    loading: authorLoading,
+    error: authorError,
+  } = useAuthor(story);
   const countryData = getData();
   const country = countryData.find((c) => c.code === author?.country)?.name;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
-
-  // fetch story
-  useEffect(() => {
-    if (!id) return;
-
-    setLoading(true);
-    const storyRef = doc(db, "stories", id);
-
-    const unsub = onSnapshot(
-      storyRef,
-      (docSnap) => {
-        if (docSnap.exists()) {
-          console.log(docSnap.data());
-          setStory({ id: docSnap.id, ...docSnap.data() });
-          setError(null);
-        } else {
-          setError(new Error("Story not found."));
-        }
-        setLoading(false);
-      },
-      (err) => {
-        setError(err);
-        setLoading(false);
-      },
-    );
-
-    return () => unsub();
-  }, [id]);
 
   // Fetch recommendations (2 random stories from different genres)
   useEffect(() => {
@@ -301,7 +281,7 @@ function NewStory() {
     );
   }, [story]);
 
-  // fetch current user
+  // fetch current user data
   useEffect(() => {
     if (!currentUser?.uid) return;
 
@@ -320,24 +300,6 @@ function NewStory() {
 
     return () => unsub();
   }, [currentUser]);
-
-  //fetch author
-  useEffect(() => {
-    if (!story?.creatorID) return;
-
-    async function fetchAuthor() {
-      try {
-        const snap = await getDoc(doc(db, "users", story.creatorID));
-        if (snap.exists()) {
-          setAuthor({ id: snap.id, ...snap.data() });
-        }
-      } catch (err) {
-        toast.error("Error fetching author data.");
-      }
-    }
-
-    fetchAuthor();
-  }, [story?.creatorID]);
 
   //adjust Picsum sizes
   const resizePicsum = useCallback((url, width, height) => {
@@ -387,8 +349,8 @@ function NewStory() {
     }
   }
 
-  if (loading) return <Spinner />;
-  if (error) return <Error error={error} />;
+  if (storyLoading) return <Spinner />;
+  if (storyError) return <Error error={storyError} />;
 
   return (
     <StyledStory>

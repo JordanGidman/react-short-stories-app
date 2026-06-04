@@ -219,6 +219,7 @@ function App() {
   //Styling breaks at small viewports on the followed authors/author profile page - Not done
   //comments allow for random whitespace.
   //tooltips off screen on smaller viewports on story page
+  //storycards have varying sizes on storyList
 
   return (
     <AuthContextProvider>
