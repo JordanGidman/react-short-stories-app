@@ -28,6 +28,8 @@ import { getData } from "country-list";
 import StoryCard from "../components/StoryCard";
 import Button from "../components/Button";
 import StoryActions from "../components/StoryActions";
+import RecommendationsSection from "../components/RecommendationsSection";
+import StoryHeader from "../components/StoryHeader";
 
 const StyledStory = styled.div`
   display: grid;
@@ -75,87 +77,6 @@ const StyledStoryContent = styled.div`
 
   @media (max-width: 64em) {
     margin-top: 0rem;
-  }
-`;
-
-const StyledHeader = styled.header`
-  display: flex;
-  gap: 2rem;
-  align-items: center;
-
-  margin-top: 4rem;
-
-  @media (max-width: 64em) {
-    margin-top: 2rem;
-    flex-direction: column;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-  }
-`;
-
-const StyledWrapper = styled.div`
-  flex: 1;
-  border-left: 1px solid black;
-  padding-left: 2rem;
-
-  @media (max-width: 64em) {
-    border-left: none;
-    padding: 0rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-`;
-
-const StyledAuthor = styled.p`
-  font-size: 1.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.2rem;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 500;
-  text-decoration: none;
-  padding-bottom: 0.9em;
-`;
-const StyledTitle = styled.h1`
-  text-transform: capitalize;
-  margin-bottom: 4rem;
-  /* margin-bottom: auto; */
-`;
-const StyledWordCount = styled.div`
-  font-size: 1.1em;
-  font-family: "Montserrat", sans-serif;
-  color: #848796;
-  font-weight: 500;
-
-  div {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-
-    ion-icon {
-      font-size: 2.2rem;
-      --ionicon-stroke-width: 50px;
-      color: #1c1f2e;
-    }
-  }
-
-  @media (max-width: 64em) {
-    justify-content: center;
-  }
-`;
-const StyledCountry = styled.p`
-  font-size: 1.8rem;
-  writing-mode: tb-rl;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 500;
-  text-transform: uppercase;
-  color: #848796;
-  letter-spacing: 0.2rem;
-  rotate: 180deg;
-
-  @media (max-width: 64em) {
-    display: none;
   }
 `;
 
@@ -213,6 +134,7 @@ const StyledDetails = styled.div`
   /* margin-top: 4rem; */
   /* margin: 0rem 3% 0 3%; */
   padding-top: 2rem;
+  margin-top: 4em;
 `;
 
 const StyledGenres = styled.div`
@@ -296,100 +218,6 @@ const BtnItem = styled.li`
       text-align: end;
     }
   }
-`;
-
-const StyledOffersText = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  justify-items: center;
-  margin-top: 4em;
-  margin-bottom: 4em;
-  h2 {
-    font-size: 3rem;
-    font-weight: 700;
-    text-transform: capitalize;
-    font-family: "Playfair Display", serif;
-  }
-
-  ion-icon {
-    font-size: 4rem;
-    /* --ionicon-stroke-width: 50px; */
-  }
-
-  div {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    width: 80%;
-  }
-
-  .black-bar {
-    height: 0.1rem;
-    background-color: #1c1f2e;
-    width: 100%;
-  }
-`;
-
-const StoryCardBox = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  width: 100%;
-  gap: 2rem;
-  margin-bottom: 4em;
-`;
-
-const CustomStoryCard = styled.div`
-  /* width: 50%; */
-  min-height: 35vh;
-  padding: 1rem;
-  color: #fff;
-
-  background-image:
-    linear-gradient(to top, rgb(28, 31, 46) 0%, rgba(0, 0, 0, 0) 80%),
-    url(${(props) => props.story.img || "/placeholder.jpg"});
-
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-
-  .word-count {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: "Montserrat", sans-serif;
-    font-weight: 500;
-    justify-self: flex-end;
-  }
-
-  .info {
-    display: flex;
-    flex-direction: column;
-    height: 90%;
-    justify-content: flex-end;
-    z-index: 999;
-  }
-
-  span {
-    font-family: "Montserrat", sans-serif;
-    font-weight: 400;
-    font-size: 1.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1rem;
-  }
-
-  p {
-    font-family: "Playfair Display", sans-serif;
-    font-weight: 300;
-    font-size: 2.6rem;
-    font-weight: 700;
-    text-transform: capitalize;
-    margin-bottom: 4rem;
-  }
-`;
-
-const StyledReadBtn = styled(Button)`
-  width: fit-content;
 `;
 
 function NewStory() {
@@ -570,24 +398,12 @@ function NewStory() {
         />
       </StyledImgWrapper>
       <StyledStoryContent>
-        <StyledHeader>
-          <StyledCountry>
-            {country && country.length < 15
-              ? country
-              : countryData?.find((c) => c.code === author?.country)?.code ||
-                "Loading..."}
-          </StyledCountry>
-          <StyledWrapper>
-            <StyledAuthor>{story?.author}</StyledAuthor>
-            <StyledTitle>{story?.title}</StyledTitle>
-            <StyledWordCount>
-              <div>
-                <ion-icon name="timer-outline"></ion-icon>
-                <span>{story?.storyText?.split(" ").length || 0} words</span>
-              </div>
-            </StyledWordCount>
-          </StyledWrapper>
-        </StyledHeader>
+        <StoryHeader
+          story={story}
+          author={author}
+          country={country}
+          countryData={countryData}
+        />
         {/* Banner */}
         <StyledBanner>
           {/* Buttons */}
@@ -652,29 +468,7 @@ function NewStory() {
               </BtnLink>
             </BtnItem>
           </NavButtons>
-          <StyledOffersText>
-            <h2>Want something different?</h2>
-            <div>
-              <ion-icon name="arrow-down-outline"></ion-icon>
-              <div className="black-bar"></div>
-            </div>
-          </StyledOffersText>
-          <StoryCardBox>
-            {recommendations.map((rec) => (
-              <CustomStoryCard key={rec.id} story={rec}>
-                <div className="word-count">
-                  <ion-icon name="timer-outline"></ion-icon>
-                  {rec.storyText.split(" ").length} Words
-                </div>
-                <div className="info">
-                  <span>{rec.author}</span>
-                  <p>{rec.title}</p>
-
-                  <StyledReadBtn>Read</StyledReadBtn>
-                </div>
-              </CustomStoryCard>
-            ))}
-          </StoryCardBox>
+          <RecommendationsSection recommendations={recommendations} />
         </StyledDetails>
       </StyledStoryContent>
     </StyledStory>
