@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import StoryCard from "./StoryCard";
+import { createNavigation } from "../helpers/createNavigation";
 
 const StyledPicks = styled.div`
   display: grid;
@@ -99,6 +100,11 @@ const StyledCardsBox = styled.div`
 `;
 
 function StaffPicks({ staffPicks }) {
+  console.log(staffPicks);
+
+  const navigation = createNavigation(staffPicks, "staffpicks");
+  console.log(navigation);
+
   return (
     <StyledPicks id="staff-picks">
       <StyledPicksText>
@@ -116,7 +122,9 @@ function StaffPicks({ staffPicks }) {
 
       <StyledCardsBox>
         {staffPicks.length > 0 ? (
-          staffPicks.map((story) => <StoryCard key={story.id} story={story} />)
+          staffPicks.map((story) => (
+            <StoryCard key={story.id} story={story} navigation={navigation} />
+          ))
         ) : (
           <p className="error">No staff picks available.</p>
         )}

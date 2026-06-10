@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 import Search from "../components/Search";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
+import { createNavigation } from "../helpers/createNavigation";
 
 const StyledMyStories = styled.div`
   min-height: 100%;
@@ -396,6 +397,7 @@ function MyStories() {
 
   const location = useLocation();
   const toastShown = useRef(false);
+  const navigation = createNavigation(sortedStories, "mystories");
 
   useEffect(() => {
     if (location.state?.storyCreated && !toastShown.current) {
@@ -527,6 +529,7 @@ function MyStories() {
                   to={`/library/${story.genre.split("-").join(" ")}/story/${
                     story.id
                   }`}
+                  state={{ navigation }}
                 >
                   {story.title}
                 </StyledTitle>

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const StyledHeader = styled.header`
@@ -30,18 +31,20 @@ const StyledWrapper = styled.div`
   }
 `;
 
-const StyledAuthor = styled.p`
+const StyledAuthor = styled(Link)`
+  text-decoration: none;
   font-size: 1.8rem;
   text-transform: uppercase;
   letter-spacing: 0.2rem;
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
   text-decoration: none;
-  padding-bottom: 0.9em;
+  /* padding-bottom: 0.9em; */
 `;
 const StyledTitle = styled.h1`
   text-transform: capitalize;
   margin-bottom: 4rem;
+  margin-top: 0.9em;
   /* margin-bottom: auto; */
 `;
 const StyledWordCount = styled.div`
@@ -82,6 +85,8 @@ const StyledCountry = styled.p`
 `;
 
 function StoryHeader({ story, author, country, countryData }) {
+  console.log(story);
+
   return (
     <StyledHeader>
       <StyledCountry>
@@ -91,7 +96,9 @@ function StoryHeader({ story, author, country, countryData }) {
             "Loading..."}
       </StyledCountry>
       <StyledWrapper>
-        <StyledAuthor>{story?.author}</StyledAuthor>
+        <StyledAuthor to={`/author/${story.creatorID}`}>
+          {story?.author}
+        </StyledAuthor>
         <StyledTitle>{story?.title}</StyledTitle>
         <StyledWordCount>
           <div>

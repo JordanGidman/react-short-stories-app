@@ -180,6 +180,7 @@ function App() {
   //72 - Add a button to password fields to show/hide the password - Done
   //73 - Make the likes icon on story cards an outline if the user has not liked it and filled if they have - Not done
   //74 - Refactor the way likes work to have a likes array on each user with the id's of their liked stories - Not done
+  //75 - Add a cta to other stories at the bottom of the story page to keep users engaged and on the site longer - Done
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
@@ -193,9 +194,8 @@ function App() {
   //13 - Profanity filter for comments - Not done
   //14 - DisplayNames should probably be unique - Not done
   //15 - Character limits for display names and full names, if its multiple words for display name we should only take the first word and ignore the rest - Not done
-  //16 - Responsive design for new story page - Not done
+  //16 - Responsive design for new story page - Partially done
   //17 - Refactor code that is being reused into single components and hooks (such as tooltip and resizepicsumimages) - Partially done
-  //18 - Add a cta to other stories at the bottom of the story page to keep users engaged and on the site longer - Not done
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments
@@ -222,6 +222,7 @@ function App() {
   //storycards have varying sizes on storyList
   //Styling for the header breaks on the storyList on smaller viewports
   //The next and previous buttons will eventually run out of stories as they are paginated meaning that only a small portion of the stories are pulled at once, the issue here would be at some point next will = nothing. I need to either load the next set of ids, or to wrap around to the beginning/end of the currently pulled ids.
+  //favorites sorting by likes doesnt work.
 
   return (
     <AuthContextProvider>

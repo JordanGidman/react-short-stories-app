@@ -41,7 +41,9 @@ const StyledListItem = styled.li`
 `;
 
 const StyledItemText = styled.p`
-  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transition:
+    max-height 0.3s ease-in-out,
+    opacity 0.3s ease-in-out;
   overflow: hidden;
 
   /* 930px */
@@ -90,7 +92,9 @@ const StyledButtons = styled.div`
     grid-column: span 3;
     width: 100%;
     overflow: hidden;
-    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    transition:
+      max-height 0.3s ease-in-out,
+      opacity 0.3s ease-in-out;
     max-height: ${(props) => (props.$expanded ? "100px" : "0px")};
     opacity: ${(props) => (props.$expanded ? 1 : 0)};
     visibility: ${(props) => (props.$expanded ? "visible" : "hidden")};
@@ -131,7 +135,7 @@ const StyledExpandButton = styled.button`
   }
 `;
 
-const StyledButton = styled.button`
+const StyledButton = styled(Link)`
   position: relative;
   border: none;
   background-color: transparent;
@@ -247,7 +251,7 @@ const StyledImg = styled.div`
   background-position: center;
 `;
 
-function FavoriteStoryItem({ story, isExpanded, toggleExpand }) {
+function FavoriteStoryItem({ story, isExpanded, toggleExpand, navigation }) {
   const navigate = useNavigate();
   const { currentUser } = useContext(AuthContext);
 
@@ -268,6 +272,7 @@ function FavoriteStoryItem({ story, isExpanded, toggleExpand }) {
       <StyledImg $backgroundImage={story.img} alt={story.title} />
       <StyledTitle
         to={`/library/${story.genre.split("-").join(" ")}/story/${story.id}`}
+        state={{ navigation }}
       >
         {story.title}
       </StyledTitle>
@@ -282,7 +287,8 @@ function FavoriteStoryItem({ story, isExpanded, toggleExpand }) {
       </StyledItemText>
       <StyledButtons $expanded={isExpanded}>
         <StyledButton
-          onClick={() => navigate(`/library/${story.genre}/book/${story.id}`)}
+          to={`/library/${story.genre}/story/${story.id}`}
+          state={{ navigation }}
           className="open"
         >
           <span className="mobile-btn-text">Read</span>

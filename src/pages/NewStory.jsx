@@ -260,31 +260,24 @@ function NewStory() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
-
   const location = useLocation();
-  console.log(location?.state?.navigation?.storyInfo);
+  console.log(location?.state);
   //This needs to be passed again when navigating to the next or prev story in order for this same component to have access to it when opened from another page in this case the story page
-  const navigation = location?.state?.navigation;
-
+  const navigation = location?.state?.navigation ?? [];
+  const storyInfo = navigation?.storyInfo ?? [];
   //I need the index of the current story in the location.state so that i can get the names and ids of the next and previous stories
+  const currentIndex = storyInfo.findIndex((s) => s.storyId === id);
 
-  const currentIndex = location?.state?.navigation?.storyInfo
-    .map((s) => s.storyId)
-    .indexOf(id);
-  console.log(currentIndex);
   // For now we loop to the beginning or end of the few ids we have at a time but this will need to be changed to pull the next or previous set of ids from the backend as this wont work at scale. - Need refactoring as well, this looks awful.
   const nextStory =
-    currentIndex !== location.state.navigation.storyInfo.length - 1
-      ? location.state.navigation.storyInfo[currentIndex + 1]
-      : location.state.navigation.storyInfo[0];
+    currentIndex !== storyInfo.length - 1
+      ? storyInfo[currentIndex + 1]
+      : storyInfo[0];
 
   const prevStory =
     currentIndex !== 0
-      ? location.state.navigation.storyInfo[currentIndex - 1]
-      : location.state.navigation.storyInfo[
-          location.state.navigation.storyInfo.length - 1
-        ];
-  console.log(prevStory);
+      ? storyInfo[currentIndex - 1]
+      : storyInfo[storyInfo.length - 1];
 
   // Fetch recommendations (2 random stories from different genres)
   useEffect(() => {
@@ -438,33 +431,35 @@ function NewStory() {
             <p>Existential</p>
           </StyledGenres>
 
-          <NavButtons>
-            <BtnItem>
-              <BtnLink
-                to={`/library/${story.genre}/story/${prevStory.storyId}`}
-                state={{ navigation }}
-              >
-                <ion-icon name="chevron-back-outline"></ion-icon>
-                <BtnText>
-                  <span>Previous</span>
-                  <p>{prevStory.title}</p>
-                </BtnText>
-              </BtnLink>
-            </BtnItem>
-            <div className="btn-divider"></div>
-            <BtnItem>
-              <BtnLink
-                to={`/library/${story.genre}/story/${nextStory.storyId}`}
-                state={{ navigation }}
-              >
-                <BtnText>
-                  <span>Next</span>
-                  <p>{nextStory.title}</p>
-                </BtnText>
-                <ion-icon name="chevron-forward-outline"></ion-icon>
-              </BtnLink>
-            </BtnItem>
-          </NavButtons>
+          {location.state && (
+            <NavButtons>
+              <BtnItem>
+                <BtnLink
+                  to={`/library/${story.genre}/story/${prevStory.storyId}`}
+                  state={{ navigation }}
+                >
+                  <ion-icon name="chevron-back-outline"></ion-icon>
+                  <BtnText>
+                    <span>Previous</span>
+                    <p>{prevStory.title}</p>
+                  </BtnText>
+                </BtnLink>
+              </BtnItem>
+              <div className="btn-divider"></div>
+              <BtnItem>
+                <BtnLink
+                  to={`/library/${story.genre}/story/${nextStory.storyId}`}
+                  state={{ navigation }}
+                >
+                  <BtnText>
+                    <span>Next</span>
+                    <p>{nextStory.title}</p>
+                  </BtnText>
+                  <ion-icon name="chevron-forward-outline"></ion-icon>
+                </BtnLink>
+              </BtnItem>
+            </NavButtons>
+          )}
           <RecommendationsSection recommendations={recommendations} />
         </StyledDetails>
       </StyledStoryContent>

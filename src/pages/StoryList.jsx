@@ -15,6 +15,7 @@ import {
 import { db } from "../firebase";
 import Search from "../components/Search";
 import Spinner from "../components/Spinner";
+import { createNavigation } from "../helpers/createNavigation";
 
 const PAGE_SIZE = 15;
 
@@ -290,19 +291,21 @@ function StoryList() {
       story.title?.toLowerCase().includes(search.toLowerCase()) ||
       story.author?.toLowerCase().includes(search.toLowerCase()),
   );
-  const navigation = useMemo(
-    () => ({
-      type: "genre",
-      storyInfo: filteredStories.map((s, i) => {
-        return {
-          storyId: s.id,
-          title: s.title,
-          index: i,
-        };
-      }),
-    }),
-    [filteredStories],
-  );
+  // const navigation = useMemo(
+  //   () => ({
+  //     type: "genre",
+  //     storyInfo: filteredStories.map((s, i) => {
+  //       return {
+  //         storyId: s.id,
+  //         title: s.title,
+  //         index: i,
+  //       };
+  //     }),
+  //   }),
+  //   [filteredStories],
+  // );
+
+  const navigation = createNavigation(filteredStories, "genre");
 
   if (loading && stories.length === 0) {
     return (

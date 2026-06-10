@@ -20,6 +20,7 @@ import Spinner from "./Spinner";
 import Error from "../pages/Error"; // assuming this exists
 import Navbar from "./Navbar";
 import FavoriteStoryItem from "./FavoriteStoryItem";
+import { createNavigation } from "../helpers/createNavigation";
 
 const StyledFavorites = styled.div`
   min-height: 100%;
@@ -75,16 +76,6 @@ function Favorites() {
   const [search, setSearch] = useState("");
 
   const [expandedStories, setExpandedStories] = useState(new Set());
-
-  function toggleExpand(storyId) {
-    setExpandedStories((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(storyId)) newSet.delete(storyId);
-      else newSet.add(storyId);
-      return newSet;
-    });
-  }
-
   // Derived sorted stories
   const sortedStories = useMemo(() => {
     return [...stories].sort((a, b) => {
@@ -107,6 +98,16 @@ function Favorites() {
       return 0;
     });
   }, [stories, sortBy]);
+  const navigation = createNavigation(sortedStories, "favorites");
+
+  function toggleExpand(storyId) {
+    setExpandedStories((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(storyId)) newSet.delete(storyId);
+      else newSet.add(storyId);
+      return newSet;
+    });
+  }
 
   // Load user's favorites
   useEffect(() => {
@@ -205,6 +206,7 @@ function Favorites() {
                 story={story}
                 isExpanded={expandedStories.has(story.id)}
                 toggleExpand={() => toggleExpand(story.id)}
+                navigation={navigation}
               />
             ))}
         </StyledStoryList>

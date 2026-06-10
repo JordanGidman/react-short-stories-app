@@ -17,6 +17,7 @@ import {
 import { db } from "../firebase";
 import { AuthContext } from "../context/AuthContext";
 import { getData } from "country-list";
+import { createNavigation } from "../helpers/createNavigation";
 
 // let testImg = faker.image.personPortrait();
 // console.log(testImg);
@@ -260,6 +261,7 @@ function AuthorProfile() {
     nationalities[Math.floor(Math.random() * nationalities.length)];
   const followed = user?.followed?.includes(id);
   const navigate = useNavigate();
+  const navigation = createNavigation(stories, "author");
   console.log(currentUser);
 
   //Fetch stories made by the current user
@@ -402,7 +404,10 @@ function AuthorProfile() {
                     <p>{story.author}</p>
                     <h4>{story.title}</h4>
                     <Button>
-                      <Link to={`/library/${story.genre}/story/${story.id}`}>
+                      <Link
+                        to={`/library/${story.genre}/story/${story.id}`}
+                        state={stories.length <= 1 ? null : { navigation }}
+                      >
                         Read
                       </Link>
                     </Button>
