@@ -136,15 +136,13 @@ const StyledButtons = styled.div`
 
 const StyledLink = styled(Link)``;
 
-const StoryCard = memo(function StoryCard({ story }) {
+const StoryCard = memo(function StoryCard({ story, navigation }) {
   const [loadedImg, setLoadedImg] = useState(null);
   const [author, setAuthor] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const { currentUser } = useContext(AuthContext);
   const [currentUserData, setCurrentUserData] = useState(null);
-
-  console.log(currentUserData);
 
   const isCriticalError = useMemo(() => {
     return (
@@ -259,7 +257,10 @@ const StoryCard = memo(function StoryCard({ story }) {
         <div>
           <StyledGenre>{story.genre || "Misc"}</StyledGenre>
           <StyledButtons>
-            <StyledLink to={`/library/${story.genre}/story/${story.id}`}>
+            <StyledLink
+              to={`/library/${story.genre}/story/${story.id}`}
+              state={{ navigation }}
+            >
               <StyledButton>Read</StyledButton>
             </StyledLink>
             <StyledLikes>

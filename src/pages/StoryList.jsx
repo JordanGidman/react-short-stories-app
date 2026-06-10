@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import StoryCard from "../components/StoryCard";
 import styled from "styled-components";
@@ -290,6 +290,19 @@ function StoryList() {
       story.title?.toLowerCase().includes(search.toLowerCase()) ||
       story.author?.toLowerCase().includes(search.toLowerCase()),
   );
+  const navigation = useMemo(
+    () => ({
+      type: "genre",
+      storyInfo: filteredStories.map((s, i) => {
+        return {
+          storyId: s.id,
+          title: s.title,
+          index: i,
+        };
+      }),
+    }),
+    [filteredStories],
+  );
 
   if (loading && stories.length === 0) {
     return (
@@ -333,7 +346,7 @@ function StoryList() {
 
         <StyledList>
           {filteredStories.map((story) => (
-            <StoryCard key={story.id} story={story} />
+            <StoryCard key={story.id} story={story} navigation={navigation} />
           ))}
         </StyledList>
 

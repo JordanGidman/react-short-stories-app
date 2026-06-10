@@ -194,7 +194,7 @@ function App() {
   //14 - DisplayNames should probably be unique - Not done
   //15 - Character limits for display names and full names, if its multiple words for display name we should only take the first word and ignore the rest - Not done
   //16 - Responsive design for new story page - Not done
-  //17 - Refactor code that is being reused into single components and hooks (such as tooltip and resizepicsumimages) - Not done
+  //17 - Refactor code that is being reused into single components and hooks (such as tooltip and resizepicsumimages) - Partially done
   //18 - Add a cta to other stories at the bottom of the story page to keep users engaged and on the site longer - Not done
 
   //POSSIBLE FUTURE FEATURES
@@ -220,6 +220,8 @@ function App() {
   //comments allow for random whitespace.
   //tooltips off screen on smaller viewports on story page
   //storycards have varying sizes on storyList
+  //Styling for the header breaks on the storyList on smaller viewports
+  //The next and previous buttons will eventually run out of stories as they are paginated meaning that only a small portion of the stories are pulled at once, the issue here would be at some point next will = nothing. I need to either load the next set of ids, or to wrap around to the beginning/end of the currently pulled ids.
 
   return (
     <AuthContextProvider>

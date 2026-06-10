@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useLocation, useParams } from "react-router-dom";
 import {
   arrayRemove,
   arrayUnion,
@@ -205,6 +205,10 @@ const BtnText = styled.div`
     letter-spacing: 0.1rem;
     font-size: 1em;
   }
+
+  p {
+    text-transform: capitalize;
+  }
 `;
 
 const BtnItem = styled.li`
@@ -256,6 +260,31 @@ function NewStory() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
+
+  const location = useLocation();
+  console.log(location?.state?.navigation?.storyInfo);
+  //This needs to be passed again when navigating to the next or prev story in order for this same component to have access to it when opened from another page in this case the story page
+  const navigation = location?.state?.navigation;
+
+  //I need the index of the current story in the location.state so that i can get the names and ids of the next and previous stories
+
+  const currentIndex = location?.state?.navigation?.storyInfo
+    .map((s) => s.storyId)
+    .indexOf(id);
+  console.log(currentIndex);
+  // For now we loop to the beginning or end of the few ids we have at a time but this will need to be changed to pull the next or previous set of ids from the backend as this wont work at scale. - Need refactoring as well, this looks awful.
+  const nextStory =
+    currentIndex !== location.state.navigation.storyInfo.length - 1
+      ? location.state.navigation.storyInfo[currentIndex + 1]
+      : location.state.navigation.storyInfo[0];
+
+  const prevStory =
+    currentIndex !== 0
+      ? location.state.navigation.storyInfo[currentIndex - 1]
+      : location.state.navigation.storyInfo[
+          location.state.navigation.storyInfo.length - 1
+        ];
+  console.log(prevStory);
 
   // Fetch recommendations (2 random stories from different genres)
   useEffect(() => {
@@ -411,20 +440,26 @@ function NewStory() {
 
           <NavButtons>
             <BtnItem>
-              <BtnLink to="#">
+              <BtnLink
+                to={`/library/${story.genre}/story/${prevStory.storyId}`}
+                state={{ navigation }}
+              >
                 <ion-icon name="chevron-back-outline"></ion-icon>
                 <BtnText>
                   <span>Previous</span>
-                  <p>Book Name</p>
+                  <p>{prevStory.title}</p>
                 </BtnText>
               </BtnLink>
             </BtnItem>
             <div className="btn-divider"></div>
             <BtnItem>
-              <BtnLink to="#">
+              <BtnLink
+                to={`/library/${story.genre}/story/${nextStory.storyId}`}
+                state={{ navigation }}
+              >
                 <BtnText>
                   <span>Next</span>
-                  <p>Book Name</p>
+                  <p>{nextStory.title}</p>
                 </BtnText>
                 <ion-icon name="chevron-forward-outline"></ion-icon>
               </BtnLink>

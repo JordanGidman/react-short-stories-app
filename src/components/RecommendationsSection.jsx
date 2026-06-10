@@ -40,6 +40,10 @@ const StoryCardBox = styled.div`
   width: 100%;
   gap: 2rem;
   margin-bottom: 4em;
+
+  @media (max-width: 35em) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const CustomStoryCard = styled.div`
