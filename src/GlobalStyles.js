@@ -21,6 +21,7 @@ body {
   font-size: 1.6rem;
   line-height: 1.5;
   overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 a {

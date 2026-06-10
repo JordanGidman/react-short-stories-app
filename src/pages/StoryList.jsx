@@ -24,7 +24,7 @@ const StyledStoryList = styled.div`
   flex-direction: column;
   padding-top: 8.2rem;
   align-items: center;
-  width: 100vw;
+  /* width: 100vw; */
   gap: 2rem;
   padding: 0% 5%;
   padding-top: 8rem;
@@ -42,7 +42,8 @@ const StyledContainer = styled.div`
 
   @media (max-width: 58.125em) {
     padding: 2rem;
-    width: 100vw;
+    padding-top: 0rem;
+    /* width: 100vw; */
   }
 `;
 
@@ -83,6 +84,26 @@ const StyledSubheading = styled.p`
   @media (max-width: 44.375em) {
     font-size: 1.4rem;
   }
+
+  /* 620px */
+  @media (max-width: 38.7em) {
+    text-align: center;
+  }
+`;
+
+const StyledImgWrapper = styled.div`
+  height: 100%;
+  width: 100%;
+  background-image: url(${book});
+  /* background-color: #fff; */
+  background-size: 80%;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  /* 620px */
+  @media (max-width: 38.7em) {
+    background-size: 60% auto;
+  }
 `;
 
 const StyledHeader = styled.header`
@@ -91,11 +112,12 @@ const StyledHeader = styled.header`
   grid-template-columns: 40% 60%;
   height: 50vh;
   width: 95vw;
-  background-image: url(${book});
+  background-color: #fff;
+  /* background-image: url(${book});
   background-color: #fff;
   background-size: 30% auto;
   background-repeat: no-repeat;
-  background-position: left 2rem center;
+  background-position: left 2rem center; */
   align-items: center;
   justify-content: space-between;
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
@@ -108,12 +130,15 @@ const StyledHeader = styled.header`
 
   /* 620px */
   @media (max-width: 38.7em) {
-    display: flex;
+    /* display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     background-position: center bottom;
-    padding-top: 3rem;
+    padding-top: 3rem; */
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    padding: 0rem 3rem 0rem 3rem;
   }
 
   /* 370px */
@@ -327,7 +352,8 @@ function StoryList() {
     <StyledStoryList>
       <StyledContainer>
         <StyledHeader>
-          <div />
+          {/* <div /> */}
+          <StyledImgWrapper />
           <StyledWrapper>
             <StyledH1>{genre}</StyledH1>
             <StyledSubheading>
