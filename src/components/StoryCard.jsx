@@ -20,6 +20,7 @@ const StyledStoryCard = styled.div`
   background-color: #fff;
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
   transition: all 0.3s ease;
+  min-height: 30rem;
 
   &:hover {
     cursor: pointer;

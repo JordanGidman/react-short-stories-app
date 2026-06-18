@@ -181,6 +181,10 @@ function App() {
   //73 - Make the likes icon on story cards an outline if the user has not liked it and filled if they have - Not done
   //74 - Refactor the way likes work to have a likes array on each user with the id's of their liked stories - Not done
   //75 - Add a cta to other stories at the bottom of the story page to keep users engaged and on the site longer - Done
+  //76 - Styling for the header breaks on the storyList on smaller viewports - Fixed.
+  //77 - storycards have varying sizes on storyList - Fixed.
+  //78 - When opening the mobile nav at the bottom of the page the footer is still visible but it should be hiddeb when the mobile nav is open. - Fixed.
+  //79 - Fixed a spacing bug where the staff picks right side padding was covered by the scrollbar due to width: 100vw instead of 100% - Fixed.
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
@@ -213,14 +217,13 @@ function App() {
   //UNFIXED BUGS
   //The homepage is not accessible without being signed in.
   //Fix responsive design of account page now that the followed page is added some of it breaks like the mobile nav breakpoint needing to be bigger now to compensate the extra nav item.
-  //When opening the mobile nav at the bottom of the page the footer is still visible but it should be hiddeb when the mobile nav is open.
+
   //Liking a story doesnt work due to firebase permissions. I want to move likes to the users collection anyway but the user should still be able to affect the likes count on the story page and story card. - Not done
   //Firebase rules dont allow correct access when deployed- Not done
   //Styling breaks at small viewports on the followed authors/author profile page - Not done
   //comments allow for random whitespace.
   //tooltips off screen on smaller viewports on story page
-  //storycards have varying sizes on storyList
-  //Styling for the header breaks on the storyList on smaller viewports
+
   //The next and previous buttons will eventually run out of stories as they are paginated meaning that only a small portion of the stories are pulled at once, the issue here would be at some point next will = nothing. I need to either load the next set of ids, or to wrap around to the beginning/end of the currently pulled ids.
   //favorites sorting by likes doesnt work.
 

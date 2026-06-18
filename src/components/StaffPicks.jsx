@@ -79,7 +79,7 @@ const StyledPicksText = styled.div`
 const StyledCardsBox = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  width: 100vw;
+  width: 100%;
   gap: 2rem;
   padding: 4rem;
 
