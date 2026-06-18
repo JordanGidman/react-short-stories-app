@@ -20,6 +20,12 @@ import { AuthContext } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import Error from "../pages/Error";
 import "react-quill-new/dist/quill.snow.css";
+import {
+  englishDataset,
+  englishRecommendedTransformers,
+  RegExpMatcher,
+} from "obscenity";
+import { constainsProfanity } from "../helpers/ProfanityCheck";
 
 const StyledComments = styled.div`
   display: flex;
@@ -109,6 +115,10 @@ function Comments({ storyId }) {
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [comments, setComments] = useState([]);
+  const matcher = new RegExpMatcher({
+    ...englishDataset.build(),
+    ...englishRecommendedTransformers,
+  });
 
   useEffect(() => {
     const docRef = doc(db, "stories", storyId);
@@ -157,31 +167,44 @@ function Comments({ storyId }) {
 
   async function handleCommentSubmit(e) {
     e.preventDefault();
-    setSubmitting(true);
     //Submit comment to backend
 
     //Validation - might be better to move to a seperate function or even a custom hook if we end up needing to reuse this logic for other forms
-    if (!currentUser)
+    if (!currentUser) {
+      setSubmitting(false);
       return toast.error("You must be logged in to post a comment.");
-    if (comment.length <= 0)
+    }
+
+    if (comment.length <= 0) {
+      setSubmitting(false);
       return toast.error("Cannot post an empty comment.");
+    }
+
     const text = comment.replace(/<[^>]*>/g, "").trim();
 
     if (!text) {
       return toast.error("Cannot post an empty comment.");
     }
 
+    if (constainsProfanity(text)) {
+      setSubmitting(false);
+      return toast.error(
+        "Comment contains profanity that is not allowed. Please be respectful in the comments.",
+      );
+    }
+
+    setSubmitting(true);
     try {
-      setLoading(true);
+      setSubmitting(true);
       const docRef = await addDoc(collection(db, "comments"), {
-        comment,
+        comment: text,
         createdAt: new Date(),
         author: currentUser.displayName,
         creatorID: currentUser.uid,
         storyID: storyId,
       });
       setComment("");
-      setLoading(false);
+
       toast.success("Comment posted");
     } catch (error) {
       console.error("Error submitting comment:", error);

@@ -185,6 +185,8 @@ function App() {
   //77 - storycards have varying sizes on storyList - Fixed.
   //78 - When opening the mobile nav at the bottom of the page the footer is still visible but it should be hiddeb when the mobile nav is open. - Fixed.
   //79 - Fixed a spacing bug where the staff picks right side padding was covered by the scrollbar due to width: 100vw instead of 100% - Fixed.
+  //80 - Character limits for display names and full names - Done
+  //81 - Profanity filter for comments - Done
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
@@ -195,16 +197,15 @@ function App() {
   //9 - Add ability to see who is following you - Not done.
   //11 redesign story page - Not done
   //12 - Move the view porfile button to the account nav bar - Not done
-  //13 - Profanity filter for comments - Not done
   //14 - DisplayNames should probably be unique - Not done
-  //15 - Character limits for display names and full names, if its multiple words for display name we should only take the first word and ignore the rest - Not done
+  //15 - If its multiple words for display name we should only take the first word and ignore the rest where we read it such as the navbar - Not done
   //16 - Responsive design for new story page - Partially done
   //17 - Refactor code that is being reused into single components and hooks (such as tooltip and resizepicsumimages) - Partially done
+  //18 - Ability to add multiple genres (will also need to update all places that show a stories genre to compensate as well as the code for reading the genre anywhere that is done as it will now be an array) - Not done
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments
   //2 - Animations and transitions
-  //3 - Ability to add multiple genres
   //5 - Personalized feed
   //6 - Back button on genre pages to go back to library
   //7 - possibly change the account link in the nav to be a drop down to either their profile or their account page.
@@ -217,7 +218,7 @@ function App() {
   //UNFIXED BUGS
   //The homepage is not accessible without being signed in.
   //Fix responsive design of account page now that the followed page is added some of it breaks like the mobile nav breakpoint needing to be bigger now to compensate the extra nav item.
-
+  //when commenting if a toast error is thrown the comment box is now unusable until a refresh.
   //Liking a story doesnt work due to firebase permissions. I want to move likes to the users collection anyway but the user should still be able to affect the likes count on the story page and story card. - Not done
   //Firebase rules dont allow correct access when deployed- Not done
   //Styling breaks at small viewports on the followed authors/author profile page - Not done

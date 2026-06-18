@@ -425,10 +425,10 @@ function NewStory() {
         <Comments storyId={story.id} />
         <StyledDetails>
           <StyledGenres>
-            {/* temp */}
-            <p>Horror</p>
+            <p>{story.genre}</p>
+            {/* <p>Horror</p>
             <p>Thriller</p>
-            <p>Existential</p>
+            <p>Existential</p> */}
           </StyledGenres>
 
           {location.state && (

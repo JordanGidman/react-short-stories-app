@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import signuphero from "../img/signup-hero.webp";
 import CountrySelect from "../components/CountrySelect";
 import { faker } from "@faker-js/faker";
+import { constainsProfanity } from "../helpers/ProfanityCheck";
 
 const SigninButton = styled(Button)`
   margin-top: 6rem;
@@ -271,6 +272,24 @@ function SignUp() {
       setIsLoading(false);
       setError("Passwords do not match.");
       toast.error("Passwords do not match.");
+      return;
+    }
+
+    if (displayName.length <= 2 || displayName.length > 20) {
+      setIsLoading(false);
+      setError("Display name must be between 2 and 20 characters");
+      toast.error("Display name must be between 2 and 20 characters");
+    }
+    if (fullName.length <= 2 || fullName.length > 30) {
+      setIsLoading(false);
+      setError("Full name must be between 2 and 30 characters");
+      toast.error("Full name name must be between 2 and 30 characters");
+    }
+
+    if (constainsProfanity(displayName)) {
+      setIsLoading(false);
+      setError("Profanity Not allowed in display name.");
+      toast.error("Profanity Not allowed in display name.");
       return;
     }
 
