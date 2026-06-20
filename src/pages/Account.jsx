@@ -128,6 +128,7 @@ const StyledNav = styled.nav`
     height: auto;
     padding: 1rem;
     row-gap: 2rem;
+    column-gap: 2rem;
   }
   /* 930px */
   @media (max-width: 58.1em) {
@@ -205,10 +206,14 @@ const StyledDropdown = styled.select`
   display: none;
   text-align: center;
 
+  /* 645px */
+  @media (max-width: 645px) {
+  }
+
   /* 525px */
   @media (max-width: 58.1em) {
     display: flex;
-    width: 90%;
+    /* width: 90%; */
     padding: 1rem;
     font-size: 1.6rem;
     border: 1px solid rgba(0, 0, 0, 0.1);
@@ -318,6 +323,9 @@ const StyledLink = styled(Link)`
   text-align: center;
   width: 100%;
 
+  /* grid-column: 2/3; */
+  grid-row: -2/-1;
+
   &:hover {
     background-color: #85e9e1;
     cursor: pointer;
@@ -335,6 +343,30 @@ const StyledLink = styled(Link)`
 `;
 
 const StyledDeleteButton = styled(StyledLink)``;
+
+const StyledNavWrapper = styled.div`
+  display: grid;
+  align-items: center;
+  justify-content: space-between;
+  grid-template-columns: auto 1fr auto;
+  width: 100%;
+  column-gap: 2rem;
+  ion-icon {
+    font-size: 3rem;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  /* div {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    
+  } */
+`;
 
 function Account() {
   //Needs to be a user logged in before allowing access to this page.
@@ -411,6 +443,20 @@ function Account() {
   }
 
   const handleDropdownChange = (route) => {
+    // switch (route) {
+    //   case "profile":
+    //     navigate(`/author/${currentUser.uid}`);
+    //     break;
+
+    //   case "delete":
+    //     setModalOpen(true);
+    //     break;
+
+    //   default:
+    //     setActiveRoute(route);
+    //     navigate(route);
+    // }
+
     setActiveRoute(route);
     navigate(route);
   };
@@ -468,26 +514,42 @@ function Account() {
         ) : (
           <StyledNav>
             <StyledName>{user?.displayName}</StyledName>
-            <StyledDropdown
-              value={activeRoute}
-              onChange={(e) => handleDropdownChange(e.target.value)}
-            >
-              <option name="favorites" value="favorites">
-                Favorites
+            <StyledNavWrapper>
+              <Link to={`/author/${currentUser.uid}`}>
+                <ion-icon name="person-circle-outline"></ion-icon>
+              </Link>
+              <StyledDropdown
+                value={activeRoute}
+                onChange={(e) => handleDropdownChange(e.target.value)}
+              >
+                <option name="favorites" value="favorites">
+                  Favorites
+                </option>
+                <option name="mystories" value="mystories">
+                  My Stories
+                </option>
+                <option name="drafts" value="drafts">
+                  Drafts
+                </option>
+                <option name="followed" value="followed">
+                  Followed
+                </option>
+                <option name="edit" value="edit">
+                  Edit Account
+                </option>
+                {/* <option name="profile" value="profile">
+                Profile
               </option>
-              <option name="mystories" value="mystories">
-                My Stories
-              </option>
-              <option name="drafts" value="drafts">
-                Drafts
-              </option>
-              <option name="followed" value="followed">
-                Followed
-              </option>
-              <option name="edit" value="edit">
-                Edit Account
-              </option>
-            </StyledDropdown>
+              <option name="delete" value="delete">
+                Delete Account
+              </option> */}
+              </StyledDropdown>
+
+              <ion-icon
+                name="trash-outline"
+                onClick={() => setModalOpen(true)}
+              ></ion-icon>
+            </StyledNavWrapper>
           </StyledNav>
         )}
         <StyledWrapper>

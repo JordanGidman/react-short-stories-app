@@ -188,6 +188,7 @@ function App() {
   //80 - Character limits for display names and full names - Done
   //81 - Profanity filter for comments - Done
   //82 - Move the view porfile button to the account nav bar - Not done
+  //83 - The option to delete account and view profile is not visible on the mobile layout of the accounts page. - Fixed.
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
@@ -202,6 +203,7 @@ function App() {
   //16 - Responsive design for new story page - Partially done
   //17 - Refactor code that is being reused into single components and hooks (such as tooltip and resizepicsumimages) - Partially done
   //18 - Ability to add multiple genres (will also need to update all places that show a stories genre to compensate as well as the code for reading the genre anywhere that is done as it will now be an array) - Not done
+  //19 - Font size button functionality on story page. - Not done
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments
@@ -214,6 +216,7 @@ function App() {
   //10 - Ability to report stories and comments
   //11 - Add the ability to see who liked a story
   //12 - Mood based recommendations
+  //13 - May need an entire account page redesign as im really unhapy with how it all looks at the moment.
 
   //UNFIXED BUGS
   //The homepage is not accessible without being signed in.
@@ -227,7 +230,8 @@ function App() {
   //The next and previous buttons will eventually run out of stories as they are paginated meaning that only a small portion of the stories are pulled at once, the issue here would be at some point next will = nothing. I need to either load the next set of ids, or to wrap around to the beginning/end of the currently pulled ids.
   //favorites sorting by likes doesnt work.
   //spacing on the react logo in the footer is off, it seems to be because the logo is aligned in the center of the grid box but the rest of them are flex-start.
-  //the option to delete account and view profile is not visible on the mobile layout of the accounts page.
+
+  //delete account modal styling broken on mobile layout
 
   return (
     <AuthContextProvider>
