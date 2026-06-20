@@ -187,6 +187,7 @@ function App() {
   //79 - Fixed a spacing bug where the staff picks right side padding was covered by the scrollbar due to width: 100vw instead of 100% - Fixed.
   //80 - Character limits for display names and full names - Done
   //81 - Profanity filter for comments - Done
+  //82 - Move the view porfile button to the account nav bar - Not done
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
@@ -196,7 +197,6 @@ function App() {
   //7 - Add a section to view stories the user has liked. - Not done
   //9 - Add ability to see who is following you - Not done.
   //11 redesign story page - Not done
-  //12 - Move the view porfile button to the account nav bar - Not done
   //14 - DisplayNames should probably be unique - Not done
   //15 - If its multiple words for display name we should only take the first word and ignore the rest where we read it such as the navbar - Not done
   //16 - Responsive design for new story page - Partially done
@@ -224,9 +224,10 @@ function App() {
   //Styling breaks at small viewports on the followed authors/author profile page - Not done
   //comments allow for random whitespace.
   //tooltips off screen on smaller viewports on story page
-
   //The next and previous buttons will eventually run out of stories as they are paginated meaning that only a small portion of the stories are pulled at once, the issue here would be at some point next will = nothing. I need to either load the next set of ids, or to wrap around to the beginning/end of the currently pulled ids.
   //favorites sorting by likes doesnt work.
+  //spacing on the react logo in the footer is off, it seems to be because the logo is aligned in the center of the grid box but the rest of them are flex-start.
+  //the option to delete account and view profile is not visible on the mobile layout of the accounts page.
 
   return (
     <AuthContextProvider>

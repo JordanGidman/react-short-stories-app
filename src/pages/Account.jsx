@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
 import {
+  Link,
   NavLink,
   Outlet,
   useLocation,
@@ -301,6 +302,40 @@ const StyledButtons = styled.div`
   }
 `;
 
+const StyledLink = styled(Link)`
+  background-color: #ffee34;
+  border: none;
+  color: rgb(28, 31, 46, 0.8);
+  font-size: 1.6rem;
+  letter-spacing: 0.1rem;
+  padding: 0.8rem 0rem;
+  transition: all 0.4s ease-in-out;
+  font-weight: 700;
+  margin-top: 2rem;
+  border-radius: 2rem;
+  text-transform: uppercase;
+  box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 100%;
+
+  &:hover {
+    background-color: #85e9e1;
+    cursor: pointer;
+  }
+
+  &:visited {
+    box-shadow: none;
+  }
+
+  &:active {
+    box-shadow: none;
+  }
+
+  /* font-family: "Montserrat", sans-serif; */
+`;
+
+const StyledDeleteButton = styled(StyledLink)``;
+
 function Account() {
   //Needs to be a user logged in before allowing access to this page.
   //name
@@ -423,9 +458,12 @@ function Account() {
                 </StyledNavLink>
               </StyledNavItem>
             </StyledNavList>
-            <StyledButton onClick={() => setModalOpen(true)}>
+            <StyledLink to={`/author/${currentUser.uid}`}>
+              View Profile
+            </StyledLink>
+            <StyledDeleteButton onClick={() => setModalOpen(true)}>
               Delete account
-            </StyledButton>
+            </StyledDeleteButton>
           </StyledNav>
         ) : (
           <StyledNav>
