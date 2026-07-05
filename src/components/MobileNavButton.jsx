@@ -6,7 +6,7 @@ const StyledButton = styled(motion.button)`
   height: 5rem;
   border-radius: 50%;
   position: fixed;
-  top: 2rem;
+  top: 1.2rem;
   left: 2rem;
   background-color: #1c1f2e;
 

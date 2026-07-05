@@ -189,21 +189,22 @@ function App() {
   //81 - Profanity filter for comments - Done
   //82 - Move the view porfile button to the account nav bar - Not done
   //83 - The option to delete account and view profile is not visible on the mobile layout of the accounts page. - Fixed.
+  //84 - delete account modal styling broken on mobile layout - Fixed.
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
   //2 - Optimizations(Img compression, lazy loading, code splitting, memoization, refactors, etc) - Partially done
   //3 - Accessibility Improvements - Partially done
   //4 - Deployment - Not done
-  //7 - Add a section to view stories the user has liked. - Not done
-  //9 - Add ability to see who is following you - Not done.
-  //11 redesign story page - Not done
-  //14 - DisplayNames should probably be unique - Not done
-  //15 - If its multiple words for display name we should only take the first word and ignore the rest where we read it such as the navbar - Not done
-  //16 - Responsive design for new story page - Partially done
-  //17 - Refactor code that is being reused into single components and hooks (such as tooltip and resizepicsumimages) - Partially done
-  //18 - Ability to add multiple genres (will also need to update all places that show a stories genre to compensate as well as the code for reading the genre anywhere that is done as it will now be an array) - Not done
-  //19 - Font size button functionality on story page. - Not done
+  //5 - Add a section to view stories the user has liked. - Not done
+  //6 - Add ability to see who is following you - Not done.
+  //7 - redesign story page - Not done
+  //8 - DisplayNames should probably be unique - Not done
+  //9 - If its multiple words for display name we should only take the first word and ignore the rest where we read it such as the navbar - Not done
+  //10 - Responsive design for new story page - Partially done
+  //11 - Refactor code that is being reused into single components and hooks (such as tooltip and resizepicsumimages) - Partially done
+  //12 - Ability to add multiple genres (will also need to update all places that show a stories genre to compensate as well as the code for reading the genre anywhere that is done as it will now be an array) - Not done
+  //13 - Font size button functionality on story page. - Not done
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments
@@ -230,8 +231,7 @@ function App() {
   //The next and previous buttons will eventually run out of stories as they are paginated meaning that only a small portion of the stories are pulled at once, the issue here would be at some point next will = nothing. I need to either load the next set of ids, or to wrap around to the beginning/end of the currently pulled ids.
   //favorites sorting by likes doesnt work.
   //spacing on the react logo in the footer is off, it seems to be because the logo is aligned in the center of the grid box but the rest of them are flex-start.
-
-  //delete account modal styling broken on mobile layout
+  //No tooltip for the delete account and view profile buttons on the account page on mobile layout
 
   return (
     <AuthContextProvider>

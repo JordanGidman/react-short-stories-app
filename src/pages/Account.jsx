@@ -8,7 +8,7 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { db } from "../firebase";
 import { doc, onSnapshot } from "firebase/firestore";
 import { AuthContext } from "../context/AuthContext";
@@ -20,25 +20,27 @@ import { toast } from "react-toastify";
 const StyledAccount = styled.main`
   width: 100%;
   min-height: 100vh;
-  padding: 8% 2% 2% 2%;
+  /* padding: 8% 2% 2% 2%; */
+  padding-top: 6%;
   display: grid;
   grid-template-columns: 25% 75%;
 
   /* 1485px */
-  @media (max-width: 92.8em) {
+  /* @media (max-width: 92.8em) {
     padding: 8% 3% 2% 2%;
-  }
+  } */
 
   /* 1200px */
   @media (max-width: 75em) {
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
     align-items: start;
+    padding-top: 8%;
   }
 
   /* 930px */
   @media (max-width: 58.1em) {
-    padding: 1% 4% 2% 2%;
+    padding: 0%;
   }
 
   /* 525px */
@@ -47,6 +49,7 @@ const StyledAccount = styled.main`
     grid-template-rows: auto 1fr;
   }
 `;
+
 const StyledName = styled.h1`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   color: rgb(28, 31, 46, 0.8);
@@ -59,13 +62,15 @@ const StyledName = styled.h1`
   @media (max-width: 75em) {
     border-bottom: none;
     padding-bottom: 0rem;
-    padding: 0rem;
+    padding-left: 4rem;
     grid-row: 1 / 2;
-    grid-column: 2/3;
+    grid-column: span 2;
+    /* align-self: center; */
+    justify-self: center;
     /* margin-bottom: 4rem; */
     display: flex;
     align-items: flex-start;
-    justify-content: flex-end;
+    justify-content: flex-start;
   }
 
   /* 930px */
@@ -73,32 +78,114 @@ const StyledName = styled.h1`
     padding-top: 0.4rem;
   }
 
+  /* 645px */
+  @media (max-width: 40.3em) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* align-self: center; */
+    /* justify-self: flex-start; */
+    /* padding-left: 0rem; */
+    padding: 2rem 0rem;
+    width: 100%;
+    margin-top: 6rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
   /* 525px */
   @media (max-width: 32.81em) {
-    grid-column: span 2;
+    /* grid-column: span 2; */
   }
 
   /* 400px */
   @media (max-width: 25em) {
-    font-size: 2.6rem;
+    /* font-size: 2.6rem; */
     /* margin-right: 1rem; */
-    padding-right: 0.4rem;
+    /* padding-right: 0.4rem; */
   }
 
   /* 425px */
-  @media (max-width: 26.5em) {
+  /* @media (max-width: 26.5em) {
     padding-top: 0rem;
     padding-bottom: 1rem;
-  }
+  } */
 
   /* 335px */
-  @media (max-width: 21em) {
+  /* @media (max-width: 21em) {
     align-self: flex-end;
+  } */
+`;
+
+const StyledNameButton = styled.button`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
+  width: 3rem;
+  border: none;
+  background-color: transparent;
+  /* background-color: red; */
+
+  ion-icon {
+    font-size: 2.4rem;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const StyledNameOptions = styled.ul`
+  position: absolute;
+  top: 3rem;
+  right: 2rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  /* gap: 1rem; */
+
+  list-style: none;
+  color: #fff;
+
+  /* padding: 1rem 2rem; */
+  font-size: 1.4rem;
+  font-family: "Montserrat", sans-serif;
+  text-transform: capitalize;
+  font-weight: 500;
+
+  width: 16rem;
+  transition: all 0.3s ease-in-out;
+
+  li {
+    background-color: #1c1f2e;
+    width: 100%;
+    padding: 1rem;
+
+    .view-profile {
+      color: #fff;
+    }
+  }
+
+  li:hover {
+    background-color: #ffee34;
+
+    & .view-profile {
+      color: #000;
+    }
+  }
+
+  .delete:hover {
+    background-color: #ff0000;
   }
 `;
 
 const StyledWrapper = styled.div`
   padding: 2rem 4rem;
+  /* padding: 2% 3% 2% 2%; */
   display: flex;
   flex-direction: column;
 
@@ -129,6 +216,7 @@ const StyledNav = styled.nav`
     padding: 1rem;
     row-gap: 2rem;
     column-gap: 2rem;
+    width: 100%;
   }
   /* 930px */
   @media (max-width: 58.1em) {
@@ -138,6 +226,12 @@ const StyledNav = styled.nav`
     height: auto;
     gap: 1rem;
     padding: 1.5rem;
+  }
+  /* 645px */
+  @media (max-width: 40.3em) {
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2rem;
   }
   /* 525px */
   @media (max-width: 32.81em) {
@@ -169,6 +263,9 @@ const StyledNavList = styled.ul`
   @media (max-width: 40.3em) {
     padding-left: 0rem;
     padding-right: 0rem;
+    flex-direction: column;
+    gap: 1rem;
+    border: none;
   }
 `;
 
@@ -184,6 +281,11 @@ const StyledNavItem = styled.li`
     align-items: center;
     justify-content: center;
     padding: 0rem;
+  }
+
+  /* 645px */
+  @media (max-width: 40.3em) {
+    justify-content: flex-start;
   }
 `;
 
@@ -277,6 +379,24 @@ const StyledModalContent = styled.div`
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
   border-radius: 1.2rem;
   z-index: 1000;
+
+  /* 1100px */
+  @media (max-width: 68.75em) {
+    width: 80vw;
+  }
+
+  /* 645px */
+  @media (max-width: 40.3em) {
+    width: 100vw;
+    height: 100vh;
+    margin-top: 9.1rem;
+    border-radius: 0rem;
+    justify-content: center;
+  }
+  /* 430px */
+  @media (max-width: 26.875em) {
+    font-size: 1.6rem;
+  }
 `;
 
 const StyledModal = styled.div`
@@ -292,6 +412,16 @@ const StyledModal = styled.div`
 
 const StyledModalButton = styled(Button)`
   font-weight: 600;
+
+  /* 645px */
+  @media (max-width: 40.3em) {
+    width: 100%;
+  }
+
+  /* 430px */
+  @media (max-width: 26.875em) {
+    font-size: 1.4rem;
+  }
 `;
 const StyledButtons = styled.div`
   display: flex;
@@ -304,6 +434,11 @@ const StyledButtons = styled.div`
       background-color: #ff0000;
       color: #fff;
     }
+  }
+
+  /* 645px */
+  @media (max-width: 40.3em) {
+    flex-direction: column;
   }
 `;
 
@@ -376,8 +511,10 @@ function Account() {
   //Edit profile options e.g change username
   const { id } = useParams();
   const [user, setUser] = useState();
-  const [modalOpen, setModalOpen] = useState(false);
   const { currentUser } = useContext(AuthContext);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -389,6 +526,32 @@ function Account() {
     const currentPath = location.pathname.split("/").pop();
     setActiveRoute(currentPath);
   }, [location]);
+
+  useEffect(() => {
+    if (modalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [modalOpen]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -472,86 +635,66 @@ function Account() {
   return (
     <>
       {/* <Navbar /> */}
-      <StyledAccount>
-        {windowWidth >= 645 ? (
-          <StyledNav>
-            <StyledName>{user?.displayName}</StyledName>
-            <StyledNavList>
-              {/* <StyledNavItem>Dashboard</StyledNavItem> */}
-              <StyledNavItem>
-                <StyledNavLink className="nav-link" to={`favorites`}>
-                  Favorites
-                </StyledNavLink>
-              </StyledNavItem>
-              <StyledNavItem>
-                <StyledNavLink className="nav-link" to={`mystories`}>
-                  My Stories
-                </StyledNavLink>
-              </StyledNavItem>
-              <StyledNavItem>
-                <StyledNavLink className="nav-link" to={`drafts`}>
-                  Drafts
-                </StyledNavLink>
-              </StyledNavItem>
-              <StyledNavItem>
-                <StyledNavLink className="nav-link" to={`followed`}>
-                  Followed
-                </StyledNavLink>
-              </StyledNavItem>
-              <StyledNavItem>
-                <StyledNavLink className="nav-link" to={`edit`}>
-                  Edit Account
-                </StyledNavLink>
-              </StyledNavItem>
-            </StyledNavList>
-            <StyledLink to={`/author/${currentUser.uid}`}>
-              View Profile
-            </StyledLink>
-            <StyledDeleteButton onClick={() => setModalOpen(true)}>
-              Delete account
-            </StyledDeleteButton>
-          </StyledNav>
-        ) : (
-          <StyledNav>
-            <StyledName>{user?.displayName}</StyledName>
-            <StyledNavWrapper>
-              <Link to={`/author/${currentUser.uid}`}>
-                <ion-icon name="person-circle-outline"></ion-icon>
-              </Link>
-              <StyledDropdown
-                value={activeRoute}
-                onChange={(e) => handleDropdownChange(e.target.value)}
+      <StyledAccount $modalOpen={modalOpen}>
+        <StyledNav>
+          <StyledName>
+            {user?.displayName}{" "}
+            {windowWidth <= 645 && (
+              <StyledNameButton
+                onClick={() => setMenuOpen(!menuOpen)}
+                ref={menuRef}
               >
-                <option name="favorites" value="favorites">
-                  Favorites
-                </option>
-                <option name="mystories" value="mystories">
-                  My Stories
-                </option>
-                <option name="drafts" value="drafts">
-                  Drafts
-                </option>
-                <option name="followed" value="followed">
-                  Followed
-                </option>
-                <option name="edit" value="edit">
-                  Edit Account
-                </option>
-                {/* <option name="profile" value="profile">
-                Profile
-              </option>
-              <option name="delete" value="delete">
-                Delete Account
-              </option> */}
-              </StyledDropdown>
+                <ion-icon name="ellipsis-vertical-outline"></ion-icon>
 
-              <ion-icon
-                name="trash-outline"
-                onClick={() => setModalOpen(true)}
-              ></ion-icon>
-            </StyledNavWrapper>
-          </StyledNav>
-        )}
+                {menuOpen && (
+                  <StyledNameOptions>
+                    <li>
+                      <Link
+                        to={`/author/${currentUser.uid}`}
+                        className="view-profile"
+                      >
+                        View Profile
+                      </Link>
+                    </li>
+                    <li className="delete" onClick={() => setModalOpen(true)}>
+                      Delete Account
+                    </li>
+                  </StyledNameOptions>
+                )}
+              </StyledNameButton>
+            )}{" "}
+          </StyledName>
+
+          <StyledNavList>
+            {/* <StyledNavItem>Dashboard</StyledNavItem> */}
+            <StyledNavItem>
+              <StyledNavLink className="nav-link" to={`favorites`}>
+                Favorites
+              </StyledNavLink>
+            </StyledNavItem>
+            <StyledNavItem>
+              <StyledNavLink className="nav-link" to={`mystories`}>
+                My Stories
+              </StyledNavLink>
+            </StyledNavItem>
+            <StyledNavItem>
+              <StyledNavLink className="nav-link" to={`drafts`}>
+                Drafts
+              </StyledNavLink>
+            </StyledNavItem>
+            <StyledNavItem>
+              <StyledNavLink className="nav-link" to={`followed`}>
+                Followed
+              </StyledNavLink>
+            </StyledNavItem>
+            <StyledNavItem>
+              <StyledNavLink className="nav-link" to={`edit`}>
+                Edit Account
+              </StyledNavLink>
+            </StyledNavItem>
+          </StyledNavList>
+        </StyledNav>
+
         <StyledWrapper>
           <Outlet />
         </StyledWrapper>
