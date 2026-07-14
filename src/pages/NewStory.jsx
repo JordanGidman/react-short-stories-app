@@ -52,6 +52,7 @@ const StyledImgWrapper = styled.div`
   width: 40vw;
   height: 100vh;
 
+  /* 1025px */
   @media (max-width: 64em) {
     position: static;
     height: 40vh;
@@ -77,6 +78,7 @@ const StyledStoryContent = styled.div`
   padding: 3% 3% 0 3%;
   margin-top: 8rem;
 
+  /* 1025px */
   @media (max-width: 64em) {
     margin-top: 0rem;
   }
@@ -92,6 +94,14 @@ const StyledBanner = styled.div`
   height: 4rem;
 
   margin: 4rem 0rem 4rem 0rem;
+
+  @media (max-width: 64em) {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 6rem;
+  }
   /* 
   display: grid;
   grid-template-columns: 40% 60%; */
@@ -109,6 +119,12 @@ const StyledLanguage = styled.div`
   span {
     color: #848796;
   }
+
+  @media (max-width: 64em) {
+    grid-column: 1/4;
+    grid-row: 1;
+    justify-self: center;
+  }
 `;
 const StyledLikes = styled.div`
   font-size: 1.4rem;
@@ -119,6 +135,12 @@ const StyledLikes = styled.div`
   span {
     color: #848796;
   }
+
+  @media (max-width: 64em) {
+    grid-row: 2;
+    grid-column: 3;
+    justify-self: flex-end;
+  }
 `;
 const StyledBody = styled.div`
   display: flex;
@@ -127,6 +149,16 @@ const StyledBody = styled.div`
   margin-bottom: 4rem;
   font-family: "Montserrat", serif;
   line-height: 1.6;
+  font-size: ${(props) => {
+    switch (props.$fontSize) {
+      case "small":
+        return "1.4rem";
+      case "medium":
+        return "1.6rem";
+      case "large":
+        return "1.8rem";
+    }
+  }};
 `;
 
 const StyledDetails = styled.div`
@@ -261,7 +293,8 @@ function NewStory() {
   const [error, setError] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
   const location = useLocation();
-  console.log(location?.state);
+  const [fontSize, setFontSize] = useState("medium"); // State for font size
+
   //This needs to be passed again when navigating to the next or prev story in order for this same component to have access to it when opened from another page in this case the story page
   const navigation = location?.state?.navigation ?? [];
   const storyInfo = navigation?.storyInfo ?? [];
@@ -371,6 +404,18 @@ function NewStory() {
     }
   }
 
+  // Font size adjustment handler
+  function adjustFontSize() {
+    //i want the font size button to cycle through 3 sizes small, medium, large and then back to small. I will use a state variable to keep track of the current size and then adjust the font size accordingly.
+    setFontSize((prevSize) => {
+      const sizes = ["small", "medium", "large"];
+      const currentIndex = sizes.indexOf(prevSize);
+      const nextIndex =
+        currentIndex === sizes.length - 1 ? 0 : currentIndex + 1;
+      return sizes[nextIndex];
+    });
+  }
+
   if (storyLoading) return <Spinner />;
   if (storyError) return <Error error={storyError} />;
 
@@ -397,6 +442,7 @@ function NewStory() {
             currentUser={currentUser}
             onLike={handleLike}
             onFavorite={handleFavorite}
+            onFontSizeChange={adjustFontSize}
           />
           {/* Language and Likes */}
           <StyledLanguage>
@@ -410,9 +456,12 @@ function NewStory() {
         </StyledBanner>
         {/* Main story content */}
         {!story.isSeedData ? (
-          <StyledBody dangerouslySetInnerHTML={{ __html: sanitizedStory }} />
+          <StyledBody
+            $fontSize={fontSize}
+            dangerouslySetInnerHTML={{ __html: sanitizedStory }}
+          />
         ) : (
-          <StyledBody>
+          <StyledBody $fontSize={fontSize}>
             <p>
               This is a seed data story created using fakerJS. Full styling is{" "}
               <strong>not</strong> available. For the best example, please view

@@ -85,8 +85,6 @@ const StyledCountry = styled.p`
 `;
 
 function StoryHeader({ story, author, country, countryData }) {
-  console.log(story);
-
   return (
     <StyledHeader>
       <StyledCountry>

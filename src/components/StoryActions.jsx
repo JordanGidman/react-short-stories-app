@@ -4,6 +4,12 @@ const StyledButtons = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
+
+  @media (max-width: 64em) {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: flex-start;
+  }
 `;
 
 const StyledButton = styled.button`
@@ -67,7 +73,14 @@ const Tooltip = styled.span`
   }
 `;
 
-function StoryActions({ story, user, currentUser, onLike, onFavorite }) {
+function StoryActions({
+  story,
+  user,
+  currentUser,
+  onLike,
+  onFavorite,
+  onFontSizeChange,
+}) {
   return (
     <StyledButtons>
       {/* Like Button */}
@@ -101,7 +114,7 @@ function StoryActions({ story, user, currentUser, onLike, onFavorite }) {
         </Tooltip>
       </StyledButton>
       {/* Font Size Button */}
-      <StyledButton>
+      <StyledButton onClick={() => onFontSizeChange()}>
         <span className="font-size">Aa</span>
         <Tooltip>Font size</Tooltip>
       </StyledButton>
