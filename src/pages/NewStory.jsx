@@ -212,6 +212,10 @@ const NavButtons = styled.ul`
     height: 4rem;
     background-color: rgba(0, 0, 0, 0.3);
     align-self: center;
+
+    @media (max-width: 22.8em) {
+      display: none;
+    }
   }
 `;
 
@@ -231,15 +235,24 @@ const BtnText = styled.div`
 
   span {
     text-transform: uppercase;
-    font-size: 1.2rem;
     font-weight: 400;
     font-family: "Montserrat", sans-serif;
     letter-spacing: 0.1rem;
     font-size: 1em;
+
+    /* 600px */
+    @media (max-width: 37.5em) {
+      font-size: 1.4rem;
+    }
   }
 
   p {
     text-transform: capitalize;
+
+    /* 600px */
+    @media (max-width: 37.5em) {
+      font-size: 1.6rem;
+    }
   }
 `;
 

@@ -190,6 +190,8 @@ function App() {
   //82 - Move the view porfile button to the account nav bar - Not done
   //83 - The option to delete account and view profile is not visible on the mobile layout of the accounts page. - Fixed.
   //84 - delete account modal styling broken on mobile layout - Fixed.
+  //85 - Font size button functionality on story page. - Done.
+  //86 - Responsive design for new story page - Done
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
@@ -201,10 +203,10 @@ function App() {
   //7 - redesign story page - Not done
   //8 - DisplayNames should probably be unique - Not done
   //9 - If its multiple words for display name we should only take the first word and ignore the rest where we read it such as the navbar - Not done
-  //10 - Responsive design for new story page - Partially done
+
   //11 - Refactor code that is being reused into single components and hooks (such as tooltip and resizepicsumimages) - Partially done
   //12 - Ability to add multiple genres (will also need to update all places that show a stories genre to compensate as well as the code for reading the genre anywhere that is done as it will now be an array) - Not done
-  //13 - Font size button functionality on story page. - Not done
+  //13 - The next and previous stories page will right now only go through the small selection of stories that are pulled for the current page, this will need to be updated to go through all stories in the db as it only has access to 1 page due to pagination only pulling stories from current page to avoid expensive queries. - Not done
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments
@@ -232,6 +234,7 @@ function App() {
   //favorites sorting by likes doesnt work.
   //spacing on the react logo in the footer is off, it seems to be because the logo is aligned in the center of the grid box but the rest of them are flex-start.
   //No tooltip for the delete account and view profile buttons on the account page on mobile layout
+  //delete account and profile buttons are missing from the non-mobile layout on the account page.
 
   return (
     <AuthContextProvider>
