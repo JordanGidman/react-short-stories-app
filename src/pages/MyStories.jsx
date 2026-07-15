@@ -556,16 +556,23 @@ function MyStories() {
                 </StyledItemText>
 
                 <StyledButtons $expanded={expandedStories.has(story.id)}>
-                  <StyledButton>
+                  <StyledButton
+                    aria-label="edit story"
+                    onClick={() => handleEdit(story)}
+                  >
                     <span className="mobile-btn-text">edit</span>
                     <ion-icon
                       name="create-outline"
                       className="icon icon-edit"
-                      onClick={() => handleEdit(story)}
                     ></ion-icon>
                     <Tooltip>Edit Story</Tooltip>
                   </StyledButton>
-                  <StyledButton onClick={() => handleTogglePrivacy(story.id)}>
+                  <StyledButton
+                    onClick={() => handleTogglePrivacy(story.id)}
+                    aria-label={
+                      story.hidden ? "Make Story Public" : "Make Story Private"
+                    }
+                  >
                     <span className="mobile-btn-text">
                       {story.hidden ? "Post" : "Hide"}
                     </span>
@@ -591,6 +598,7 @@ function MyStories() {
                       setModalOpen(true);
                       setCurrentStory(story);
                     }}
+                    aria-label="delete story"
                   >
                     <span className="mobile-btn-text">delete</span>
                     <ion-icon

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Button from "./Button";
+import { toast } from "react-toastify";
 
 const StyledFooter = styled.footer`
   display: grid;
@@ -231,8 +232,8 @@ function Footer() {
       <StyledForm
         onSubmit={(e) => {
           e.preventDefault();
-          alert(
-            "Sadly there are no stories to email you as they are all fake data generated with fakerJS"
+          toast.error(
+            "Sadly there are no stories to email you as they are all fake data generated with fakerJS",
           );
         }}
       >

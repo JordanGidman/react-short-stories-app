@@ -71,6 +71,10 @@ const Tooltip = styled.span`
     visibility: visible;
     opacity: 1;
   }
+
+  @media (max-width: 48.125em) {
+    display: none;
+  }
 `;
 
 function StoryActions({
@@ -86,6 +90,9 @@ function StoryActions({
       {/* Like Button */}
       <StyledButton
         onClick={() => onLike(currentUser.uid, user?.likes?.includes(story.id))}
+        aria-label={
+          user?.likes?.includes(story.id) ? "Remove Like" : "Like Story"
+        }
       >
         {user?.likes?.includes(story.id) ? (
           <ion-icon name="heart"></ion-icon>
@@ -101,6 +108,11 @@ function StoryActions({
         onClick={() =>
           onFavorite(currentUser.uid, user?.favorites?.includes(story.id))
         }
+        aria-label={
+          user?.favorites?.includes(story.id)
+            ? "Remove Favorite"
+            : "Favorite Story"
+        }
       >
         {user?.favorites?.includes(story.id) ? (
           <ion-icon className="icon-star" name="star"></ion-icon>
@@ -114,7 +126,10 @@ function StoryActions({
         </Tooltip>
       </StyledButton>
       {/* Font Size Button */}
-      <StyledButton onClick={() => onFontSizeChange()}>
+      <StyledButton
+        onClick={() => onFontSizeChange()}
+        aria-label="Change Font Size"
+      >
         <span className="font-size">Aa</span>
         <Tooltip>Font size</Tooltip>
       </StyledButton>

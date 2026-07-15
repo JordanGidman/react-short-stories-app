@@ -45,10 +45,18 @@ const StyledContainer = styled(ToastContainer)`
     justify-content: center;
     align-items: center;
     text-transform: capitalize;
+
+    @media (max-width: 30.62em) {
+      width: 100%;
+    }
   }
 
   .Toastify__toast-body {
     color: #fff;
+
+    @media (max-width: 30.62em) {
+      padding-right: 1rem;
+    }
   }
 
   /* Progress bar */
@@ -64,6 +72,10 @@ const StyledContainer = styled(ToastContainer)`
   /* Close button */
   .Toastify__close-button {
     color: #fff;
+
+    @media (max-width: 30.62em) {
+      right: 12px;
+    }
   }
 
   .Toastify__close-button:hover {
@@ -196,6 +208,10 @@ function App() {
   //88 - delete account and profile buttons are missing from the non-mobile layout on the account page. - Fixed.
   //89 - favorites and mystories sorting by likes doesnt work. - Fixed.
   //90 - comments allow for random whitespace. - Fixed.
+  //91 - tooltips off screen on smaller viewports on story page - Fixed.
+  //92 -Fix responsive design of account page now that the followed page is added some of it breaks like the mobile nav breakpoint needing to be bigger now to compensate the extra nav item. - Fixed.
+  //93 - when commenting if a toast error is thrown the comment box is now unusable until a refresh. - Fixed.
+  //94 - Add aria labels to all buttons and links for accessibility - Done
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
@@ -207,36 +223,32 @@ function App() {
   //7 - redesign story page - Not done
   //8 - DisplayNames should probably be unique - Not done
   //9 - If its multiple words for display name we should only take the first word and ignore the rest where we read it such as the navbar - Not done
-
-  //11 - Refactor code that is being reused into single components and hooks (such as tooltip and resizepicsumimages) - Partially done
-  //12 - Ability to add multiple genres (will also need to update all places that show a stories genre to compensate as well as the code for reading the genre anywhere that is done as it will now be an array) - Not done
-  //13 - The next and previous stories page will right now only go through the small selection of stories that are pulled for the current page, this will need to be updated to go through all stories in the db as it only has access to 1 page due to pagination only pulling stories from current page to avoid expensive queries. - Not done
-  //14 - Need to make it so that comments get paginated as there could be many of them and they will infinitely increase the size of the page and make it slow to load. - Not done
+  //10 - Refactor code that is being reused into single components and hooks (such as tooltip and resizepicsumimages) - Partially done
+  //11 - Ability to add multiple genres (will also need to update all places that show a stories genre to compensate as well as the code for reading the genre anywhere that is done as it will now be an array) - Not done
+  //12 - The next and previous stories page will right now only go through the small selection of stories that are pulled for the current page, this will need to be updated to go through all stories in the db as it only has access to 1 page due to pagination only pulling stories from current page to avoid expensive queries. - Not done
+  //13 - Need to make it so that comments get paginated as there could be many of them and they will infinitely increase the size of the page and make it slow to load. - Not done
+  //14 - The genres on the story page should be clickable links to that genres list of stories. Which i will tackle once multiple genres is implemented - Not done
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments
   //2 - Animations and transitions
-  //5 - Personalized feed
-  //6 - Back button on genre pages to go back to library
-  //7 - possibly change the account link in the nav to be a drop down to either their profile or their account page.
-  //8 - Add the ability to see how many people an author is following on their profile - Not done
-  //9 - Rating system for stories - Not done
-  //10 - Ability to report stories and comments
-  //11 - Add the ability to see who liked a story
-  //12 - Mood based recommendations
-  //13 - May need an entire account page redesign as im really unhapy with how it all looks at the moment.
-  //14 - Report system for stories, which will auto-hide stories after multiple reports and notify the author.
+  //3 - Personalized feed
+  //4 - Back button on genre pages to go back to library
+  //5 - possibly change the account link in the nav to be a drop down to either their profile or their account page.
+  //6 - Add the ability to see how many people an author is following on their profile - Not done
+  //7 - Rating system for stories - Not done
+  //8 - Ability to report stories and comments
+  //9 - Add the ability to see who liked a story
+  //10 - Mood based recommendations
+  //11 - May need an entire account page redesign as im really unhapy with how it all looks at the moment.
+  //12 - Report system for stories, which will auto-hide stories after multiple reports and notify the author.
 
   //UNFIXED BUGS
   //The homepage is not accessible without being signed in.
-  //Fix responsive design of account page now that the followed page is added some of it breaks like the mobile nav breakpoint needing to be bigger now to compensate the extra nav item.
-  //when commenting if a toast error is thrown the comment box is now unusable until a refresh.
   //Liking a story doesnt work due to firebase permissions. I want to move likes to the users collection anyway but the user should still be able to affect the likes count on the story page and story card. - Not done
   //Firebase rules dont allow correct access when deployed- Not done
   //Styling breaks at small viewports on the followed authors/author profile page - Not done
-  //tooltips off screen on smaller viewports on story page
   //The next and previous buttons will eventually run out of stories as they are paginated meaning that only a small portion of the stories are pulled at once, the issue here would be at some point next will = nothing. I need to either load the next set of ids, or to wrap around to the beginning/end of the currently pulled ids.
-  //spacing on the react logo in the footer is off, it seems to be because the logo is aligned in the center of the grid box but the rest of them are flex-start.
 
   return (
     <AuthContextProvider>

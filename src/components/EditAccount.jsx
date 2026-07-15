@@ -338,7 +338,7 @@ function EditAccount() {
                 Apologies but firebase auth requires real email verfication to
                 change email and password and as this is a portfolio piece i do
                 not expect users to use a real email. If you did you can delete
-                your account at any time from this page.
+                your account at any time by clicking the dots next to your name.
               </Tooltip>
             </StyledField>
             <StyledField>
@@ -353,7 +353,7 @@ function EditAccount() {
                 Apologies but firebase auth requires real email verfication to
                 change email and password and as this is a portfolio piece i do
                 not expect users to use a real email. If you did you can delete
-                your account at any time from this page.
+                your account at any time by clicking the dots next to your name.
               </Tooltip>
             </StyledField>
             <StyledButton>Submit</StyledButton>

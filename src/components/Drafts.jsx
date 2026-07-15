@@ -455,6 +455,7 @@ function Drafts() {
                     onClick={() =>
                       navigate(`/edit/${story.draftId}`, { state: { story } })
                     }
+                    aria-label="Edit draft"
                   >
                     <span className="mobile-btn-text">Edit</span>
                     <ion-icon
@@ -467,6 +468,7 @@ function Drafts() {
                   <StyledButton
                     onClick={() => handleDelete(story.draftId)}
                     className="delete"
+                    aria-label="Delete draft"
                   >
                     <span className="mobile-btn-text">Delete</span>
                     <ion-icon

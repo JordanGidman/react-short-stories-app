@@ -276,7 +276,12 @@ function FavoriteStoryItem({ story, isExpanded, toggleExpand, navigation }) {
       >
         {story.title}
       </StyledTitle>
-      <StyledExpandButton onClick={() => toggleExpand(story.id)}>
+      <StyledExpandButton
+        onClick={() => toggleExpand(story.id)}
+        aria-label={
+          isExpanded ? "Collapse Story Details" : "Expand Story Details"
+        }
+      >
         {isExpanded ? "−" : "+"}
       </StyledExpandButton>
       <StyledItemText className="genre" $expanded={isExpanded}>
@@ -290,6 +295,7 @@ function FavoriteStoryItem({ story, isExpanded, toggleExpand, navigation }) {
           to={`/library/${story.genre}/story/${story.id}`}
           state={{ navigation }}
           className="open"
+          aria-label="Read Story"
         >
           <span className="mobile-btn-text">Read</span>
           <ion-icon class="icon icon-open" name="open-outline"></ion-icon>
@@ -299,6 +305,7 @@ function FavoriteStoryItem({ story, isExpanded, toggleExpand, navigation }) {
         <StyledButton
           onClick={() => handleUnfavorite(story.id)}
           className="star"
+          aria-label="Remove from favorites"
         >
           <span className="mobile-btn-text">Remove</span>
           <ion-icon class="icon icon-star" name="star"></ion-icon>
