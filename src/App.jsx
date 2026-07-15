@@ -192,6 +192,8 @@ function App() {
   //84 - delete account modal styling broken on mobile layout - Fixed.
   //85 - Font size button functionality on story page. - Done.
   //86 - Responsive design for new story page - Done
+  //87 - No tooltip for the delete account and view profile buttons on the account page on mobile layout - Fixed.
+  //88 - delete account and profile buttons are missing from the non-mobile layout on the account page. - Fixed.
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
@@ -233,8 +235,6 @@ function App() {
   //The next and previous buttons will eventually run out of stories as they are paginated meaning that only a small portion of the stories are pulled at once, the issue here would be at some point next will = nothing. I need to either load the next set of ids, or to wrap around to the beginning/end of the currently pulled ids.
   //favorites sorting by likes doesnt work.
   //spacing on the react logo in the footer is off, it seems to be because the logo is aligned in the center of the grid box but the rest of them are flex-start.
-  //No tooltip for the delete account and view profile buttons on the account page on mobile layout
-  //delete account and profile buttons are missing from the non-mobile layout on the account page.
 
   return (
     <AuthContextProvider>

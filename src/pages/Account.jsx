@@ -22,6 +22,7 @@ const StyledAccount = styled.main`
   min-height: 100vh;
   /* padding: 8% 2% 2% 2%; */
   padding-top: 6%;
+  padding-bottom: 2%;
   display: grid;
   grid-template-columns: 25% 75%;
 
@@ -51,26 +52,33 @@ const StyledAccount = styled.main`
 `;
 
 const StyledName = styled.h1`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   color: rgb(28, 31, 46, 0.8);
   padding-bottom: 2rem;
   text-transform: uppercase;
   font-family: "Playfair Display", serif;
+  width: 100%;
+
   /* padding: 2rem; */
 
   /* 1200px */
   @media (max-width: 75em) {
+    width: 100%;
     border-bottom: none;
     padding-bottom: 0rem;
-    padding-left: 4rem;
-    grid-row: 1 / 2;
     grid-column: span 2;
+    /* padding-left: 4rem; */
+    /* grid-row: 1 / 2;
+    grid-column: span 2; */
     /* align-self: center; */
-    justify-self: center;
+    /* justify-self: center; */
     /* margin-bottom: 4rem; */
     display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
+    align-items: center;
+    justify-content: center;
   }
 
   /* 930px */
@@ -207,6 +215,7 @@ const StyledNav = styled.nav`
   align-items: flex-start;
   padding: 2rem;
   height: 100%; /* for large screens */
+
   /* 1200px */
   @media (max-width: 75em) {
     display: grid;
@@ -638,31 +647,30 @@ function Account() {
       <StyledAccount $modalOpen={modalOpen}>
         <StyledNav>
           <StyledName>
-            {user?.displayName}{" "}
-            {windowWidth <= 645 && (
-              <StyledNameButton
-                onClick={() => setMenuOpen(!menuOpen)}
-                ref={menuRef}
-              >
-                <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+            {user?.displayName} {/* {windowWidth <= 645 && ( */}
+            <StyledNameButton
+              onClick={() => setMenuOpen(!menuOpen)}
+              ref={menuRef}
+            >
+              <ion-icon name="ellipsis-vertical-outline"></ion-icon>
 
-                {menuOpen && (
-                  <StyledNameOptions>
-                    <li>
-                      <Link
-                        to={`/author/${currentUser.uid}`}
-                        className="view-profile"
-                      >
-                        View Profile
-                      </Link>
-                    </li>
-                    <li className="delete" onClick={() => setModalOpen(true)}>
-                      Delete Account
-                    </li>
-                  </StyledNameOptions>
-                )}
-              </StyledNameButton>
-            )}{" "}
+              {menuOpen && (
+                <StyledNameOptions>
+                  <li>
+                    <Link
+                      to={`/author/${currentUser.uid}`}
+                      className="view-profile"
+                    >
+                      View Profile
+                    </Link>
+                  </li>
+                  <li className="delete" onClick={() => setModalOpen(true)}>
+                    Delete Account
+                  </li>
+                </StyledNameOptions>
+              )}
+            </StyledNameButton>
+            {/* )}{" "} */}
           </StyledName>
 
           <StyledNavList>
