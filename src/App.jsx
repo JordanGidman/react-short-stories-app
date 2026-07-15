@@ -194,6 +194,7 @@ function App() {
   //86 - Responsive design for new story page - Done
   //87 - No tooltip for the delete account and view profile buttons on the account page on mobile layout - Fixed.
   //88 - delete account and profile buttons are missing from the non-mobile layout on the account page. - Fixed.
+  //89 - favorites and mystories sorting by likes doesnt work. - Fixed.
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
@@ -222,6 +223,7 @@ function App() {
   //11 - Add the ability to see who liked a story
   //12 - Mood based recommendations
   //13 - May need an entire account page redesign as im really unhapy with how it all looks at the moment.
+  //14 - Report system for stories, which will auto-hide stories after multiple reports and notify the author.
 
   //UNFIXED BUGS
   //The homepage is not accessible without being signed in.
@@ -233,7 +235,7 @@ function App() {
   //comments allow for random whitespace.
   //tooltips off screen on smaller viewports on story page
   //The next and previous buttons will eventually run out of stories as they are paginated meaning that only a small portion of the stories are pulled at once, the issue here would be at some point next will = nothing. I need to either load the next set of ids, or to wrap around to the beginning/end of the currently pulled ids.
-  //favorites sorting by likes doesnt work.
+
   //spacing on the react logo in the footer is off, it seems to be because the logo is aligned in the center of the grid box but the rest of them are flex-start.
 
   return (

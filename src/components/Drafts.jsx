@@ -327,11 +327,11 @@ function Drafts() {
 
   // Derived sorted stories
   const sortedStories = [...drafts].sort((a, b) => {
-    if (sortBy === "newest")
+    if (sortBy === "oldest")
       return b.createdAt.seconds !== a.createdAt.seconds
         ? b.createdAt.seconds - a.createdAt.seconds
         : b.createdAt.nanoseconds - a.createdAt.nanoseconds;
-    if (sortBy === "oldest")
+    if (sortBy === "newest")
       return b.createdAt.seconds !== a.createdAt.seconds
         ? a.createdAt.seconds - b.createdAt.seconds
         : a.createdAt.nanoseconds - b.createdAt.nanoseconds;
