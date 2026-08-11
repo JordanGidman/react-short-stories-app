@@ -212,6 +212,7 @@ function App() {
   //92 -Fix responsive design of account page now that the followed page is added some of it breaks like the mobile nav breakpoint needing to be bigger now to compensate the extra nav item. - Fixed.
   //93 - when commenting if a toast error is thrown the comment box is now unusable until a refresh. - Fixed.
   //94 - Add aria labels to all buttons and links for accessibility - Done
+  //95 - Added responsive design to the author profile page - Done
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
@@ -247,7 +248,7 @@ function App() {
   //The homepage is not accessible without being signed in.
   //Liking a story doesnt work due to firebase permissions. I want to move likes to the users collection anyway but the user should still be able to affect the likes count on the story page and story card. - Not done
   //Firebase rules dont allow correct access when deployed- Not done
-  //Styling breaks at small viewports on the followed authors/author profile page - Not done
+  //Styling breaks at small viewports on the followed authors page - Not done
   //The next and previous buttons will eventually run out of stories as they are paginated meaning that only a small portion of the stories are pulled at once, the issue here would be at some point next will = nothing. I need to either load the next set of ids, or to wrap around to the beginning/end of the currently pulled ids.
 
   return (

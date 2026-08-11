@@ -30,15 +30,46 @@ const StyledAuthorProfile = styled.div`
   min-height: 100vh;
   padding: 8% 2% 2% 2%;
   font-family: "Playfair Display", sans-serif;
+
+  /* 1200px */
+  @media (max-width: 75em) {
+    /* grid-template-rows: 40% 60%; */
+    /* grid-template-columns: 1fr; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 6.7% 0 0 0;
+  }
+  /* 930px */
+  @media (max-width: 58.125em) {
+    padding: 0rem;
+  }
 `;
 
 const StyledImgWrapper = styled.div`
-  position: fixed;
-  height: 100%;
-  width: 40%;
+  height: 100vh;
+  width: 100%;
 
   display: grid;
   grid-template-columns: 18% 82%;
+
+  /* 1201px */
+  @media (min-width: 75.01em) {
+    position: fixed;
+    width: 40%;
+  }
+
+  /* 1200px */
+  @media (max-width: 75em) {
+    /* position: relative;
+    height: 40vh;
+    width: 100%; */
+    grid-template-columns: 1fr;
+
+    width: 100%;
+    height: 40vh;
+  }
 `;
 
 const StyledAuthorImg = styled.div`
@@ -48,6 +79,13 @@ const StyledAuthorImg = styled.div`
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+
+  /* 1200px */
+  @media (max-width: 75em) {
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+  }
 `;
 
 const StyledBanner = styled.div`
@@ -80,6 +118,11 @@ const StyledBanner = styled.div`
     letter-spacing: 0.1rem;
     /* width: 100%; */
   }
+
+  /* 1200px */
+  @media (max-width: 75em) {
+    display: none;
+  }
 `;
 const StyledAuthorInfo = styled.div`
   width: 100vw;
@@ -92,6 +135,14 @@ const StyledAuthorInfo = styled.div`
     width: 100%;
     height: 100%;
   } */
+
+  /* 1200px */
+  @media (max-width: 75em) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center; */
+  }
 `;
 
 const StyledInfoWrapper = styled.div`
@@ -102,6 +153,11 @@ const StyledInfoWrapper = styled.div`
 const StyledH1 = styled.h1`
   font-size: 6.4rem;
   color: #313131;
+
+  /* 580px */
+  @media (max-width: 36.25em) {
+    font-size: 4.8rem;
+  }
 `;
 
 const StyledSubheading = styled.h3`
@@ -112,12 +168,22 @@ const StyledSubheading = styled.h3`
   font-weight: 500;
   margin-bottom: 4rem;
   font-family: "Montserrat", sans-serif;
+
+  /* 580px */
+  @media (max-width: 36.25em) {
+    font-size: 1.6rem;
+  }
 `;
 
 const FollowButton = styled(Button)`
   font-weight: 500;
   letter-spacing: 0.1rem;
   font-family: "Montserrat", sans-serif;
+
+  /* 580px */
+  @media (max-width: 36.25em) {
+    font-size: 1.4rem;
+  }
 `;
 
 const StyledOverview = styled.div`
@@ -132,6 +198,11 @@ const StyledOverview = styled.div`
   font-weight: 400;
   line-height: 2.2;
   /* padding: 0rem 12rem 0rem 0rem; */
+
+  /* 1200px */
+  @media (max-width: 75em) {
+    margin: 10rem 0 10rem 0;
+  }
 `;
 
 const StyledStories = styled.section``;
@@ -163,6 +234,12 @@ const StoriesContainer = styled.div`
   gap: 1rem;
   min-height: 30vh;
   margin-top: 6rem;
+
+  /* 580px */
+  @media (max-width: 36.25em) {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
 `;
 
 const StyledCard = styled.div`
@@ -221,6 +298,7 @@ const StyledFollowContainer = styled.div`
   gap: 3rem;
 
   font-family: "Montserrat", sans-serif;
+  text-transform: capitalize;
 
   p {
     font-size: 2.2rem;
@@ -228,6 +306,13 @@ const StyledFollowContainer = styled.div`
     span {
       font-weight: 700;
     }
+  }
+
+  /* 580px */
+  @media (max-width: 36.25em) {
+    font-size: 1.6rem;
+    flex-direction: column;
+    align-items: flex-start;
   }
 `;
 

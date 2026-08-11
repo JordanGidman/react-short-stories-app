@@ -103,7 +103,6 @@ function MobileNav({ navOpen, setNavOpen }) {
     auth.signOut();
     toast.success("Signed out.");
   }
-
   return (
     <StyledMobileNav animate={open ? "open" : "closed"} initial={false}>
       <StyledBg variants={bgVariants}>
