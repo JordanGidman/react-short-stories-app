@@ -460,10 +460,14 @@ function Home() {
           </h1>
           <p className="author">{story?.author || "Loading..."}</p>
           <p className="title">{story?.title || "Loading..."}</p>
-          <p className="genre">{story?.genre || "Loading..."}</p>
+          <p className="genre">
+            {story?.genres?.[0]?.split("-").join(" ") || "Loading..."}
+          </p>
           <Button
             onClick={() =>
-              navigate(`/library/${story?.genre}/story/${story?.id}`)
+              navigate(
+                `/library/${story?.genres?.[0]?.split("-").join(" ")}/story/${story?.id}`,
+              )
             }
           >
             read now
@@ -487,17 +491,26 @@ function Home() {
             <p className="author">{freshStory?.author || "Unknown Author"}</p>
             <p className="title">{freshStory?.title || "Title not found"}</p>
             <div className="underline"></div>
-            <p className="genre">{freshStory?.genre || "Genre not found"}</p>
+            <p className="genre">
+              {freshStory?.genres?.[0]?.split("-").join(" ") ||
+                "Genre not found"}
+            </p>
           </div>
           <StyledFreshButton
             onClick={() =>
-              navigate(`/library/${freshStory?.genre}/story/${freshStory?.id}`)
+              navigate(
+                `/library/${freshStory?.genres?.[0]?.split("-").join(" ")}/story/${freshStory?.id}`,
+              )
             }
           >
             Read
           </StyledFreshButton>
           <StyledAltButton
-            onClick={() => navigate(`/library/${freshStory?.genre}`)}
+            onClick={() =>
+              navigate(
+                `/library/${freshStory?.genres?.[0]?.split("-").join(" ")}/story/${freshStory?.id}`,
+              )
+            }
           >
             More stories like this <ion-icon name="arrow-forward"></ion-icon>
           </StyledAltButton>

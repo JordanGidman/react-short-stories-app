@@ -271,7 +271,7 @@ function FavoriteStoryItem({ story, isExpanded, toggleExpand, navigation }) {
     <StyledListItem $expanded={isExpanded}>
       <StyledImg $backgroundImage={story.img} alt={story.title} />
       <StyledTitle
-        to={`/library/${story.genre.split("-").join(" ")}/story/${story.id}`}
+        to={`/library/${story.genres[0]?.split("-").join(" ")}/story/${story.id}`}
         state={{ navigation }}
       >
         {story.title}
@@ -285,14 +285,14 @@ function FavoriteStoryItem({ story, isExpanded, toggleExpand, navigation }) {
         {isExpanded ? "−" : "+"}
       </StyledExpandButton>
       <StyledItemText className="genre" $expanded={isExpanded}>
-        {story.genre}
+        {story?.genres[0]?.split("-").join(" ") || "Misc"}
       </StyledItemText>
       <StyledItemText className="author" $expanded={isExpanded}>
         {story.author}
       </StyledItemText>
       <StyledButtons $expanded={isExpanded}>
         <StyledButton
-          to={`/library/${story.genre}/story/${story.id}`}
+          to={`/library/${story.genres[0]?.split("-").join(" ")}/story/${story.id}`}
           state={{ navigation }}
           className="open"
           aria-label="Read Story"

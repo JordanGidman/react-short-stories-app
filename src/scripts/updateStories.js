@@ -4,7 +4,7 @@ import { readFileSync } from "fs";
 
 // Load Firebase service account key
 const serviceAccount = JSON.parse(
-  readFileSync("./serviceAccountKey.json", "utf8")
+  readFileSync("./serviceAccountKey.json", "utf8"),
 );
 
 admin.initializeApp({
@@ -45,20 +45,35 @@ async function updateStories() {
 
   //   console.log(`✅ Updated story ${doc.id} with likesCount = ${likesCount}`);
   // }
-  for (const doc of snapshot.docs) {
-    const data = doc.data();
 
-    // Only set hidden to false if it doesn't exist
-    // If hidden is already true, leave it unchanged
-    if (data.hidden === undefined) {
-      await db.collection("stories").doc(doc.id).update({
-        hidden: false,
+  // Add hidden variable to all stories if it doesn't exist
+  // for (const doc of snapshot.docs) {
+  //   const data = doc.data();
+
+  //   // Only set hidden to false if it doesn't exist
+  //   // If hidden is already true, leave it unchanged
+  //   if (data.hidden === undefined) {
+  //     await db.collection("stories").doc(doc.id).update({
+  //       hidden: false,
+  //     });
+  //     console.log(`✅ Updated story ${doc.id} with hidden = false`);
+  //   } else {
+  //     console.log(
+  //       `ℹ️ Story ${doc.id} already has hidden = ${data.hidden}, skipping`,
+  //     );
+  //   }
+  // }
+
+  // Migrate all the genre fields to genres array if genre is a string
+  for (const storyDoc of snapshot.docs) {
+    const data = storyDoc.data();
+
+    if (typeof data.genre === "string" && !Array.isArray(data.genres)) {
+      await storyDoc.ref.update({
+        genres: [data.genre],
       });
-      console.log(`✅ Updated story ${doc.id} with hidden = false`);
-    } else {
-      console.log(
-        `ℹ️ Story ${doc.id} already has hidden = ${data.hidden}, skipping`
-      );
+
+      console.log(`Migrated ${storyDoc.id}: ${data.genre} -> [${data.genre}]`);
     }
   }
 

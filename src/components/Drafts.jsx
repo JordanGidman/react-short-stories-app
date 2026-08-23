@@ -438,7 +438,7 @@ function Drafts() {
                   {expandedStories.has(story.id) ? "−" : "+"}
                 </StyledExpandButton>
                 <StyledItemText $expanded={expandedStories.has(story.id)}>
-                  {story.genre || "No Genre"}
+                  {story.genres[0]?.split("-").join(" ") || "No Genre"}
                 </StyledItemText>
                 <StyledItemText
                   $expanded={expandedStories.has(story.id)}

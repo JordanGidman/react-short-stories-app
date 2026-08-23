@@ -226,7 +226,7 @@ function App() {
   //8 - DisplayNames should probably be unique - Not done
   //9 - If its multiple words for display name we should only take the first word and ignore the rest where we read it such as the navbar - Not done
   //10 - Refactor code that is being reused into single components and hooks (such as tooltip and resizepicsumimages) - Partially done
-  //11 - Ability to add multiple genres (will also need to update all places that show a stories genre to compensate as well as the code for reading the genre anywhere that is done as it will now be an array) - Not done
+  //11 - Ability to add multiple genres (will also need to update all places that show a stories genre to compensate as well as the code for reading the genre anywhere that is done as it will now be an array). This is going to be quite difficult as right now we find stories by genre and the url is by genre i.e library/fantast/story but now genre will be multiple so i will have to ensure that the story is pulled for every genre it contains so that /horror will work as will /thriller if it has both - Not done
   //12 - The next and previous stories page will right now only go through the small selection of stories that are pulled for the current page, this will need to be updated to go through all stories in the db as it only has access to 1 page due to pagination only pulling stories from current page to avoid expensive queries. - Not done
   //13 - Need to make it so that comments get paginated as there could be many of them and they will infinitely increase the size of the page and make it slow to load. - Not done
   //14 - The genres on the story page should be clickable links to that genres list of stories. Which i will tackle once multiple genres is implemented - Not donew
@@ -238,6 +238,7 @@ function App() {
   //Styling breaks at small viewports on the followed authors page - Not done
   //The next and previous buttons will eventually run out of stories as they are paginated meaning that only a small portion of the stories are pulled at once, the issue here would be at some point next will = nothing. I need to either load the next set of ids, or to wrap around to the beginning/end of the currently pulled ids.
   //Remove any old pages, where pages have the New tag in the name it needs to be renamed to remove the new tag and the original page needs to be removed.
+  //Genres are bugged
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments

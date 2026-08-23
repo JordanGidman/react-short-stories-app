@@ -103,7 +103,7 @@ function RecommendationsSection({ recommendations }) {
   return (
     <>
       <StyledOffersText>
-        <h2>Want something different?</h2>
+        <h2>Want something similar?</h2>
         <div>
           <ion-icon name="arrow-down-outline"></ion-icon>
           <div className="black-bar"></div>

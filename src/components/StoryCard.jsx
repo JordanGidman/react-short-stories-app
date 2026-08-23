@@ -74,9 +74,25 @@ const StyledSynopsis = styled.p`
   color: #555;
 `;
 
-const StyledGenre = styled.p`
+const StyledGenre = styled.div`
+  display: flex;
+  align-items: center;
   text-transform: capitalize;
-  font-size: 1.4rem;
+  flex-wrap: wrap;
+  font-size: 1.2rem;
+  gap: 0.5rem;
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    .dot {
+      width: 0.4rem;
+      height: 0.4rem;
+      border-radius: 50%;
+      background-color: #555;
+    }
+  }
 `;
 
 const StyledAuthor = styled.p`
@@ -256,10 +272,16 @@ const StoryCard = memo(function StoryCard({ story, navigation }) {
           {/* {story.synopsis || "Synopsis not found"} */}
         </StyledSynopsis>
         <div>
-          <StyledGenre>{story.genre || "Misc"}</StyledGenre>
+          <StyledGenre>
+            {story.genres.map((genre, index) => (
+              <span key={index}>
+                {genre} <div className="dot" />
+              </span>
+            ))}
+          </StyledGenre>
           <StyledButtons>
             <StyledLink
-              to={`/library/${story.genre}/story/${story.id}`}
+              to={`/library/${story.genres[0]}/story/${story.id}`}
               state={{ navigation }}
             >
               <StyledButton>Read</StyledButton>

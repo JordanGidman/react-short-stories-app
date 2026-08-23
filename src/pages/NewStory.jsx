@@ -178,6 +178,7 @@ const StyledGenres = styled.div`
   gap: 2rem;
   padding-top: 2em;
   width: 100%;
+  flex-wrap: wrap;
 
   p {
     display: flex;
@@ -325,12 +326,14 @@ function NewStory() {
       ? storyInfo[currentIndex - 1]
       : storyInfo[storyInfo.length - 1];
 
+  // console.log(story.genres);
+
   // Fetch recommendations (2 random stories from different genres)
   useEffect(() => {
     if (!story) return;
     const recommendationsQuery = query(
       collection(db, "stories"),
-      where("genre", "!=", story.genre),
+      where("genres", "array-contains", story.genres[0]),
       limit(2),
     );
     const unsub = onSnapshot(
@@ -487,7 +490,10 @@ function NewStory() {
         <Comments storyId={story.id} />
         <StyledDetails>
           <StyledGenres>
-            <p>{story.genre}</p>
+            {story.genres.map((genre, index) => (
+              <p key={index}>{genre}</p>
+            ))}
+            {/* <p>{story.genre}</p> */}
             {/* <p>Horror</p>
             <p>Thriller</p>
             <p>Existential</p> */}
@@ -497,7 +503,7 @@ function NewStory() {
             <NavButtons>
               <BtnItem>
                 <BtnLink
-                  to={`/library/${story.genre}/story/${prevStory.storyId}`}
+                  to={`/library/${story.genres[0]}/story/${prevStory.storyId}`}
                   state={{ navigation }}
                 >
                   <ion-icon name="chevron-back-outline"></ion-icon>
@@ -510,7 +516,7 @@ function NewStory() {
               <div className="btn-divider"></div>
               <BtnItem>
                 <BtnLink
-                  to={`/library/${story.genre}/story/${nextStory.storyId}`}
+                  to={`/library/${story.genres[0]}/story/${nextStory.storyId}`}
                   state={{ navigation }}
                 >
                   <BtnText>

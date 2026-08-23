@@ -250,7 +250,8 @@ function StoryList() {
         // Base query - genre + hidden
         let baseQuery = query(
           storiesRef,
-          where("genre", "==", genreName),
+          where("genres", "array-contains", genreName),
+          // where("genres", "array-contains", genreName),
           where("hidden", "==", false),
         );
 
@@ -301,6 +302,7 @@ function StoryList() {
     [genreName, sortBy],
   );
 
+  console.log(stories);
   // Fetch first page when genre or sort changes
   useEffect(() => {
     setStories([]);

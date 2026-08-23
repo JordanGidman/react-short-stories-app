@@ -399,6 +399,8 @@ function MyStories() {
   const toastShown = useRef(false);
   const navigation = createNavigation(sortedStories, "mystories");
 
+  console.log(stories[0]?.genres);
+
   useEffect(() => {
     if (location.state?.storyCreated && !toastShown.current) {
       toastShown.current = true;
@@ -526,7 +528,7 @@ function MyStories() {
               >
                 <StyledImg $backgroundImage={story.img} alt={story.title} />
                 <StyledTitle
-                  to={`/library/${story.genre.split("-").join(" ")}/story/${
+                  to={`/library/${story.genres[0]?.split("-").join(" ")}/story/${
                     story.id
                   }`}
                   state={{ navigation }}
@@ -537,7 +539,7 @@ function MyStories() {
                   {expandedStories.has(story.id) ? "−" : "+"}
                 </StyledExpandButton>
                 <StyledItemText $expanded={expandedStories.has(story.id)}>
-                  {story.genre}
+                  {story.genres[0]?.split("-").join(" ")}
                 </StyledItemText>
                 <StyledItemText $expanded={expandedStories.has(story.id)}>
                   Created:{" "}
