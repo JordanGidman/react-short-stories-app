@@ -1,0 +1,516 @@
+import styled from "styled-components";
+import Button from "../components/Button";
+import InputBox from "../components/InputBox";
+import "react-quill-new/dist/quill.snow.css";
+import ReactQuill from "react-quill-new";
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../firebase";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Error from "./Error";
+
+const StyledWriteBook = styled.main`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  gap: 2rem;
+  padding: 0% 5%;
+
+  background-color: #f9f9f9;
+
+  min-height: 100vh;
+`;
+
+const StyledH1 = styled.h1`
+  font-size: 1.6rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  font-family: "Playfair Display", sans-serif;
+  font-style: italic;
+`;
+
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
+  gap: 1.5rem;
+  width: 100%;
+  min-height: 100vh;
+  padding-top: 10rem;
+  padding-bottom: 3rem;
+
+  flex: 1;
+
+  .text-editor {
+    font-size: 1.6rem;
+    width: 100%;
+    border-radius: 1.6rem;
+    min-height: 3rem;
+    flex: 1;
+    padding-bottom: 4rem;
+    font-family: "Montserrat", sans-serif;
+    background-color: #fff;
+
+    .ql-toolbar {
+      border: none !important;
+      box-shadow: 0rem 0.8rem 0.6rem -1rem rgba(0, 0, 0, 0.3);
+    }
+
+    .ql-container {
+      border: none !important;
+      height: auto !important;
+      .ql-editor {
+        font-size: 1.6rem;
+        font-family: "Montserrat", sans-serif;
+        box-shadow: 0rem 0.8rem 0.6rem -1rem rgba(0, 0, 0, 0.8);
+        font-style: italic;
+
+        min-height: 35vh;
+        overflow-y: visible;
+
+        &::before {
+          text-transform: capitalize;
+        }
+
+        @media (max-width: 28em) {
+          font-size: 1.4rem;
+        }
+      }
+    }
+  }
+`;
+
+const StyledWrapper = styled.div`
+  width: 100%;
+`;
+
+const TitleInput = styled.textarea`
+  font-size: 4rem;
+  background-color: transparent;
+  width: 100%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: none;
+  padding-top: 0rem;
+  padding: 1rem 2rem;
+  padding-left: 0rem;
+
+  border: none;
+  color: #1c1f2e;
+  border-radius: 1.6rem;
+  font-family: "Montserrat", sans-serif;
+
+  &::placeholder {
+    color: rgb(0, 0, 0, 0.5);
+    font-style: italic;
+    text-transform: capitalize;
+  }
+
+  @media (max-width: 28em) {
+    font-size: 3rem;
+  }
+`;
+
+const StyledGenres = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  flex-direction: column;
+  align-items: flex-start;
+
+  /* 480px */
+  @media (max-width: 28em) {
+  }
+`;
+
+const GenreContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  flex-wrap: wrap;
+`;
+
+const StyledGenre = styled.span`
+  font-style: italic;
+  text-transform: capitalize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  background-color: #cecece;
+  padding: 1rem 2rem;
+  text-transform: capitalize;
+  border-radius: 2em;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background-color: #ffee34;
+    cursor: pointer;
+  }
+
+  /* 480px */
+  @media (max-width: 28em) {
+    font-size: 1.2rem;
+  }
+`;
+
+const StyledSelect = styled.select`
+  font-size: 1.6rem;
+  border-radius: 1.6rem;
+  width: 20rem;
+  padding: 1rem 2rem;
+  border: none;
+  border-bottom: 1px solid rgb(0, 0, 0, 0.2);
+  text-transform: capitalize;
+  font-style: italic;
+  color: #1c1f2e;
+
+  &[data-chosen-placeholder] {
+    color: rgb(0, 0, 0, 0.5);
+  }
+
+  /* 480px */
+  @media (max-width: 28em) {
+    font-size: 1.4rem;
+  }
+`;
+
+const StyledOption = styled.option`
+  /* color: #1c1f2e; */
+  color: #1c1f2e;
+`;
+
+const StyledInputBox = styled(InputBox)`
+  width: 100%;
+
+  /* 480px */
+  @media (max-width: 28em) {
+    font-size: 1.4rem;
+  }
+`;
+
+const StyledTextarea = styled.textarea`
+  width: 100%;
+  min-height: 7.8rem;
+  padding: 1rem 2rem;
+  font-size: 1.6rem;
+  border: none;
+  box-shadow: 0rem 0.8rem 0.6rem -1rem rgba(0, 0, 0, 0.8);
+  color: #1c1f2e;
+  border-radius: 1.6rem;
+  font-family: "Montserrat", sans-serif;
+  &::placeholder {
+    color: rgb(0, 0, 0, 0.5);
+    font-style: italic;
+    text-transform: capitalize;
+  }
+
+  @media (max-width: 28em) {
+    font-size: 1.4rem;
+  }
+`;
+
+const StyledButtons = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+
+  /* 480px */
+  @media (max-width: 30em) {
+    flex-direction: column;
+  }
+`;
+
+const StyledButton = styled(Button)`
+  width: 30vw;
+  align-self: center;
+  font-weight: 600;
+
+  /* 670px */
+  @media (max-width: 41.2em) {
+    width: 50%;
+  }
+`;
+
+function WriteBook() {
+  const { currentUser } = useContext(AuthContext);
+  const [storyText, setStoryText] = useState("");
+  const [title, setTitle] = useState("");
+
+  const [genres, setGenres] = useState([]);
+  const [synopsis, setSynopsis] = useState("");
+  const [img, setImg] = useState(`https://picsum.photos/seed/hireme/600/400`);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [isDirty, setIsDirty] = useState(false);
+
+  const navigate = useNavigate();
+
+  //Check for unsaved changes and inform the user before leaving the page
+  (useEffect(() => {
+    if (!isDirty) return;
+
+    const handler = (e) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }),
+    [isDirty]);
+
+  async function handleSubmit(e, isDraft) {
+    console.log(e);
+    e.preventDefault();
+
+    if (!currentUser) {
+      toast.error(`No user logged in.`);
+    }
+    //Form validation
+    const allowedChars = /^[a-zA-Z0-9\s.,!?'"-:;()\n\r]+$/;
+    //Make sure required fields arent empty
+    if (!title || !genres.length || !synopsis || !storyText) {
+      toast.error("Please fill all required fields marked with *");
+      return;
+    }
+    //Make sure no special characters are being used and the title and synopsis arent too long and the story is more than 10 characters to avoid accidental submissions.
+    if (!allowedChars.test(title) || title.split("").length > 100) {
+      toast.error(
+        "Title must be less than 100 characters long, and must NOT contain any special characters",
+      );
+      return;
+    }
+
+    if (!allowedChars.test(synopsis) || synopsis.split("").length > 500) {
+      toast.error(
+        "Synopsis must be less than 500 characters long, and must NOT contain any special characters",
+      );
+      return;
+    }
+    //we dont need to check for special characters because A) we do want some of them and B) I DOMPurify this before rendering it.
+    if (storyText.split("").length < 10) {
+      toast.error("story must be more than 10 characters long.");
+      return;
+    }
+
+    //Save input data to firebase
+    try {
+      let docRef;
+
+      //Create a new story document
+      setLoading(true);
+      if (!isDraft) {
+        docRef = await addDoc(collection(db, "stories"), {
+          title,
+          genres,
+          synopsis,
+          img,
+          storyText,
+          creatorID: currentUser.uid,
+          createdAt: new Date(),
+          author: currentUser.displayName,
+          isSeedData: false,
+          hidden: false,
+          randomNumber: Math.random(),
+        });
+      } else {
+        //Create a new draft in the users drafts array
+        await updateDoc(doc(db, "users", currentUser.uid), {
+          drafts: arrayUnion({
+            draftId: crypto.randomUUID(),
+            title,
+            genres,
+            synopsis,
+            img,
+            storyText,
+            creatorID: currentUser.uid,
+            createdAt: new Date(),
+            author: currentUser.displayName,
+            isSeedData: false,
+            hidden: false,
+            randomNumber: Math.random(),
+          }),
+        });
+
+        console.log(docRef);
+      }
+
+      //add the story id to the stories array of the user that created it
+      docRef &&
+        (await updateDoc(doc(db, "users", currentUser.uid), {
+          stories: arrayUnion(docRef.id),
+        }));
+
+      //Navigate to the book page for this story
+
+      navigate(
+        `/account/${currentUser.uid}/${isDraft ? "drafts" : "mystories"}`,
+        {
+          state: { storyCreated: true },
+        },
+      );
+    } catch (error) {
+      toast.error(`Error: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function addGenre(genre) {
+    //user clicks a genre from the select menu
+    //add that genre to the genre array
+
+    !genres.includes(genre) &&
+      setGenres((prevGenres) => [...prevGenres, genre]);
+    console.log(genres);
+  }
+
+  function removeGenre(genre) {
+    //user clicks a genre from the list of genres
+    //remove that genre from the genre array and add it back to the select menu
+    setGenres((prevGenres) => prevGenres.filter((g) => g !== genre));
+  }
+
+  return (
+    <>
+      {!error ? (
+        <StyledWriteBook>
+          <StyledWrapper>
+            <StyledForm onSubmit={(e) => handleSubmit(e)}>
+              <StyledH1>Write your story</StyledH1>
+              <TitleInput
+                type="text"
+                placeholder="Title of your story *"
+                disabled={loading}
+                value={title}
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                  setIsDirty(true);
+                }}
+              />
+              <StyledGenres>
+                <StyledSelect
+                  name="genre"
+                  disabled={loading}
+                  value={"Misc"}
+                  onChange={(e) => {
+                    addGenre(e.target.value);
+                  }}
+                >
+                  <StyledOption name="placeholder" value="Misc" disabled hidden>
+                    Select Genre *
+                  </StyledOption>
+                  <StyledOption value="Fantasy">Fantasy</StyledOption>
+                  <StyledOption value="Science Fiction">
+                    Science Fiction
+                  </StyledOption>
+                  <StyledOption value="Gaming">Gaming</StyledOption>
+                  <StyledOption value="Mystery">Mystery</StyledOption>
+                  <StyledOption value="Romance">Romance</StyledOption>
+                  <StyledOption value="Horror">Horror</StyledOption>
+                  <StyledOption value="Thriller">Thriller</StyledOption>
+                  <StyledOption value="Historical">Historical</StyledOption>
+                  <StyledOption value="Adventure">Adventure</StyledOption>
+                  <StyledOption value="Action">Action</StyledOption>
+                  <StyledOption value="Crime">Crime</StyledOption>
+                  <StyledOption value="Comedy">Comedy</StyledOption>
+                  <StyledOption value="Religious">Religious</StyledOption>
+                  <StyledOption value="Political">Political</StyledOption>
+                  <StyledOption value="Existential">Existential</StyledOption>
+                  <StyledOption value="War">War</StyledOption>
+                  <StyledOption value="Educational">Educational</StyledOption>
+                  <StyledOption value="Drama">Drama</StyledOption>
+                  <StyledOption value="Other">Other</StyledOption>
+                </StyledSelect>
+                <GenreContainer>
+                  {genres.map((genre) => (
+                    <StyledGenre key={genre} onClick={() => removeGenre(genre)}>
+                      {genre}
+                    </StyledGenre>
+                  ))}
+                </GenreContainer>
+              </StyledGenres>
+
+              <StyledTextarea
+                type="textarea"
+                placeholder="A short synopsis of your story *"
+                disabled={loading}
+                value={synopsis}
+                onChange={(e) => {
+                  setSynopsis(e.target.value);
+                  setIsDirty(true);
+                }}
+              />
+              <StyledInputBox
+                type="text"
+                placeholder="Image URL (Firebase no longer allows free image uploads leave blank for a placeholder or put any image url. )"
+                disabled={loading}
+                value={img}
+                onChange={(e) =>
+                  setImg(
+                    e.target.value
+                      ? e.target.value
+                      : `https://picsum.photos/seed/hireme/600/400`,
+                  )
+                }
+              />
+              <ReactQuill
+                theme="snow"
+                placeholder="Write your story here... *"
+                className="text-editor"
+                value={storyText}
+                onChange={(value) => {
+                  setStoryText(value);
+                  setIsDirty(true);
+                }}
+                readOnly={loading}
+              />
+              <StyledButtons>
+                <StyledButton
+                  type="button"
+                  disabled={loading}
+                  //Draft mode
+                  onClick={(e) => handleSubmit(e, true)}
+                >
+                  {loading ? "Saving..." : "Save as draft"}
+                </StyledButton>
+
+                <StyledButton
+                  type="button"
+                  disabled={loading}
+                  //Publish mode
+                  onClick={(e) => handleSubmit(e, false)}
+                >
+                  {loading ? "Posting..." : "Post"}
+                </StyledButton>
+              </StyledButtons>
+              {/* Maybe a button for saving as draft */}
+            </StyledForm>
+          </StyledWrapper>
+        </StyledWriteBook>
+      ) : (
+        <Error />
+      )}
+    </>
+  );
+}
+
+export default WriteBook;

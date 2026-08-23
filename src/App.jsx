@@ -14,6 +14,7 @@ const SignUp = lazy(() => import("./pages/SignUp"));
 const About = lazy(() => import("./pages/About"));
 const Account = lazy(() => import("./pages/Account"));
 const WriteStory = lazy(() => import("./pages/WriteStory"));
+const WriteStoryNew = lazy(() => import("./pages/WriteStoryNew"));
 const Library = lazy(() => import("./pages/Library"));
 const StoryList = lazy(() => import("./pages/StoryList"));
 const Story = lazy(() => import("./pages/Story"));
@@ -213,6 +214,7 @@ function App() {
   //93 - when commenting if a toast error is thrown the comment box is now unusable until a refresh. - Fixed.
   //94 - Add aria labels to all buttons and links for accessibility - Done
   //95 - Added responsive design to the author profile page - Done
+  //96 - redesign story page - Done
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
@@ -221,14 +223,21 @@ function App() {
   //4 - Deployment - Not done
   //5 - Add a section to view stories the user has liked. - Not done
   //6 - Add ability to see who is following you - Not done.
-  //7 - redesign story page - Not done
   //8 - DisplayNames should probably be unique - Not done
   //9 - If its multiple words for display name we should only take the first word and ignore the rest where we read it such as the navbar - Not done
   //10 - Refactor code that is being reused into single components and hooks (such as tooltip and resizepicsumimages) - Partially done
   //11 - Ability to add multiple genres (will also need to update all places that show a stories genre to compensate as well as the code for reading the genre anywhere that is done as it will now be an array) - Not done
   //12 - The next and previous stories page will right now only go through the small selection of stories that are pulled for the current page, this will need to be updated to go through all stories in the db as it only has access to 1 page due to pagination only pulling stories from current page to avoid expensive queries. - Not done
   //13 - Need to make it so that comments get paginated as there could be many of them and they will infinitely increase the size of the page and make it slow to load. - Not done
-  //14 - The genres on the story page should be clickable links to that genres list of stories. Which i will tackle once multiple genres is implemented - Not done
+  //14 - The genres on the story page should be clickable links to that genres list of stories. Which i will tackle once multiple genres is implemented - Not donew
+
+  //UNFIXED BUGS
+  //The homepage is not accessible without being signed in.
+  //Liking a story doesnt work due to firebase permissions. I want to move likes to the users collection anyway but the user should still be able to affect the likes count on the story page and story card. - Not done
+  //Firebase rules dont allow correct access when deployed- Not done
+  //Styling breaks at small viewports on the followed authors page - Not done
+  //The next and previous buttons will eventually run out of stories as they are paginated meaning that only a small portion of the stories are pulled at once, the issue here would be at some point next will = nothing. I need to either load the next set of ids, or to wrap around to the beginning/end of the currently pulled ids.
+  //Remove any old pages, where pages have the New tag in the name it needs to be renamed to remove the new tag and the original page needs to be removed.
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments
@@ -243,13 +252,6 @@ function App() {
   //10 - Mood based recommendations
   //11 - May need an entire account page redesign as im really unhapy with how it all looks at the moment.
   //12 - Report system for stories, which will auto-hide stories after multiple reports and notify the author.
-
-  //UNFIXED BUGS
-  //The homepage is not accessible without being signed in.
-  //Liking a story doesnt work due to firebase permissions. I want to move likes to the users collection anyway but the user should still be able to affect the likes count on the story page and story card. - Not done
-  //Firebase rules dont allow correct access when deployed- Not done
-  //Styling breaks at small viewports on the followed authors page - Not done
-  //The next and previous buttons will eventually run out of stories as they are paginated meaning that only a small portion of the stories are pulled at once, the issue here would be at some point next will = nothing. I need to either load the next set of ids, or to wrap around to the beginning/end of the currently pulled ids.
 
   return (
     <AuthContextProvider>
@@ -298,7 +300,7 @@ function App() {
                   path="write"
                   element={
                     <ProtectedRoute>
-                      <WriteStory />
+                      <WriteStoryNew />
                     </ProtectedRoute>
                   }
                 />
