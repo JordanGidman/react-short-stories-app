@@ -5,8 +5,11 @@ import styled from "styled-components";
 import book from "../img/book.webp";
 import {
   collection,
+  endBefore,
+  getCountFromServer,
   getDocs,
   limit,
+  limitToLast,
   orderBy,
   query,
   startAfter,
@@ -210,7 +213,7 @@ const LoadMoreButton = styled.button`
   padding: 1rem 2rem;
   font-weight: 600;
   border-radius: 0.5rem;
-  margin-top: 3rem;
+
   font-size: 1.6rem;
   cursor: pointer;
   &:hover {
@@ -222,6 +225,14 @@ const LoadMoreButton = styled.button`
   }
 `;
 
+const PageNavigation = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem;
+  margin-top: 3rem;
+`;
+
 function StoryList() {
   const { genre } = useParams();
   const [stories, setStories] = useState([]);
@@ -229,9 +240,15 @@ function StoryList() {
   const [error, setError] = useState(null);
   const [sortBy, setSortBy] = useState("placeholder");
   const [search, setSearch] = useState("");
-  const [lastDoc, setLastDoc] = useState(null);
-  const lastDocRef = useRef(null);
+
+  const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [totalDocs, setTotalDocs] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
+  const firstDocRef = useRef(null);
+  const lastDocRef = useRef(null);
+  const currentPageRef = useRef(1);
 
   //Capitalize genre to match stored format
   const genreName = genre
@@ -240,7 +257,7 @@ function StoryList() {
     .join(" ");
 
   const fetchStories = useCallback(
-    async (reset = false) => {
+    async (direction = "initial") => {
       setLoading(true);
       setError(null);
 
@@ -248,7 +265,7 @@ function StoryList() {
         const storiesRef = collection(db, "stories");
 
         // Base query - genre + hidden
-        let baseQuery = query(
+        const baseQuery = query(
           storiesRef,
           where("genres", "array-contains", genreName),
           // where("genres", "array-contains", genreName),
@@ -257,45 +274,70 @@ function StoryList() {
 
         // Sorting
         let q;
-        if (sortBy === "newest")
+
+        if (sortBy === "newest") {
           q = query(baseQuery, orderBy("createdAt", "desc"));
-        else if (sortBy === "oldest")
+        } else if (sortBy === "oldest") {
           q = query(baseQuery, orderBy("createdAt", "asc"));
-        else if (sortBy === "mostlikes")
+        } else if (sortBy === "mostlikes") {
           q = query(baseQuery, orderBy("likesCount", "desc"));
-        else if (sortBy === "leastlikes")
+        } else if (sortBy === "leastlikes") {
           q = query(baseQuery, orderBy("likesCount", "asc"));
-        else q = query(baseQuery, orderBy("createdAt", "desc"));
-
-        // Pagination - fetch one extra doc to check if more exist
-        const fetchLimit = PAGE_SIZE + 1;
-
-        //Pull everything after the last doc if it exists, otherwise just pull the first page
-        if (!reset && lastDocRef.current) {
-          q = query(q, startAfter(lastDocRef.current), limit(fetchLimit));
         } else {
-          q = query(q, limit(fetchLimit));
+          q = query(baseQuery, orderBy("createdAt", "desc"));
+        }
+
+        // Get total count
+        const countSnapshot = await getCountFromServer(baseQuery);
+        const total = countSnapshot.data().count;
+        const calculatedTotalPages = Math.ceil(total / PAGE_SIZE);
+
+        setTotalDocs(total);
+        setTotalPages(calculatedTotalPages);
+
+        // Determine target page
+        let targetPage;
+
+        if (direction === "next") {
+          targetPage = currentPageRef.current + 1;
+        } else if (direction === "previous") {
+          targetPage = currentPageRef.current - 1;
+        } else {
+          targetPage = 1;
+        }
+
+        // Don't fetch outside valid page range
+        if (targetPage < 1 || targetPage > calculatedTotalPages) {
+          return;
+        }
+
+        // Pagination query
+        if (direction === "next") {
+          q = query(q, startAfter(lastDocRef.current), limit(PAGE_SIZE));
+        } else if (direction === "previous") {
+          q = query(q, endBefore(firstDocRef.current), limitToLast(PAGE_SIZE));
+        } else {
+          q = query(q, limit(PAGE_SIZE));
         }
 
         const snapshot = await getDocs(q);
 
-        // Check if there is another page
-        const fetched = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
-        const hasNextPage = fetched.length > PAGE_SIZE;
+        const fetched = snapshot.docs.map((d) => ({
+          id: d.id,
+          ...d.data(),
+        }));
 
-        // Slice off the extra doc if it exists
-        const pageStories = hasNextPage ? fetched.slice(0, PAGE_SIZE) : fetched;
+        // Store cursors
+        firstDocRef.current = snapshot.docs[0] ?? null;
+        lastDocRef.current = snapshot.docs[snapshot.docs.length - 1] ?? null;
 
-        // Update lastDoc for next pagination
-        const last = snapshot.docs[pageStories.length - 1] ?? null;
-        lastDocRef.current = last;
+        // Store current page
+        currentPageRef.current = targetPage;
+        setCurrentPage(targetPage);
 
-        // Update state
-        // setStories((prev) => (reset ? pageStories : [...prev, ...pageStories]));
-        setStories(pageStories);
-        setHasMore(hasNextPage);
-        setLastDoc(last);
-        setLoading(false);
+        setStories(fetched);
+        //Check if there are more pages to fetch
+        setHasMore(targetPage < calculatedTotalPages);
       } catch (err) {
         console.error("Firestore fetch error:", err);
         setError("Failed to load stories. Please try again later.");
@@ -310,10 +352,15 @@ function StoryList() {
   // Fetch first page when genre or sort changes
   useEffect(() => {
     setStories([]);
-    setLastDoc(null);
+
+    currentPageRef.current = 1;
+    firstDocRef.current = null;
     lastDocRef.current = null;
+
+    setCurrentPage(1);
     setHasMore(true);
-    fetchStories(true);
+
+    fetchStories("initial");
   }, [fetchStories]);
 
   // Apply client-side search (server handles filtering/sorting)
@@ -385,13 +432,34 @@ function StoryList() {
           ))}
         </StyledList>
 
-        {hasMore && !loading && (
+        {/* {hasMore && !loading && (
           <LoadMoreButton onClick={() => fetchStories(false)}>
             Next Page
           </LoadMoreButton>
+        )} */}
+        {totalPages > 1 && (
+          <PageNavigation>
+            <LoadMoreButton
+              disabled={currentPage === 1 || loading}
+              onClick={() => fetchStories("previous")}
+            >
+              Previous Page
+            </LoadMoreButton>
+
+            <span>
+              Page {currentPage} of {totalPages}
+            </span>
+
+            <LoadMoreButton
+              disabled={currentPage === totalPages || loading}
+              onClick={() => fetchStories("next")}
+            >
+              Next Page
+            </LoadMoreButton>
+          </PageNavigation>
         )}
 
-        {loading && stories.length > 0 && <Spinner />}
+        {/* {loading && stories.length > 0 && <Spinner />} */}
       </StyledContainer>
     </StyledStoryList>
   );
