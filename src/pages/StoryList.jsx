@@ -270,6 +270,7 @@ function StoryList() {
         // Pagination - fetch one extra doc to check if more exist
         const fetchLimit = PAGE_SIZE + 1;
 
+        //Pull everything after the last doc if it exists, otherwise just pull the first page
         if (!reset && lastDocRef.current) {
           q = query(q, startAfter(lastDocRef.current), limit(fetchLimit));
         } else {
@@ -290,8 +291,11 @@ function StoryList() {
         lastDocRef.current = last;
 
         // Update state
-        setStories((prev) => (reset ? pageStories : [...prev, ...pageStories]));
+        // setStories((prev) => (reset ? pageStories : [...prev, ...pageStories]));
+        setStories(pageStories);
         setHasMore(hasNextPage);
+        setLastDoc(last);
+        setLoading(false);
       } catch (err) {
         console.error("Firestore fetch error:", err);
         setError("Failed to load stories. Please try again later.");
@@ -383,7 +387,7 @@ function StoryList() {
 
         {hasMore && !loading && (
           <LoadMoreButton onClick={() => fetchStories(false)}>
-            Load More
+            Next Page
           </LoadMoreButton>
         )}
 

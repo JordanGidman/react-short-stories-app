@@ -32,6 +32,7 @@ import RecommendationsSection from "../components/RecommendationsSection";
 import StoryHeader from "../components/StoryHeader";
 import { useStory } from "../hooks/useStory";
 import { useAuthor } from "../hooks/useAuthor";
+import { useNavigate } from "react-router-dom";
 
 const StyledStory = styled.div`
   display: grid;
@@ -303,13 +304,14 @@ function NewStory() {
   } = useAuthor(story);
   const countryData = getData();
   const country = countryData.find((c) => c.code === author?.country)?.name;
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
   const location = useLocation();
   const [fontSize, setFontSize] = useState("medium"); // State for font size
+  const navigate = useNavigate();
 
-  //This needs to be passed again when navigating to the next or prev story in order for this same component to have access to it when opened from another page in this case the story page
+  //This needs to be passed again when navigating to the next or prev story in order for this same component to have access to it when opened from another page in this case the story page. The createNavigation can be found in the StoryList page.
   const navigation = location?.state?.navigation ?? [];
   const storyInfo = navigation?.storyInfo ?? [];
   //I need the index of the current story in the location.state so that i can get the names and ids of the next and previous stories
@@ -350,6 +352,8 @@ function NewStory() {
         console.error("Error fetching recommendations:", err);
       },
     );
+
+    return () => unsub();
   }, [story]);
 
   // fetch current user data
@@ -491,7 +495,9 @@ function NewStory() {
         <StyledDetails>
           <StyledGenres>
             {story.genres.map((genre, index) => (
-              <p key={index}>{genre}</p>
+              <p key={index} onClick={() => navigate(`/library/${genre}`)}>
+                {genre}
+              </p>
             ))}
             {/* <p>{story.genre}</p> */}
             {/* <p>Horror</p>
