@@ -218,20 +218,19 @@ function App() {
   //97 - The genres on the story page should be clickable links to that genres list of stories. Which i will tackle once multiple genres is implemented - Done
   //98 - Styling breaks at small viewports on the followed authors page - Done
   //99 - Ability to add multiple genres to a story - Done
+  //100 - If its multiple words for display name we should only take the first word and ignore the rest where we read it such as the navbar - Done
+  //101 - Add a cap to the amount of stories and comments a user can post on the off chance someone tries to spam the site with stories and comments. - Not done
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
   //2 - Optimizations(Img compression, lazy loading, code splitting, memoization, refactors, etc) - Partially done
   //3 - Accessibility Improvements - Partially done
   //4 - Deployment - Not done
-  //5 - Add a section to view stories the user has liked. - Not done
-  //6 - Add ability to see who is following you - Not done.
-  //7 - DisplayNames should probably be unique - Not done
-  //8 - If its multiple words for display name we should only take the first word and ignore the rest where we read it such as the navbar - Not done
-  //9 - Refactor code that is being reused into single components and hooks (such as tooltip and resizepicsumimages) - Partially done
-  //10 - The next and previous stories page will right now only go through the small selection of stories that are pulled for the current page, this will need to be updated to go through all stories in the db as it only has access to 1 page due to pagination only pulling stories from current page to avoid expensive queries. - Not done
-  //11 - Need to make it so that comments get paginated as there could be many of them and they will infinitely increase the size of the page and make it slow to load. - Not done
-  //12 - Pagination on the storyList likely needs to be reworked, right now it will just render the new stories under the orginal ones which at scale could slow the page alot, it seems to me that theres 2 solutions either i un-render the stories not in the viewport and render them when they are or i need to create actual seperate pages. We can get the page numbers by checking the total amount of docs and dividing it by the page size, then simple request the docs between the start and end index of the page number. I have made it so it only renders 1 page at a time, now it needs a way to navigate between pages and the next and previous story buttons need to work across pages as right now they only work for the current page. - Partially done
+  //5 - Add ability to see who is following you - Not done.
+  //6 - Refactor code that is being reused into single components and hooks (such as tooltip and resizepicsumimages) - Partially done
+  //7 - The next and previous stories page will right now only go through the small selection of stories that are pulled for the current page, this will need to be updated to go through all stories in the db as it only has access to 1 page due to pagination only pulling stories from current page to avoid expensive queries. - Not done
+  //8 - Need to make it so that comments get paginated as there could be many of them and they will infinitely increase the size of the page and make it slow to load. - Not done
+  //9 - Pagination on the storyList likely needs to be reworked, right now it will just render the new stories under the orginal ones which at scale could slow the page alot, it seems to me that theres 2 solutions either i un-render the stories not in the viewport and render them when they are or i need to create actual seperate pages. We can get the page numbers by checking the total amount of docs and dividing it by the page size, then simple request the docs between the start and end index of the page number. I have made it so it only renders 1 page at a time, now it needs a way to navigate between pages and the next and previous story buttons need to work across pages as right now they only work for the current page. - Partially done
 
   //UNFIXED BUGS
   //The homepage is not accessible without being signed in.
@@ -239,7 +238,7 @@ function App() {
   //Firebase rules dont allow correct access when deployed- Not done
   //The next and previous buttons will eventually run out of stories as they are paginated meaning that only a small portion of the stories are pulled at once, the issue here would be at some point next will = nothing. For now it loops around to the beginning of the ids already pulled but this will likely need to change to pull the next set of id's from the db when the end of the current set is reached. - Not done
   //Remove any old pages, where pages have the New tag in the name it needs to be renamed to remove the new tag and the original page needs to be removed.
-  //Genres are bugged
+  //The modal window for deleting stories is bugged on mobile layout, the buttons are not shown and the text is squished - Not done
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments
@@ -254,6 +253,8 @@ function App() {
   //10 - Mood based recommendations
   //11 - May need an entire account page redesign as im really unhapy with how it all looks at the moment.
   //12 - Report system for stories, which will auto-hide stories after multiple reports and notify the author.
+  //13 - Ability to click page numbers on the storyList to go to a specific page instead of just next and previous.
+  //14 - Add a section to view stories the user has liked. - Not done
 
   return (
     <AuthContextProvider>

@@ -127,7 +127,7 @@ function MobileNav({ navOpen, setNavOpen }) {
                   to={`/account/${currentUser.uid}`}
                   onClick={() => setOpen(false)}
                 >
-                  {userInfo?.displayName || "Account"}
+                  {userInfo?.displayName.split(" ")[0] || "Account"}
                 </StyledNavLink>
               </motion.li>
               <motion.li variants={linkVariants}>

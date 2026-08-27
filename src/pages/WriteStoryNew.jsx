@@ -8,7 +8,10 @@ import {
   arrayUnion,
   collection,
   doc,
+  getDocs,
+  query,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { useContext, useEffect, useState } from "react";
@@ -281,9 +284,35 @@ function WriteBook() {
     console.log(e);
     e.preventDefault();
 
+    //Check if user is logged in
     if (!currentUser) {
       toast.error(`No user logged in.`);
+      return;
     }
+    //Check user has fewer than 3 stories or drafts, if they have 3 or more, prevent them from posting and inform them they need to delete some stories or drafts before posting more.
+
+    const storiesQuery = query(
+      collection(db, "stories"),
+      where("creatorID", "==", currentUser.uid),
+    );
+    const querySnapshot = await getDocs(storiesQuery);
+
+    const draftsQuery = query(
+      collection(db, "users"),
+      where("uid", "==", currentUser.uid),
+    );
+    const draftsSnapshot = await getDocs(draftsQuery);
+
+    if (
+      querySnapshot.size >= 3 ||
+      draftsSnapshot.docs[0].data().drafts.length >= 3
+    ) {
+      toast.error(
+        `You have reached the maximum amount of stories or drafts you can post. Please delete some stories or drafts before posting more.`,
+      );
+      return;
+    }
+
     //Form validation
     const allowedChars = /^[a-zA-Z0-9\s.,!?'"-:;()\n\r]+$/;
     //Make sure required fields arent empty

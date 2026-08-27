@@ -6,7 +6,14 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../components/Button";
 import InputBox from "../components/InputBox";
-import { doc, setDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
 import { toast } from "react-toastify";
 import signuphero from "../img/signup-hero.webp";
 import CountrySelect from "../components/CountrySelect";
@@ -295,6 +302,20 @@ function SignUp() {
 
     //Create a user in auth and in the DB for saving their stories.
     try {
+      //Check if the display name is already taken
+      const displayNameQuery = query(
+        collection(db, "users"),
+        where("displayName", "==", displayName),
+      );
+
+      const querySnapshot = await getDocs(displayNameQuery);
+
+      if (!querySnapshot.empty) {
+        setIsLoading(false);
+        setError("Display name is already taken.");
+        toast.error("Display name is already taken.");
+        return;
+      }
       //Create user with email and password
       await createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {

@@ -142,7 +142,7 @@ function Navbar() {
         <Li>
           {currentUser ? (
             <StyledLink to={`/account/${currentUser.uid}`}>
-              {userInfo?.displayName}
+              {userInfo?.displayName.split(" ")[0] || "Account"}
             </StyledLink>
           ) : (
             <Button onClick={() => navigate("/signin")}>Sign In</Button>
