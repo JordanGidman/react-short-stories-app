@@ -9,8 +9,12 @@ import {
   query,
   updateDoc,
   where,
+  limit,
+  getDocs,
+  startAfter,
+  getCountFromServer,
 } from "firebase/firestore";
-import { use, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { db } from "../firebase";
 import CommentCard from "./CommentCard";
@@ -26,6 +30,7 @@ import {
   RegExpMatcher,
 } from "obscenity";
 import { constainsProfanity } from "../helpers/ProfanityCheck";
+import { Timestamp } from "firebase/firestore";
 
 const StyledComments = styled.div`
   display: flex;
@@ -102,6 +107,21 @@ const StyledButton = styled(Button)`
   }
 `;
 
+const LoadMoreButton = styled.button`
+  background-color: transparent;
+  color: #000;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  font-size: 2.4rem;
+
+  &:hover {
+    scale: 1.15;
+  }
+`;
+
 function Comments({ storyId }) {
   //Pull the comments from the backend using the story ID which will be passed in and render to screen
   //Render a form to add a comment
@@ -115,10 +135,15 @@ function Comments({ storyId }) {
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [comments, setComments] = useState([]);
-  const matcher = new RegExpMatcher({
-    ...englishDataset.build(),
-    ...englishRecommendedTransformers,
-  });
+  const [lastComment, setLastComment] = useState(null);
+  const [hasMoreComments, setHasMoreComments] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [commentCount, setCommentCount] = useState(0);
+
+  // const matcher = new RegExpMatcher({
+  //   ...englishDataset.build(),
+  //   ...englishRecommendedTransformers,
+  // });
 
   useEffect(() => {
     const docRef = doc(db, "stories", storyId);
@@ -135,35 +160,87 @@ function Comments({ storyId }) {
     return () => unsubscribe(); // clean up listener on unmount
   }, [storyId]);
 
-  //Fetch comments
+  // Fetch initial comments
+
   useEffect(() => {
-    const commentsQuery = query(
-      collection(db, "comments"),
-      where("storyID", "==", storyId),
-      orderBy("createdAt", "desc"),
-    );
+    async function fetchComments() {
+      try {
+        const commentsQuery = query(
+          collection(db, "comments"),
+          where("storyID", "==", storyId),
+          orderBy("createdAt", "desc"),
+          limit(10),
+        );
 
-    const unsubscribe = onSnapshot(
-      commentsQuery,
-      (querySnapshot) => {
-        const commentsData = [];
+        const countQuery = query(
+          collection(db, "comments"),
+          where("storyID", "==", storyId),
+        );
 
-        querySnapshot.forEach((doc) => {
-          commentsData.push({
-            id: doc.id,
-            ...doc.data(),
-          });
-        });
+        const [querySnapshot, countSnapshot] = await Promise.all([
+          getDocs(commentsQuery),
+          getCountFromServer(countQuery),
+        ]);
+
+        const commentsData = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
 
         setComments(commentsData);
-      },
-      (error) => {
-        console.error(error.message);
-      },
-    );
+        setCommentCount(countSnapshot.data().count);
 
-    return unsubscribe;
+        if (commentsData.length < 10) {
+          setHasMoreComments(false);
+        } else {
+          setHasMoreComments(true);
+        }
+
+        if (querySnapshot.docs.length > 0) {
+          setLastComment(querySnapshot.docs[querySnapshot.docs.length - 1]);
+        }
+      } catch (error) {
+        console.error("Error fetching comments:", error);
+      }
+    }
+
+    fetchComments();
   }, [storyId]);
+
+  async function handleLoadMore() {
+    if (!lastComment || loadingMore || !hasMoreComments) return;
+
+    setLoadingMore(true);
+
+    try {
+      const commentsQuery = query(
+        collection(db, "comments"),
+        where("storyID", "==", storyId),
+        orderBy("createdAt", "desc"),
+        startAfter(lastComment),
+        limit(10),
+      );
+
+      const querySnapshot = await getDocs(commentsQuery);
+
+      const newComments = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setComments((prevComments) => [...prevComments, ...newComments]);
+
+      if (querySnapshot.docs.length < 10) {
+        setHasMoreComments(false);
+      } else {
+        setLastComment(querySnapshot.docs[querySnapshot.docs.length - 1]);
+      }
+    } catch (error) {
+      console.error("Error loading more comments:", error);
+    } finally {
+      setLoadingMore(false);
+    }
+  }
 
   async function handleCommentSubmit(e) {
     e.preventDefault();
@@ -195,15 +272,30 @@ function Comments({ storyId }) {
 
     setSubmitting(true);
     try {
+      const createdAt = Timestamp.now();
+      // const createdAt = Timestamp.now();
       setSubmitting(true);
       const docRef = await addDoc(collection(db, "comments"), {
         comment: text,
-        createdAt: new Date(),
+        createdAt,
         author: currentUser.displayName,
         creatorID: currentUser.uid,
         storyID: storyId,
       });
+
+      setComments((previousComments) => [
+        {
+          id: docRef.id,
+          comment: text,
+          createdAt,
+          author: currentUser.displayName,
+          creatorID: currentUser.uid,
+          storyID: storyId,
+        },
+        ...previousComments,
+      ]);
       setComment("");
+      setCommentCount((prevCount) => prevCount + 1);
 
       toast.success("Comment posted");
     } catch (error) {
@@ -214,19 +306,19 @@ function Comments({ storyId }) {
     }
   }
 
+  function handleCommentDelete(commentId) {
+    setComments((previousComments) =>
+      previousComments.filter((comment) => comment.id !== commentId),
+    );
+  }
+
   return (
     <StyledComments>
       <StyledH3>
         {comments?.length > 0
-          ? `${comments.length} Comments`
+          ? ` Comments (${commentCount})`
           : "No Comments Yet"}
       </StyledH3>
-      <StyledList>
-        {comments?.length > 0 &&
-          comments.map((comment, index) => (
-            <CommentCard key={index} comment={comment} story={story} />
-          ))}
-      </StyledList>
       <StyledForm>
         <StyledQuill
           theme="snow"
@@ -237,10 +329,41 @@ function Comments({ storyId }) {
           readOnly={submitting}
           modules={{ toolbar: false }}
         />
-        <StyledButton disabled={loading} onClick={handleCommentSubmit}>
+        <StyledButton
+          disabled={loading}
+          onClick={handleCommentSubmit}
+          name="post-comment"
+          aria-label="Post comment"
+        >
           Post
         </StyledButton>
       </StyledForm>
+      <StyledList>
+        {comments?.length > 0 &&
+          comments.map((comment, index) => (
+            <CommentCard
+              key={comment.id}
+              comment={comment}
+              story={story}
+              onDelete={handleCommentDelete}
+            />
+          ))}
+      </StyledList>
+
+      {hasMoreComments && (
+        <LoadMoreButton
+          onClick={handleLoadMore}
+          disabled={loadingMore}
+          name="load-more-comments"
+          aria-label="Load more comments"
+        >
+          {loadingMore ? (
+            "Loading..."
+          ) : (
+            <ion-icon name="chevron-down-outline"></ion-icon>
+          )}
+        </LoadMoreButton>
+      )}
     </StyledComments>
   );
 }

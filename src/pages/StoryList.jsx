@@ -287,7 +287,7 @@ function StoryList() {
           q = query(baseQuery, orderBy("createdAt", "desc"));
         }
 
-        // Get total count
+        // Get total count of documents for pagination
         const countSnapshot = await getCountFromServer(baseQuery);
         const total = countSnapshot.data().count;
         const calculatedTotalPages = Math.ceil(total / PAGE_SIZE);
@@ -295,7 +295,7 @@ function StoryList() {
         setTotalDocs(total);
         setTotalPages(calculatedTotalPages);
 
-        // Determine target page
+        // Determine target page (next or previous)
         let targetPage;
 
         if (direction === "next") {

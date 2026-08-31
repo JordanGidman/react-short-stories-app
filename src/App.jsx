@@ -231,6 +231,7 @@ function App() {
   //7 - The next and previous stories page will right now only go through the small selection of stories that are pulled for the current page, this will need to be updated to go through all stories in the db as it only has access to 1 page due to pagination only pulling stories from current page to avoid expensive queries. - Not done
   //8 - Need to make it so that comments get paginated as there could be many of them and they will infinitely increase the size of the page and make it slow to load. - Not done
   //9 - Pagination on the storyList likely needs to be reworked, right now it will just render the new stories under the orginal ones which at scale could slow the page alot, it seems to me that theres 2 solutions either i un-render the stories not in the viewport and render them when they are or i need to create actual seperate pages. We can get the page numbers by checking the total amount of docs and dividing it by the page size, then simple request the docs between the start and end index of the page number. I have made it so it only renders 1 page at a time, now it needs a way to navigate between pages and the next and previous story buttons need to work across pages as right now they only work for the current page. - Partially done
+  //10 - Might want to debounce the toast pop ups as if a user is doing alot of actions at once it can get spammy and annoying. - Not done
 
   //UNFIXED BUGS
   //The homepage is not accessible without being signed in.
@@ -239,6 +240,7 @@ function App() {
   //The next and previous buttons will eventually run out of stories as they are paginated meaning that only a small portion of the stories are pulled at once, the issue here would be at some point next will = nothing. For now it loops around to the beginning of the ids already pulled but this will likely need to change to pull the next set of id's from the db when the end of the current set is reached. - Not done
   //Remove any old pages, where pages have the New tag in the name it needs to be renamed to remove the new tag and the original page needs to be removed.
   //The modal window for deleting stories is bugged on mobile layout, the buttons are not shown and the text is squished - Not done
+  //Hero image, the fresh today story image, the story images for the my stories, favourites and drafts and the newstory page as well as the recommendations cards all need placeholders. Picsum images is down at the moment and has highlighted the need for a better solution for placeholder images. - Not done
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments

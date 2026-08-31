@@ -99,20 +99,26 @@ const Tooltip = styled.span`
   }
 `;
 
-function CommentCard({ comment, story }) {
+function CommentCard({ comment, story, onDelete }) {
   const { currentUser } = useContext(AuthContext);
 
   async function handleDelete() {
     //remove the comment from the stories comments array.
-
-    if (currentUser.uid !== comment.creatorID) {
+    if (currentUser?.uid !== comment.creatorID) {
       toast.error("You can only delete your comments.");
       return;
     }
 
-    await deleteDoc(doc(db, "comments", comment.id));
+    try {
+      await deleteDoc(doc(db, "comments", comment?.id));
+      //Delete the comment from the local state
+      onDelete(comment?.id);
 
-    toast.success(`Comment deleted.`);
+      toast.success("Comment deleted.");
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+      toast.error("Failed to delete comment.");
+    }
   }
 
   return (
@@ -120,11 +126,11 @@ function CommentCard({ comment, story }) {
       <StyledWrapper>
         <StyledAuthor>{comment?.author}</StyledAuthor>
         <StyledDate>
-          {new Date(comment.createdAt?.seconds * 1000).toLocaleDateString(
+          {new Date(comment?.createdAt?.seconds * 1000).toLocaleDateString(
             "en-EU",
           )}
         </StyledDate>
-        {currentUser.uid === comment.creatorID && (
+        {currentUser?.uid === comment?.creatorID && (
           <StyledDeleteButton onClick={() => handleDelete()}>
             x<Tooltip>Delete your comment</Tooltip>
           </StyledDeleteButton>
