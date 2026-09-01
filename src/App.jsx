@@ -219,7 +219,9 @@ function App() {
   //98 - Styling breaks at small viewports on the followed authors page - Done
   //99 - Ability to add multiple genres to a story - Done
   //100 - If its multiple words for display name we should only take the first word and ignore the rest where we read it such as the navbar - Done
-  //101 - Add a cap to the amount of stories and comments a user can post on the off chance someone tries to spam the site with stories and comments. - Not done
+  //101 - Add a cap to the amount of stories and comments a user can post on the off chance someone tries to spam the site with stories and comments. - Done
+  //102 - The homepage is not accessible without being signed in. - Done
+  //103 - The modal window for deleting stories is bugged on mobile layout, the buttons are not shown and the text is squished - Done
 
   //WIP
   //1 - Resize images to be the max size they are rendered at. - Not done
@@ -234,12 +236,11 @@ function App() {
   //10 - Might want to debounce the toast pop ups as if a user is doing alot of actions at once it can get spammy and annoying. - Not done
 
   //UNFIXED BUGS
-  //The homepage is not accessible without being signed in.
   //Liking a story doesnt work due to firebase permissions. I want to move likes to the users collection anyway but the user should still be able to affect the likes count on the story page and story card. - Not done
   //Firebase rules dont allow correct access when deployed- Not done
   //The next and previous buttons will eventually run out of stories as they are paginated meaning that only a small portion of the stories are pulled at once, the issue here would be at some point next will = nothing. For now it loops around to the beginning of the ids already pulled but this will likely need to change to pull the next set of id's from the db when the end of the current set is reached. - Not done
   //Remove any old pages, where pages have the New tag in the name it needs to be renamed to remove the new tag and the original page needs to be removed.
-  //The modal window for deleting stories is bugged on mobile layout, the buttons are not shown and the text is squished - Not done
+
   //Hero image, the fresh today story image, the story images for the my stories, favourites and drafts and the newstory page as well as the recommendations cards all need placeholders. Picsum images is down at the moment and has highlighted the need for a better solution for placeholder images. - Not done
   //Recommendations currently can end up with the same story as the one currently being viewed, this needs to be changed to prevent that from happening. - Not done
   //When not signed in the recommendations section returns a firebase permissions error even though it still works as intended this error needs to be understood and fixed.
@@ -259,6 +260,7 @@ function App() {
   //12 - Report system for stories, which will auto-hide stories after multiple reports and notify the author.
   //13 - Ability to click page numbers on the storyList to go to a specific page instead of just next and previous.
   //14 - Add a section to view stories the user has liked. - Not done
+  //15 - When a user logs in check if they are logged in elsewhere and if so log them out of the other session.
 
   return (
     <AuthContextProvider>

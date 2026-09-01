@@ -23,6 +23,7 @@ import { createNavigation } from "../helpers/createNavigation";
 
 const StyledMyStories = styled.div`
   min-height: 100%;
+  width: 100%;
 `;
 
 const StyledHead = styled.div`
@@ -154,7 +155,6 @@ const StyledButtons = styled.div`
     max-height: ${(props) => (props.$expanded ? "100px" : "0px")};
     opacity: ${(props) => (props.$expanded ? 1 : 0)};
     visibility: ${(props) => (props.$expanded ? "visible" : "hidden")};
-    gap: 0rem;
 
     padding-bottom: ${(props) => (props.$expanded ? "1rem" : "0rem")};
   }
@@ -336,6 +336,24 @@ const StyledModalContent = styled.div`
   box-shadow: 0rem 0.3rem 0.8rem -1rem rgba(0, 0, 0, 0.8);
   border-radius: 1.2rem;
   z-index: 1000;
+
+  /* 1100px */
+  @media (max-width: 68.75em) {
+    width: 80vw;
+  }
+
+  /* 645px */
+  @media (max-width: 40.3em) {
+    width: 100vw;
+    height: 100vh;
+    margin-top: 9.1rem;
+    border-radius: 0rem;
+    justify-content: center;
+  }
+  /* 430px */
+  @media (max-width: 26.875em) {
+    font-size: 1.6rem;
+  }
 `;
 
 const StyledModal = styled.div`
@@ -343,20 +361,35 @@ const StyledModal = styled.div`
   height: 100vh;
   width: 100vw;
   position: fixed;
-  top: 0;
-  left: 0;
-
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   backdrop-filter: blur(4px);
+`;
+
+const StyledModalButtons = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+
+  .btn-delete {
+    &:hover {
+      background-color: #ff0000;
+      color: #fff;
+    }
+  }
+
+  /* 645px */
+  @media (max-width: 40.3em) {
+    flex-direction: column;
+  }
 `;
 
 const StyledModalButton = styled(Button)`
   transition: all 0.3s ease-in-out;
   font-weight: 600;
-
-  &:hover {
-    background-color: red;
-    color: #fff;
-  }
 `;
 
 function MyStories() {
@@ -621,11 +654,12 @@ function MyStories() {
             Are you sure you want to delete this story? Deleting is permanent
             and cannot be undone.
           </p>
-          <StyledButtons>
+          <StyledModalButtons>
             <StyledModalButton onClick={() => setModalOpen(false)}>
               Cancel
             </StyledModalButton>
             <StyledModalButton
+              className="btn-delete"
               disabled={loading}
               onClick={() => {
                 handleDelete(currentStory.id);
@@ -634,7 +668,7 @@ function MyStories() {
             >
               Confirm Delete
             </StyledModalButton>
-          </StyledButtons>
+          </StyledModalButtons>
         </StyledModalContent>
       </StyledModal>
     </StyledMyStories>

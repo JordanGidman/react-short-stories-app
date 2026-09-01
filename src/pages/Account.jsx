@@ -486,31 +486,24 @@ const StyledLink = styled(Link)`
   /* font-family: "Montserrat", sans-serif; */
 `;
 
-const StyledDeleteButton = styled(StyledLink)``;
+// const StyledDeleteButton = styled(StyledLink)``;
 
-const StyledNavWrapper = styled.div`
-  display: grid;
-  align-items: center;
-  justify-content: space-between;
-  grid-template-columns: auto 1fr auto;
-  width: 100%;
-  column-gap: 2rem;
-  ion-icon {
-    font-size: 3rem;
+// const StyledNavWrapper = styled.div`
+//   display: grid;
+//   align-items: center;
+//   justify-content: space-between;
+//   grid-template-columns: auto 1fr auto;
+//   width: 100%;
+//   column-gap: 2rem;
+//   ion-icon {
+//     font-size: 3rem;
 
-    &:hover {
-      cursor: pointer;
-    }
-  }
+//     &:hover {
+//       cursor: pointer;
+//     }
+//   }
 
-  /* div {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-
-    
-  } */
-`;
+// `;
 
 function Account() {
   //Needs to be a user logged in before allowing access to this page.
