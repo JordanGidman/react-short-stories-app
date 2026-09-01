@@ -28,6 +28,7 @@ const StyledInfoBox = styled.div`
   background-color: #fff;
   padding: 6rem 6rem;
   box-shadow: 0rem 0.8rem 0.6rem -1rem rgba(0, 0, 0, 0.3);
+  text-align: center;
 
   .large-icon {
     font-size: 10rem;

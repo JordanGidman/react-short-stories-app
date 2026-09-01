@@ -241,6 +241,8 @@ function App() {
   //Remove any old pages, where pages have the New tag in the name it needs to be renamed to remove the new tag and the original page needs to be removed.
   //The modal window for deleting stories is bugged on mobile layout, the buttons are not shown and the text is squished - Not done
   //Hero image, the fresh today story image, the story images for the my stories, favourites and drafts and the newstory page as well as the recommendations cards all need placeholders. Picsum images is down at the moment and has highlighted the need for a better solution for placeholder images. - Not done
+  //Recommendations currently can end up with the same story as the one currently being viewed, this needs to be changed to prevent that from happening. - Not done
+  //When not signed in the recommendations section returns a firebase permissions error even though it still works as intended this error needs to be understood and fixed.
 
   //POSSIBLE FUTURE FEATURES
   //1 - Edit comments
@@ -275,14 +277,15 @@ function App() {
                 <Route path="library/:genre" element={<StoryList />} />
                 <Route path="signin" element={<SignIn />} />
                 <Route path="signup" element={<SignUp />} />
-                <Route
+                {/* <Route
                   path="library/:genre/story/:id"
                   element={
                     <ProtectedRoute>
                       <NewStory />
                     </ProtectedRoute>
                   }
-                />
+                /> */}
+                <Route path="library/:genre/story/:id" element={<NewStory />} />
 
                 {/* Protected nested routes */}
                 <Route

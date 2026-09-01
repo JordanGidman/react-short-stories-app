@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { toast } from "react-toastify";
 
 const StyledButtons = styled.div`
   display: flex;
@@ -89,7 +90,11 @@ function StoryActions({
     <StyledButtons>
       {/* Like Button */}
       <StyledButton
-        onClick={() => onLike(currentUser.uid, user?.likes?.includes(story.id))}
+        onClick={() =>
+          currentUser
+            ? onLike(currentUser.uid, user?.likes?.includes(story.id))
+            : toast.error("You must be signed in to like a story.")
+        }
         aria-label={
           user?.likes?.includes(story.id) ? "Remove Like" : "Like Story"
         }
@@ -106,7 +111,9 @@ function StoryActions({
       {/* Favorite Button */}
       <StyledButton
         onClick={() =>
-          onFavorite(currentUser.uid, user?.favorites?.includes(story.id))
+          currentUser
+            ? onFavorite(currentUser.uid, user?.favorites?.includes(story.id))
+            : toast.error("You must be signed in to favorite a story.")
         }
         aria-label={
           user?.favorites?.includes(story.id)

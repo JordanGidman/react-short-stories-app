@@ -100,10 +100,7 @@ const StyledCardsBox = styled.div`
 `;
 
 function StaffPicks({ staffPicks }) {
-  console.log(staffPicks);
-
   const navigation = createNavigation(staffPicks, "staffpicks");
-  console.log(navigation);
 
   return (
     <StyledPicks id="staff-picks">

@@ -392,6 +392,7 @@ function NewStory() {
   //Like & Favorite handlers
   async function handleLike(userId, isLiked) {
     if (!story?.id || !userId) return;
+
     try {
       //Need to refactor this to be users liking stories instead of stories keeping track of which users liked them.
       await updateDoc(doc(db, "stories", story.id), {

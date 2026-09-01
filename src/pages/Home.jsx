@@ -333,6 +333,7 @@ function Home() {
         let q = query(
           storiesRef,
           where("isSeedData", "==", true),
+          where("hidden", "==", false),
           orderBy("randomNumber"),
           startAt(rand),
           limit(5),
@@ -350,6 +351,7 @@ function Home() {
           const q2 = query(
             storiesRef,
             where("isSeedData", "==", true),
+            where("hidden", "==", false),
             orderBy("randomNumber"),
             limit(remaining),
           );

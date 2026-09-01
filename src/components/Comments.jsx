@@ -319,18 +319,23 @@ function Comments({ storyId }) {
           ? ` Comments (${commentCount})`
           : "No Comments Yet"}
       </StyledH3>
+
       <StyledForm>
         <StyledQuill
           theme="snow"
-          placeholder="Leave a comment..."
+          placeholder={
+            currentUser
+              ? "Leave a comment..."
+              : "You must be logged in to post a comment."
+          }
           className="text-editor"
           value={comment}
           onChange={(e) => setComment(e)}
-          readOnly={submitting}
+          readOnly={submitting || !currentUser}
           modules={{ toolbar: false }}
         />
         <StyledButton
-          disabled={loading}
+          disabled={loading || !currentUser || submitting}
           onClick={handleCommentSubmit}
           name="post-comment"
           aria-label="Post comment"
@@ -338,6 +343,7 @@ function Comments({ storyId }) {
           Post
         </StyledButton>
       </StyledForm>
+
       <StyledList>
         {comments?.length > 0 &&
           comments.map((comment, index) => (

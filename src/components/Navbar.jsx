@@ -126,7 +126,7 @@ function Navbar() {
     <StyledNav>
       <Ul>
         <Li>
-          <StyledLink to={"/"}>LOGO</StyledLink>
+          <StyledLink to={"/"}>Home</StyledLink>
         </Li>
 
         <Li>
